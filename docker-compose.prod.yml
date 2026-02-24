@@ -1,0 +1,107 @@
+# ==============================================
+# Docker Compose Production — __APP_NAME__
+# FrankenPHP + PostgreSQL + Redis
+# ==============================================
+
+name: __APP_SLUG__-prod
+
+services:
+  # ==============================================
+  # Main Application (FrankenPHP)
+  # ==============================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.frankenphp
+      target: production
+    image: __APP_SLUG__:production
+    container_name: __APP_SLUG__-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SERVER_NAME: "__APP_DOMAIN__, www.__APP_DOMAIN__"
+      APP_ENV: production
+      APP_DEBUG: "false"
+    env_file:
+      - .env.production
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - app_storage:/app/storage
+      - ./logs/caddy:/var/log/caddy
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ==============================================
+  # PostgreSQL Database
+  # ==============================================
+  db:
+    image: postgres:16-alpine
+    container_name: __APP_SLUG__-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: __APP_SLUG__
+      POSTGRES_USER: __APP_SLUG__
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __APP_SLUG__ -d __APP_SLUG__"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ==============================================
+  # Redis (Sessions, Cache, Queue)
+  # ==============================================
+  redis:
+    image: redis:7-alpine
+    container_name: __APP_SLUG__-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+# ==============================================
+# Volumes (named, persist across rebuilds)
+# ==============================================
+volumes:
+  caddy_data:
+    name: __APP_SLUG___caddy_data
+  caddy_config:
+    name: __APP_SLUG___caddy_config
+  app_storage:
+    name: __APP_SLUG___storage
+  postgres_data:
+    name: __APP_SLUG___postgres
+  redis_data:
+    name: __APP_SLUG___redis
+
+# ==============================================
+# Networks
+# ==============================================
+networks:
+  app-network:
+    name: __APP_SLUG__-network

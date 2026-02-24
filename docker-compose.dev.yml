@@ -1,0 +1,85 @@
+# ==============================================
+# Docker Compose Development — __APP_NAME__
+# ==============================================
+
+name: __APP_SLUG__-dev
+
+services:
+  app:
+    build:
+      context: .
+      target: development
+    container_name: __APP_SLUG__-app-dev
+    ports:
+      - "8787:8000"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  vite:
+    image: node:20-alpine
+    container_name: __APP_SLUG__-vite
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    networks:
+      - app-network
+
+  scheduler:
+    build:
+      context: .
+      target: development
+    container_name: __APP_SLUG__-scheduler
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: php artisan schedule:work --no-interaction
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: __APP_SLUG__-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: __APP_SLUG__
+      POSTGRES_USER: __APP_SLUG__
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __APP_SLUG__ -d __APP_SLUG__"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
