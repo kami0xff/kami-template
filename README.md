@@ -1,8 +1,41 @@
-# Laravel FrankenPHP Template
+# Kami Template
 
-Production-ready Laravel template with FrankenPHP, Docker, PostgreSQL, Redis, and automated CI/CD deployment.
+Production-ready Laravel project bootstrapper with FrankenPHP, Docker, PostgreSQL, Redis, and automated CI/CD deployment.
 
-## What's Included
+## Quick Start
+
+One command creates a fully configured Laravel project:
+
+```bash
+/var/www/kami-template/init.sh "My App" "myapp" "myapp.com" /var/www/myapp
+```
+
+That's it. The script will:
+
+1. Install a fresh Laravel 12 project
+2. Configure PostgreSQL + Redis
+3. Install the FrankenPHP Docker deployment stack
+4. Set up CI/CD, Makefile, deploy.sh, Caddyfile
+5. Create a welcome page with environment indicator
+6. Initialize a git repository
+
+Then just:
+
+```bash
+cd /var/www/myapp
+make dev          # Start dev at http://localhost:8787
+```
+
+## Arguments
+
+| # | Argument | Example | Used for |
+|---|----------|---------|----------|
+| 1 | App Name | `"PornGuru Cam"` | Display name, .env |
+| 2 | App Slug | `"porngurucam"` | Docker containers, DB name, volumes |
+| 3 | Domain | `"pornguru.cam"` | Caddyfile, HTTPS, session domain |
+| 4 | Target Dir | `/var/www/porngurucam` | Where to create the project |
+
+## What's in the box
 
 | File | Purpose |
 |------|---------|
@@ -14,48 +47,6 @@ Production-ready Laravel template with FrankenPHP, Docker, PostgreSQL, Redis, an
 | `Makefile` | Dev & prod shortcuts + git workflow helpers |
 | `.github/workflows/deploy.yml` | GitHub Actions CI/CD (SSH deploy) |
 | `.env.production.example` | Production environment template |
-| `init.sh` | One-time setup script to replace placeholders |
-
-## Quick Start
-
-### 1. Clone the template
-
-```bash
-git clone https://github.com/YOUR_ORG/laravel-template.git my-new-app
-cd my-new-app
-```
-
-### 2. Initialize with your project details
-
-```bash
-chmod +x init.sh
-./init.sh "My App Name" "myapp" "myapp.com"
-```
-
-This replaces all `__APP_NAME__`, `__APP_SLUG__`, and `__APP_DOMAIN__` placeholders across every config file.
-
-### 3. Install Laravel
-
-```bash
-composer install
-php artisan key:generate
-```
-
-### 4. Start development
-
-```bash
-make dev
-# App at http://localhost:8787
-# Vite at http://localhost:5173
-```
-
-### 5. Deploy to production
-
-```bash
-cp .env.production.example .env.production
-# Fill in your values (APP_KEY, DB_PASSWORD, etc.)
-make prod
-```
 
 ## Stack
 
@@ -63,8 +54,6 @@ make prod
 - **Laravel 12**
 - **PostgreSQL 16** (Alpine)
 - **Redis 7** (Alpine)
-- **Vite** for frontend asset bundling
+- **Vite** for frontend assets
 - **Docker Compose** for orchestration
 - **GitHub Actions** for CI/CD
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for full deployment documentation.
