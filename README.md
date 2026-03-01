@@ -7,10 +7,18 @@ Production-ready Laravel project bootstrapper with FrankenPHP, Docker, PostgreSQ
 One command creates a fully configured Laravel project:
 
 ```bash
-/var/www/kami-template/init.sh "My App" "myapp" "myapp.com" /var/www/myapp
+/var/www/kami-template/init.sh "HHentai" /var/www/hhentai
 ```
 
-That's it. The script will:
+That's it. The script auto-derives the slug (`hhentai`) and domain (`hhentai.com`) from the name.
+
+If your domain doesn't match `slug.com`, pass it as a third argument:
+
+```bash
+/var/www/kami-template/init.sh "PornGuru Cam" /var/www/porngurucam pornguru.cam
+```
+
+The script will:
 
 1. Install a fresh Laravel 12 project
 2. Configure PostgreSQL + Redis
@@ -28,12 +36,11 @@ make dev          # Start dev at http://localhost:8787
 
 ## Arguments
 
-| # | Argument | Example | Used for |
-|---|----------|---------|----------|
-| 1 | App Name | `"PornGuru Cam"` | Display name, .env |
-| 2 | App Slug | `"porngurucam"` | Docker containers, DB name, volumes |
-| 3 | Domain | `"pornguru.cam"` | Caddyfile, HTTPS, session domain |
-| 4 | Target Dir | `/var/www/porngurucam` | Where to create the project |
+| # | Argument | Required | Example | Description |
+|---|----------|----------|---------|-------------|
+| 1 | App Name | Yes | `"HHentai"` | Display name — slug is auto-derived (lowercase, no spaces) |
+| 2 | Target Dir | Yes | `/var/www/hhentai` | Where to create the project |
+| 3 | Domain | No | `pornguru.cam` | Defaults to `slug.com` — override if different |
 
 ## What's in the box
 

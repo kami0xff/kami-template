@@ -1,52 +1,40 @@
 # ==============================================
 # Docker Compose Production — __APP_NAME__
 # FrankenPHP + PostgreSQL + Redis
+# Tunnel handled by system cloudflared service
 # ==============================================
 
 name: __APP_SLUG__-prod
 
 services:
-  # ==============================================
-  # Main Application (FrankenPHP)
-  # ==============================================
   app:
     build:
       context: .
       dockerfile: Dockerfile.frankenphp
       target: production
     image: __APP_SLUG__:production
-    container_name: __APP_SLUG__-app
+    container_name: __APP_SLUG__-app-prod
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    environment:
-      SERVER_NAME: "__APP_DOMAIN__, www.__APP_DOMAIN__"
-      APP_ENV: production
-      APP_DEBUG: "false"
     env_file:
       - .env.production
     volumes:
-      - caddy_data:/data
-      - caddy_config:/config
       - app_storage:/app/storage
-      - ./logs/caddy:/var/log/caddy
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/up"]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 15s
 
-  # ==============================================
-  # PostgreSQL Database
-  # ==============================================
   db:
     image: postgres:16-alpine
     container_name: __APP_SLUG__-db-prod
@@ -54,7 +42,7 @@ services:
     environment:
       POSTGRES_DB: __APP_SLUG__
       POSTGRES_USER: __APP_SLUG__
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -66,12 +54,9 @@ services:
       retries: 5
       start_period: 30s
 
-  # ==============================================
-  # Redis (Sessions, Cache, Queue)
-  # ==============================================
   redis:
     image: redis:7-alpine
-    container_name: __APP_SLUG__-redis
+    container_name: __APP_SLUG__-redis-prod
     restart: unless-stopped
     command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
     volumes:
@@ -84,14 +69,41 @@ services:
       timeout: 5s
       retries: 3
 
-# ==============================================
-# Volumes (named, persist across rebuilds)
-# ==============================================
+  worker:
+    image: __APP_SLUG__:production
+    container_name: __APP_SLUG__-worker-prod
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    volumes:
+      - app_storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+
+  scheduler:
+    image: __APP_SLUG__:production
+    container_name: __APP_SLUG__-scheduler-prod
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    volumes:
+      - app_storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    command: php artisan schedule:work --no-interaction
+
 volumes:
-  caddy_data:
-    name: __APP_SLUG___caddy_data
-  caddy_config:
-    name: __APP_SLUG___caddy_config
   app_storage:
     name: __APP_SLUG___storage
   postgres_data:
@@ -99,9 +111,6 @@ volumes:
   redis_data:
     name: __APP_SLUG___redis
 
-# ==============================================
-# Networks
-# ==============================================
 networks:
   app-network:
     name: __APP_SLUG__-network

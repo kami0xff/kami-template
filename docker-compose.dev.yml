@@ -25,24 +25,11 @@ services:
       db:
         condition: service_healthy
 
-  vite:
-    image: node:20-alpine
-    container_name: __APP_SLUG__-vite
-    working_dir: /app
-    ports:
-      - "5173:5173"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
-    networks:
-      - app-network
-
   scheduler:
     build:
       context: .
       target: development
-    container_name: __APP_SLUG__-scheduler
+    container_name: __APP_SLUG__-scheduler-dev
     volumes:
       - .:/var/www/html
     networks:
@@ -60,7 +47,7 @@ services:
 
   db:
     image: postgres:16-alpine
-    container_name: __APP_SLUG__-db
+    container_name: __APP_SLUG__-db-dev
     restart: unless-stopped
     ports:
       - "5432:5432"
