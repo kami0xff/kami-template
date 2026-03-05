@@ -1,66 +1,135 @@
 # Kami Template
 
-Production-ready Laravel project bootstrapper with FrankenPHP, Docker, PostgreSQL, Redis, and automated CI/CD deployment.
-
-## Quick Start
-
-One command creates a fully configured Laravel project:
-
-```bash
-/var/www/kami-template/init.sh "HHentai" /var/www/hhentai
-```
-
-That's it. The script auto-derives the slug (`hhentai`) and domain (`hhentai.com`) from the name.
-
-If your domain doesn't match `slug.com`, pass it as a third argument:
-
-```bash
-/var/www/kami-template/init.sh "PornGuru Cam" /var/www/porngurucam pornguru.cam
-```
-
-The script will:
-
-1. Install a fresh Laravel 12 project
-2. Configure PostgreSQL + Redis
-3. Install the FrankenPHP Docker deployment stack
-4. Set up CI/CD, Makefile, deploy.sh, Caddyfile
-5. Create a welcome page with environment indicator
-6. Initialize a git repository
-
-Then just:
-
-```bash
-cd /var/www/myapp
-make dev          # Start dev at http://localhost:8787
-```
-
-## Arguments
-
-| # | Argument | Required | Example | Description |
-|---|----------|----------|---------|-------------|
-| 1 | App Name | Yes | `"HHentai"` | Display name — slug is auto-derived (lowercase, no spaces) |
-| 2 | Target Dir | Yes | `/var/www/hhentai` | Where to create the project |
-| 3 | Domain | No | `pornguru.cam` | Defaults to `slug.com` — override if different |
-
-## What's in the box
-
-| File | Purpose |
-|------|---------|
-| `Dockerfile.frankenphp` | Multi-stage production build (Composer + Node + FrankenPHP) |
-| `docker-compose.prod.yml` | Production stack (App + PostgreSQL + Redis) |
-| `docker-compose.dev.yml` | Development stack with Vite HMR + scheduler |
-| `Caddyfile` | HTTP server config (Cloudflare Tunnel ready) |
-| `deploy.sh` | Zero-downtime deployment script |
-| `Makefile` | Dev & prod shortcuts + git workflow helpers |
-| `.github/workflows/deploy.yml` | GitHub Actions CI/CD (SSH deploy) |
-| `.env.production.example` | Production environment template |
+Production-ready Laravel starter with built-in SEO infrastructure and multi-locale support.
 
 ## Stack
 
-- **PHP 8.3** via FrankenPHP (Caddy embedded)
-- **Laravel 12**
-- **PostgreSQL 16** (Alpine)
-- **Redis 7** (Alpine)
-- **Vite** for frontend assets
-- **Docker Compose** for orchestration
-- **GitHub Actions** for CI/CD
+- PHP 8.3 + Laravel 12
+- FrankenPHP (production) / PHP dev server (local)
+- PostgreSQL 16, Redis 7
+- Vite, Docker Compose, GitHub Actions CI/CD
+
+## Quick Start
+
+```bash
+# 1. Create a new project from this template
+git clone <this-repo> /var/www/my-project
+cd /var/www/my-project
+
+# 2. Install dependencies
+composer install
+npm install && npm run build
+
+# 3. Configure environment
+cp .env.production.example .env
+php artisan key:generate
+
+# 4. Run migrations
+php artisan migrate
+
+# 5. Start development server
+php artisan serve
+```
+
+## SEO Infrastructure
+
+### Components
+
+| Component | Path | Description |
+|-----------|------|-------------|
+| `<x-seo.schema>` | `resources/views/components/seo/schema.blade.php` | Outputs JSON-LD `<script>` blocks |
+| `<x-seo.hreflang>` | `resources/views/components/seo/hreflang.blade.php` | Outputs `<link rel="alternate" hreflang>` |
+| `<x-seo.breadcrumbs>` | `resources/views/components/seo/breadcrumbs.blade.php` | Breadcrumb navigation |
+| `<x-seo.content-block>` | `resources/views/components/seo/content-block.blade.php` | AI-generated SEO text blocks |
+
+### Services
+
+| Class | Description |
+|-------|-------------|
+| `SeoService` | Builds JSON-LD schemas (WebSite, CollectionPage, ItemList, BreadcrumbList, FAQPage, ProfilePage) |
+| `PageSeoContent` | Model for database-backed SEO content with locale fallback |
+
+### Artisan Commands
+
+```bash
+# Generate SEO content for a page
+php artisan seo:generate-page-content --pages=home
+
+# Translate to all priority locales
+php artisan seo:generate-page-content --translate --priority
+
+# Force regenerate
+php artisan seo:generate-page-content --pages=home --force
+```
+
+Requires `ANTHROPIC_API_KEY` in `config/services.php`:
+
+```php
+'anthropic' => [
+    'api_key' => env('ANTHROPIC_API_KEY'),
+],
+```
+
+### Locale System
+
+**Routing pattern:** English uses bare URLs (`/about`), other locales use prefix (`/es/about`).
+
+**Middleware:**
+- `detect.locale` — Reads browser `Accept-Language`, redirects on first visit
+- `set.locale` — Sets `App::setLocale()` from URL prefix
+
+**Helper:** `localized_route('name', $params)` — auto-adds locale prefix.
+
+**Config:** `config/locales.php` — 15 locales pre-configured (add more as needed).
+
+**Translations:** Use `lang/{locale}/*.php` files with `__('file.key')` dot-notation.
+
+### Per-Page SEO Checklist
+
+Every page must define:
+
+```blade
+@section('title', 'Page Title - Site Name')           {{-- <60 chars --}}
+@section('meta_description', 'Description here...')     {{-- 150-160 chars --}}
+@section('canonical', url('/my-page'))                  {{-- True URL --}}
+
+@push('seo-pagination')
+<x-seo.hreflang :urls="$hreflangUrls" />               {{-- Locale alternates --}}
+<x-seo.schema :schemas="$seoSchemas" />                 {{-- JSON-LD --}}
+@endpush
+```
+
+### Showcase Page
+
+Visit `/seo-showcase` to see all components in action with usage examples.
+
+## Deployment
+
+```bash
+# Deploy to production (Docker)
+bash deploy.sh
+
+# Or manually
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+See `DEPLOYMENT.md` for full production setup guide.
+
+## File Structure
+
+```
+app/
+  Console/Commands/GeneratePageSeoContent.php
+  Helpers/helpers.php
+  Http/Middleware/{DetectLocale,SetLocale}.php
+  Models/PageSeoContent.php
+  Services/SeoService.php
+config/locales.php
+database/migrations/create_page_seo_content_table.php
+lang/en/common.php
+resources/views/
+  components/seo/{schema,hreflang,breadcrumbs,content-block}.blade.php
+  layouts/app.blade.php
+  pages/seo-showcase.blade.php
+routes/web.php
+```
