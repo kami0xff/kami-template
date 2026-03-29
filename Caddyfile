@@ -1,5 +1,10 @@
 {
-    frankenphp
+    frankenphp {
+        worker {
+            file /app/public/frankenphp-worker.php
+            num {$FRANKENPHP_NUM_WORKERS:4}
+        }
+    }
     auto_https off
     servers {
         trusted_proxies static private_ranges

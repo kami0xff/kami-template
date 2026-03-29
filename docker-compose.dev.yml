@@ -1,7 +1,3 @@
-# ==============================================
-# Docker Compose Development — __APP_NAME__
-# ==============================================
-
 name: __APP_SLUG__-dev
 
 services:
@@ -11,11 +7,11 @@ services:
       target: development
     container_name: __APP_SLUG__-app-dev
     ports:
-      - "8787:8000"
+      - "${DEV_PORT:-8787}:8000"
     volumes:
       - .:/var/www/html
     networks:
-      - app-network
+      - __APP_SLUG__
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
@@ -29,11 +25,11 @@ services:
     build:
       context: .
       target: development
-    container_name: __APP_SLUG__-scheduler-dev
+    container_name: __APP_SLUG__-scheduler
     volumes:
       - .:/var/www/html
     networks:
-      - app-network
+      - __APP_SLUG__
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
@@ -47,26 +43,26 @@ services:
 
   db:
     image: postgres:16-alpine
-    container_name: __APP_SLUG__-db-dev
+    container_name: __APP_SLUG__-db
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "${DB_EXTERNAL_PORT:-5432}:5432"
     environment:
       POSTGRES_DB: __APP_SLUG__
       POSTGRES_USER: __APP_SLUG__
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - __APP_SLUG__-db:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U __APP_SLUG__ -d __APP_SLUG__"]
       interval: 5s
       timeout: 5s
       retries: 10
     networks:
-      - app-network
+      - __APP_SLUG__
 
 volumes:
-  db-data:
+  __APP_SLUG__-db:
 
 networks:
-  app-network:
+  __APP_SLUG__:

@@ -1,23 +1,53 @@
 # ==============================================
-# FrankenPHP Production Dockerfile — __APP_NAME__
-# Single binary: Caddy + PHP
+# FrankenPHP Production Dockerfile
+# Octane worker mode: Laravel stays booted in memory
 # ==============================================
 
+# ==============================================
 # Stage 1: Composer dependencies
+# ==============================================
 FROM composer:2 AS composer
 
 WORKDIR /app
+
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
+
+RUN composer install \
+    --no-dev \
+    --no-scripts \
+    --no-autoloader \
+    --ignore-platform-reqs
+
 COPY . .
+
 RUN composer dump-autoload --optimize --no-dev --no-scripts
 
-# Stage 2: FrankenPHP Production
+# ==============================================
+# Stage 2: Build frontend assets
+# ==============================================
+FROM node:20-alpine AS frontend
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY resources ./resources
+COPY vite.config.js ./
+COPY public ./public
+COPY --from=composer /app/vendor ./vendor
+
+RUN npm run build
+
+# ==============================================
+# Stage 3: FrankenPHP Production
+# ==============================================
 FROM dunglas/frankenphp:1-php8.3-alpine AS production
 
 RUN apk add --no-cache curl
 
 RUN install-php-extensions \
+    pdo_mysql \
     pdo_pgsql \
     mbstring \
     exif \
@@ -44,14 +74,12 @@ RUN echo "memory_limit=256M" >> /usr/local/etc/php/conf.d/production.ini \
 WORKDIR /app
 
 COPY --from=composer /app /app
+COPY --from=frontend /app/public/build /app/public/build
 COPY Caddyfile /etc/caddy/Caddyfile
 
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p storage/logs \
     && mkdir -p bootstrap/cache \
-    && mkdir -p /var/log/caddy \
-    && rm -f bootstrap/cache/packages.php bootstrap/cache/services.php \
-    && php artisan package:discover --ansi || true \
     && chown -R www-data:www-data /app \
     && chmod -R 775 storage bootstrap/cache
 
@@ -60,8 +88,8 @@ ENV APP_ENV=production
 ENV APP_DEBUG=false
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:80/up || exit 1
+    CMD curl -f http://localhost/up || exit 1
 
-EXPOSE 80
+EXPOSE 80 443 443/udp
 
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
