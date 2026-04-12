@@ -21,7 +21,6 @@ ALL containers must follow `{slug}-{service}-{env}`:
 
 **Development** (`docker-compose.dev.yml`):
 - `porngurucam-app-dev` (already correct)
-- `porngurucam-vite-dev` (currently `porngurucam-vite`, add `-dev`)
 - `porngurucam-scheduler-dev` (currently `porngurucam-scheduler`, add `-dev`)
 - `porngurucam-db-dev` (currently `porngurucam-db`, add `-dev`)
 
@@ -46,7 +45,6 @@ Update to:
 
 #### 2. `docker-compose.dev.yml`
 
-- Rename `porngurucam-vite` to `porngurucam-vite-dev`
 - Rename `porngurucam-scheduler` to `porngurucam-scheduler-dev`
 - Rename `porngurucam-db` to `porngurucam-db-dev`
 - `porngurucam-app-dev` is already correct

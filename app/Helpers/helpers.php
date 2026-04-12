@@ -1,12 +1,25 @@
 <?php
 
+use App\Services\SeoManager;
+
+if (!function_exists('seo')) {
+    /**
+     * Get the SeoManager singleton.
+     *
+     * seo()                       - returns the SeoManager instance
+     * seo()->title('My Page')     - set title, returns manager for chaining
+     * seo()->get('title')         - get current title value
+     */
+    function seo(): SeoManager
+    {
+        return app(SeoManager::class);
+    }
+}
+
 if (!function_exists('localized_route')) {
     /**
      * Generate a URL for a named route, automatically adding the locale prefix
      * when the current locale is not the default (English).
-     *
-     * If a ".localized" version of the route exists, it will be used with the
-     * current locale automatically injected.
      */
     function localized_route(string $name, mixed $parameters = [], bool $absolute = true): string
     {

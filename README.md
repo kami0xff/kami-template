@@ -7,7 +7,7 @@ Production-ready Laravel starter with built-in SEO infrastructure and multi-loca
 - PHP 8.3 + Laravel 12
 - FrankenPHP (production) / PHP dev server (local)
 - PostgreSQL 16, Redis 7
-- Vite, Docker Compose, GitHub Actions CI/CD
+- Docker Compose, GitHub Actions CI/CD
 
 ## Quick Start
 
@@ -18,7 +18,6 @@ cd /var/www/my-project
 
 # 2. Install dependencies
 composer install
-npm install && npm run build
 
 # 3. Configure environment
 cp .env.production.example .env
