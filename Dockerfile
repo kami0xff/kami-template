@@ -8,6 +8,10 @@
 # ==============================================
 FROM php:8.3-cli-alpine AS base
 
+# Composer and Node.js
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+RUN apk add --no-cache nodejs npm
+
 RUN apk add --no-cache \
     postgresql-dev \
     libpng \
@@ -23,12 +27,17 @@ RUN apk add --no-cache \
 FROM base AS development
 
 RUN apk add --no-cache --virtual .build-deps \
+    autoconf \
+    gcc \
+    g++ \
+    make \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
     libzip-dev \
     oniguruma-dev \
     icu-dev \
+    linux-headers \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo_pgsql \
@@ -39,9 +48,13 @@ RUN apk add --no-cache --virtual .build-deps \
         gd \
         zip \
         intl \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
     && apk del .build-deps
 
-WORKDIR /var/www/html
+#Build js and css assets ?
+
+WORKDIR /app
 
 EXPOSE 8000
 

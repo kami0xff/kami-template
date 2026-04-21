@@ -9,7 +9,7 @@ services:
     ports:
       - "${DEV_PORT:-8787}:8000"
     volumes:
-      - .:/var/www/html
+      - .:/app
     networks:
       - __APP_SLUG__
     environment:
