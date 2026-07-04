@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'set.locale' => \App\Http\Middleware\SetLocale::class,
             'detect.locale' => \App\Http\Middleware\DetectLocale::class,
+            'site' => \App\Http\Middleware\SetSite::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

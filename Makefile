@@ -8,7 +8,7 @@
 #   make help       - Show all commands
 # ==============================================
 
-.PHONY: help configure setup dev dev-up dev-down dev-logs dev-shell prod prod-up prod-down prod-logs prod-shell migrate fresh test build ide-helper boost-install boost-update assets assets-build \
+.PHONY: help configure setup dev dev-up dev-down dev-logs dev-shell prod prod-up prod-down prod-logs prod-shell migrate fresh test build ide-helper boost-install boost-update assets assets-build site-new sites-build \
 	prod-status prod-stats prod-health prod-logs-laravel prod-logs-access prod-slow-requests prod-logs-worker prod-logs-scheduler prod-queue prod-schedule prod-frankenphp-process-list prod-db-activity prod-db-connections prod-db-slow-queries prod-db-stats-reset prod-redis prod-telescope-prune
 
 # Default
@@ -33,6 +33,11 @@ help:
 	@echo "  make ide-helper   Generate IDE helper files"
 	@echo "  make boost-install  Install Laravel Boost (MCP + guidelines)"
 	@echo "  make boost-update   Refresh Boost guidelines/skills"
+	@echo ""
+	@echo "  Static Sites"
+	@echo "  ─────────────────────────────────────"
+	@echo "  make site-new KEY=myblog DOMAIN=myblog.com   Scaffold a new site"
+	@echo "  make sites-build                             Build static snapshots"
 	@echo ""
 	@echo "  Production"
 	@echo "  ─────────────────────────────────────"
@@ -149,6 +154,18 @@ fresh:
 
 test:
 	docker compose -f docker-compose.dev.yml exec app php artisan test
+
+# Scaffold a new static site: make site-new KEY=myblog DOMAIN=myblog.com
+site-new:
+	@if [ -z "$(KEY)" ] || [ -z "$(DOMAIN)" ]; then \
+		echo "Usage: make site-new KEY=myblog DOMAIN=myblog.com"; \
+		exit 1; \
+	fi
+	docker compose -f docker-compose.dev.yml exec app php artisan site:make $(KEY) $(DOMAIN) --with-www
+
+# Render all static sites to public/static/{domain} (Caddy serves these in prod)
+sites-build:
+	docker compose -f docker-compose.dev.yml exec app php artisan site:build --clean
 
 # Rebuild assets into public/build on every change (no dev server / HMR).
 assets:

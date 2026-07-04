@@ -47,6 +47,20 @@
     }
     route {
         respond @public_dash 404
+
+        # Static site snapshots (php artisan site:build) live under
+        # public/static/{domain}/... — serve them directly so PHP never runs
+        # for a cached page. Falls through to php_server on a miss, which
+        # renders the same page dynamically.
+        @sitecache {
+            method GET
+            file {
+                try_files /static/{host}{path}/index.html /static/{host}{path}index.html /static/{host}{path}
+            }
+        }
+        header @sitecache Cache-Control "public, max-age=300"
+        rewrite @sitecache {http.matchers.file.relative}
+
         php_server
     }
 

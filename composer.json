@@ -14,7 +14,9 @@
         "laravel/pulse": "^1.0",
         "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.10.1",
-        "sentry/sentry-laravel": "^4.0"
+        "league/commonmark": "^2.8",
+        "sentry/sentry-laravel": "^4.0",
+        "symfony/yaml": "^7.4"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

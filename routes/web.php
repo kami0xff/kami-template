@@ -3,6 +3,13 @@
 use Illuminate\Support\Facades\Route;
 
 // ======================================================
+// Static Sites (domain-scoped — must be registered first
+// so they take precedence over the host-agnostic routes)
+// ======================================================
+
+require __DIR__ . '/sites.php';
+
+// ======================================================
 // Health Check
 // ======================================================
 

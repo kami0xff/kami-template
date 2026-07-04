@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Sites\SiteRegistry;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -10,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->singleton(SiteRegistry::class);
     }
 
     public function boot(): void
@@ -20,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
         // stray command can never wipe live data. Non-production environments
         // (e.g. `make fresh` in local dev) are unaffected.
         DB::prohibitDestructiveCommands($this->app->isProduction());
+
+        // Pristine copy of the seo config, captured before any request could
+        // mutate it. SetSite derives each site's seo config from this so that
+        // long-lived processes (Octane workers, site:build) never leak one
+        // site's overrides into another's.
+        $this->app->instance('seo.defaults', config('seo'));
 
         $this->authorizeDashboards();
     }

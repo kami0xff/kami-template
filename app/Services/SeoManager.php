@@ -50,6 +50,10 @@ class SeoManager
                 return $title . $separator . $suffix;
             };
         }
+
+        foreach (array_filter($c['preconnect'] ?? []) as $domain) {
+            $this->preconnect($domain);
+        }
     }
 
     public function set(string $key, string|Closure|null $value): static

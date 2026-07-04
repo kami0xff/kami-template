@@ -92,6 +92,90 @@ Keep guidelines current as packages change with `make boost-update`. Boost's gen
 guideline/config files (`boost.json`, `.mcp.json`, `AGENTS.md`, `CLAUDE.md`) are git-ignored;
 `.cursor/mcp.json` is committed intentionally.
 
+## Static Sites (multi-domain)
+
+One project can host many static sites — each site is a folder under
+`resources/sites/{key}/`, routed by its domain and served as pre-built HTML
+in production (Caddy serves the files directly; PHP never runs for a cached page).
+
+### Create a site
+
+```bash
+php artisan site:make myblog myblog.com --name="My Blog" --with-www
+# or: make site-new KEY=myblog DOMAIN=myblog.com
+```
+
+This scaffolds:
+
+```
+resources/sites/myblog/
+  site.php               — name, domains, locale, per-site SEO overrides
+  content/
+    blog/hello-world.md  — blog post (filename = URL slug -> /blog/hello-world)
+    pages/home.md        — static page (path = URL -> /)
+  views/pages/           — optional Blade pages (win over markdown)
+```
+
+Then point the domain at the server (Cloudflare tunnel/DNS). The first domain
+in `site.php` is canonical; others (e.g. www.) 301-redirect to it.
+
+### URL structure per site
+
+| URL | Source |
+|-----|--------|
+| `/` | `views/pages/home.blade.php` or `content/pages/home.md` |
+| `/blog` | index of `content/blog/*.md`, newest first |
+| `/blog/{slug}` | `content/blog/{slug}.md` |
+| `/{path}` | `views/pages/{path}.blade.php` or `content/pages/{path}.md` (nesting allowed) |
+| `/sitemap.xml` | generated (includes lastmod from front matter) |
+
+### Content = markdown + front matter
+
+```markdown
+---
+title: My Post Title
+description: Meta description for search results.
+date: 2026-07-01          # article:published_time + datePublished
+updated: 2026-07-10       # article:modified_time + dateModified
+author: Jane Doe
+section: Guides
+tags: [laravel, seo]
+image: https://myblog.com/img/cover.png   # og:image + schema image
+draft: true               # hidden everywhere except local dev
+---
+
+# My Post Title
+
+GitHub-flavored markdown body...
+```
+
+Every field feeds the SEO layer automatically: meta title/description,
+canonical URL, Open Graph article tags, BlogPosting + BreadcrumbList JSON-LD,
+and the sitemap. Only `title` is really needed — everything else has fallbacks.
+
+### Publishing workflow
+
+1. Edit or add a `.md` file (drafts preview in local dev)
+2. Commit and push to `main`
+3. `deploy.sh` runs `php artisan site:build --clean`, which renders every page
+   to `public/static/{domain}/.../index.html`
+
+Caddy serves those files directly with a 5-minute cache header and falls back
+to dynamic rendering on a miss. To publish content without a code deploy, run
+`make prod-shell` then `php artisan site:build` after pulling.
+
+### Per-site SEO / branding
+
+`site.php` can override any key from `config/seo.php` for that site only
+(description, theme color, twitter handles, organization schema, …). The site
+name automatically becomes the title suffix, og:site_name, and Organization
+name. The shared look lives in `resources/views/sites/layout.blade.php`; a
+site can override it (or any shared view) by creating the same file under
+`resources/sites/{key}/views/`.
+
+The `example` site under `resources/sites/example/` is a living reference and
+is used by the test suite (domain `example.test`).
+
 ## SEO Infrastructure
 
 ### Components
