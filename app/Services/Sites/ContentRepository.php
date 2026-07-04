@@ -19,6 +19,18 @@ use League\CommonMark\MarkdownConverter;
  *   content/blog/{slug}.md    -> /blog/{slug}   (post; filename is the slug)
  *   content/pages/{path}.md   -> /{path}        (static page, may be nested)
  *
+ * Multi-locale sites ('locales' in site.php) keep the default locale at the
+ * content root and nest each extra locale in its own subtree, served under
+ * a /{locale} URL prefix:
+ *
+ *   content/es/blog/{slug}.md -> /es/blog/{slug}
+ *   content/es/pages/home.md  -> /es/
+ *
+ * The same slug across locales marks documents as translations of each
+ * other (that is what links them in hreflang alternates). Lookups default
+ * to the current app locale, which the SetSite middleware derives from the
+ * URL prefix.
+ *
  * Rendered HTML is cached keyed by file mtime, so editing a file busts the
  * cache automatically.
  */
@@ -35,18 +47,18 @@ class ContentRepository
      *
      * @return Collection<int, MarkdownDocument>
      */
-    public function posts(Site $site, bool $withDrafts = false): Collection
+    public function posts(Site $site, bool $withDrafts = false, ?string $locale = null): Collection
     {
-        return collect(glob($site->contentPath('blog') . '/*.md') ?: [])
+        return collect(glob($this->dir($site, 'blog', $locale) . '/*.md') ?: [])
             ->map(fn(string $file) => $this->parse($site, $file))
             ->filter(fn(MarkdownDocument $doc) => $withDrafts || !$doc->isDraft())
             ->sortByDesc(fn(MarkdownDocument $doc) => $doc->date()?->getTimestamp() ?? 0)
             ->values();
     }
 
-    public function post(Site $site, string $slug, bool $withDrafts = false): ?MarkdownDocument
+    public function post(Site $site, string $slug, bool $withDrafts = false, ?string $locale = null): ?MarkdownDocument
     {
-        $file = $site->contentPath('blog') . '/' . $slug . '.md';
+        $file = $this->dir($site, 'blog', $locale) . '/' . $slug . '.md';
 
         if (!$this->isSafeContentFile($site, $file)) {
             return null;
@@ -60,9 +72,9 @@ class ContentRepository
     /**
      * A markdown static page, e.g. path "about" or "guides/getting-started".
      */
-    public function page(Site $site, string $path, bool $withDrafts = false): ?MarkdownDocument
+    public function page(Site $site, string $path, bool $withDrafts = false, ?string $locale = null): ?MarkdownDocument
     {
-        $file = $site->contentPath('pages') . '/' . $path . '.md';
+        $file = $this->dir($site, 'pages', $locale) . '/' . $path . '.md';
 
         if (!$this->isSafeContentFile($site, $file)) {
             return null;
@@ -78,9 +90,9 @@ class ContentRepository
      *
      * @return Collection<int, array{path: string, doc: MarkdownDocument}>
      */
-    public function pages(Site $site, bool $withDrafts = false): Collection
+    public function pages(Site $site, bool $withDrafts = false, ?string $locale = null): Collection
     {
-        $base = $site->contentPath('pages');
+        $base = $this->dir($site, 'pages', $locale);
 
         return collect($this->globRecursive($base . '/*.md'))
             ->map(fn(string $file) => [
@@ -90,6 +102,49 @@ class ContentRepository
             ])
             ->filter(fn(array $item) => $withDrafts || !$item['doc']->isDraft())
             ->values();
+    }
+
+    /**
+     * Locales in which a blog post exists (same slug = translation).
+     *
+     * @return string[]
+     */
+    public function postLocales(Site $site, string $slug): array
+    {
+        return array_values(array_filter(
+            $site->locales,
+            fn(string $locale) => $this->post($site, $slug, locale: $locale) !== null,
+        ));
+    }
+
+    /**
+     * Locales in which a markdown page exists (same path = translation).
+     *
+     * @return string[]
+     */
+    public function pageLocales(Site $site, string $path): array
+    {
+        return array_values(array_filter(
+            $site->locales,
+            fn(string $locale) => $this->page($site, $path, locale: $locale) !== null,
+        ));
+    }
+
+    /**
+     * Content directory for a locale: the default locale lives at the
+     * content root, extra locales in their own subtree (content/{locale}/).
+     */
+    protected function dir(Site $site, string $sub, ?string $locale): string
+    {
+        $locale ??= app()->getLocale();
+
+        $prefix = $site->isMultiLocale()
+            && $locale !== $site->locale
+            && in_array($locale, $site->locales, true)
+            ? $locale . '/'
+            : '';
+
+        return $site->contentPath($prefix . $sub);
     }
 
     protected function parse(Site $site, string $file): MarkdownDocument

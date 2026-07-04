@@ -16,6 +16,7 @@ class Site
         public readonly string $name,
         public readonly array $domains,
         public readonly string $locale,
+        public readonly array $locales,
         public readonly array $seo,
         public readonly array $author,
         public readonly array $newsletter,
@@ -30,11 +31,17 @@ class Site
             throw new \InvalidArgumentException("Site [{$key}] must define at least one domain in site.php");
         }
 
+        $locale = $config['locale'] ?? 'en';
+        // 'locales' opts into multi-locale URLs; the default locale is
+        // always included and always served un-prefixed at the root.
+        $locales = array_values(array_unique(array_merge([$locale], $config['locales'] ?? [])));
+
         return new self(
             key: $key,
             name: $config['name'] ?? $key,
             domains: array_values($config['domains']),
-            locale: $config['locale'] ?? 'en',
+            locale: $locale,
+            locales: $locales,
             seo: $config['seo'] ?? [],
             author: $config['author'] ?? [],
             newsletter: $config['newsletter'] ?? [],
@@ -42,6 +49,17 @@ class Site
             analytics: $config['analytics'] ?? [],
             path: $path,
         );
+    }
+
+    public function isMultiLocale(): bool
+    {
+        return count($this->locales) > 1;
+    }
+
+    /** Locales served under a /{locale} URL prefix (all but the default). */
+    public function extraLocales(): array
+    {
+        return array_values(array_diff($this->locales, [$this->locale]));
     }
 
     /**
@@ -77,6 +95,23 @@ class Site
     public function url(string $path = '/'): string
     {
         return 'https://' . $this->canonicalDomain() . '/' . ltrim($path, '/');
+    }
+
+    /**
+     * Absolute URL for a path in a locale: the default locale lives at the
+     * root, extra locales under /{locale}. Defaults to the current app
+     * locale, so views/controllers build correct links without caring
+     * which language the request is in.
+     */
+    public function localizedUrl(string $path = '/', ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+
+        if ($locale === $this->locale || !in_array($locale, $this->locales, true)) {
+            return $this->url($path);
+        }
+
+        return $this->url('/' . $locale . ($path === '/' ? '/' : '/' . ltrim($path, '/')));
     }
 
     public function viewsPath(): string

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Sites;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Sites\Concerns\SharesAlternates;
 use App\Services\SeoService;
 use App\Services\Sites\ClusterRepository;
 use App\Services\Sites\ContentRepository;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class BlogController extends Controller
 {
+    use SharesAlternates;
+
     public function __construct(
         protected ContentRepository $content,
         protected SeoService $seoService,
@@ -24,12 +27,19 @@ class BlogController extends Controller
 
         seo()->title(__('Blog'))
             ->description(__('Articles and updates from :site', ['site' => $site->name]))
-            ->canonical($site->url('/blog'));
+            ->canonical($site->localizedUrl('/blog'));
+
+        // The blog index is a translation of itself in every locale that
+        // has at least one published post.
+        $this->shareAlternates($site, '/blog', array_values(array_filter(
+            $site->locales,
+            fn(string $locale) => $this->content->posts($site, locale: $locale)->isNotEmpty(),
+        )));
 
         $schemas = [
             $this->seoService->getCollectionPageSchema(
                 name: $site->name . ' Blog',
-                url: $site->url('/blog'),
+                url: $site->localizedUrl('/blog'),
                 numberOfItems: $posts->count(),
             ),
             $this->seoService->getItemListSchema(
@@ -37,7 +47,7 @@ class BlogController extends Controller
                 totalItems: $posts->count(),
                 items: $posts->map(fn($post) => [
                     'name' => $post->title(),
-                    'url' => $site->url('/blog/' . $post->slug),
+                    'url' => $site->localizedUrl('/blog/' . $post->slug),
                 ])->all(),
             ),
         ];
@@ -54,7 +64,9 @@ class BlogController extends Controller
 
         abort_if($post === null, 404);
 
-        $url = $site->url('/blog/' . $slug);
+        $url = $site->localizedUrl('/blog/' . $slug);
+
+        $this->shareAlternates($site, '/blog/' . $slug, $this->content->postLocales($site, $slug));
 
         seo()->title($post->title())
             ->description($post->description())
@@ -72,8 +84,8 @@ class BlogController extends Controller
         }
 
         $breadcrumbs = [
-            ['name' => $site->name, 'url' => $site->url('/')],
-            ['name' => __('Blog'), 'url' => $site->url('/blog')],
+            ['name' => $site->name, 'url' => $site->localizedUrl('/')],
+            ['name' => __('Blog'), 'url' => $site->localizedUrl('/blog')],
             ['name' => $post->title(), 'url' => $url],
         ];
 

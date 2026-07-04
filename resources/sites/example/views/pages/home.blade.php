@@ -8,7 +8,7 @@
 @php
     seo()->title('Example Site — Static Multi-Site Demo')
         ->description('An example static site demonstrating markdown content, blog posts, and per-site SEO.')
-        ->canonical($site->url('/'));
+        ->canonical($site->localizedUrl('/'));
 @endphp
 
 @push('seo-pagination')
@@ -31,11 +31,11 @@
 <ul class="post-list">
     @foreach($posts->take(5) as $post)
         <li class="post-list-item">
-            <h2><a href="{{ $site->url('/blog/' . $post->slug) }}">{{ $post->title() }}</a></h2>
+            <h2><a href="{{ $site->localizedUrl('/blog/' . $post->slug) }}">{{ $post->title() }}</a></h2>
             <p>{{ $post->excerpt(140) }}</p>
         </li>
     @endforeach
 </ul>
 
-<p><a href="{{ $site->url('/blog') }}">{{ __('All articles') }} &rarr;</a></p>
+<p><a href="{{ $site->localizedUrl('/blog') }}">{{ __('All articles') }} &rarr;</a></p>
 @endsection

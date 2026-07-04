@@ -3,8 +3,8 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>{{ $site->name }}</title>
-        <link>{{ $site->url('/') }}</link>
-        <atom:link href="{{ $site->url('/feed.xml') }}" rel="self" type="application/rss+xml" />
+        <link>{{ $site->localizedUrl('/') }}</link>
+        <atom:link href="{{ $site->localizedUrl('/feed.xml') }}" rel="self" type="application/rss+xml" />
         <description>{{ config('seo.description') }}</description>
         <language>{{ $site->locale }}</language>
 @if($posts->isNotEmpty())
@@ -13,8 +13,8 @@
 @foreach($posts as $post)
         <item>
             <title>{{ $post->title() }}</title>
-            <link>{{ $site->url('/blog/' . $post->slug) }}</link>
-            <guid isPermaLink="true">{{ $site->url('/blog/' . $post->slug) }}</guid>
+            <link>{{ $site->localizedUrl('/blog/' . $post->slug) }}</link>
+            <guid isPermaLink="true">{{ $site->localizedUrl('/blog/' . $post->slug) }}</guid>
 @if($post->date())
             <pubDate>{{ $post->date()->toRssString() }}</pubDate>
 @endif

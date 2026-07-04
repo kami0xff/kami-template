@@ -33,6 +33,40 @@ Use `make assets` for a Vite rebuild-on-change watcher during development.
 > the Postgres database/user. (The Composer package name stays `kami/template`
 > so the committed `composer.lock` remains valid.)
 
+### Keeping projects in sync with the template (avoiding drift)
+
+Copied projects fork the moment they are created — template fixes don't
+reach them by themselves. The workflow that keeps updates flowing:
+
+1. **Copy with `git clone`, never `cp`** — cloning preserves the template's
+   history, which is what makes future merges trivial three-way merges
+   instead of conflict storms.
+2. **Keep the template as a second remote** in every project:
+
+```bash
+git clone <template-repo> /var/www/myapp && cd /var/www/myapp
+git remote rename origin template
+git remote add origin <project-repo>       # the project's own repo
+git push -u origin main
+```
+
+3. **Pull template improvements periodically:**
+
+```bash
+git fetch template
+git merge template/main      # then: make check
+```
+
+Conflicts stay rare because project-specific changes concentrate in files
+the template rarely touches (`resources/sites/`, `.env*`, compose files).
+When a project intentionally diverges (e.g. a trimmed `docker-compose.prod.yml`
+for a static hub), git remembers your resolution direction after the first merge.
+
+If the family of projects grows past a handful, the mature next step is
+extracting the sites engine into a Composer package that projects
+`composer require` — updates then arrive with `composer update` instead of
+merges. Not worth the overhead below ~4-5 projects.
+
 ## Dev Tooling
 
 This template ships with AI/IDE tooling enabled by default (all `require-dev`, never loaded in production):
@@ -330,6 +364,40 @@ sources are reprocessed); a dynamic fallback route generates on demand, so
 local dev needs no build step and a production cache miss heals itself.
 SVG and GIF pass through untouched. Widths are whitelisted, so the dynamic
 route can't be abused to generate arbitrary sizes.
+
+### Multi-locale sites
+
+A site becomes multi-locale by declaring extra locales in `site.php`:
+
+```php
+'locale' => 'en',        // default — served at the root (/)
+'locales' => ['es'],     // extras — served under /es/...
+```
+
+Translations live in `content/{locale}/` with **matching slugs** — the
+matching slug is what links two documents as translations:
+
+```
+content/blog/hello-world.md        -> /blog/hello-world       (en)
+content/es/blog/hello-world.md     -> /es/blog/hello-world    (es)
+content/es/pages/about.md          -> /es/about
+```
+
+What happens automatically for every translated document:
+
+- `hreflang` alternates in the head (each locale + `x-default` pointing at
+  the default locale) — the canonical multi-language SEO signal
+- A language switcher in the site header (only on pages that actually have
+  a translation)
+- Per-locale sitemap entries and a per-locale RSS feed (`/es/feed.xml`)
+- Localized UI chrome via `lang/{locale}.json` (`es` and `fr` ship with the
+  template) and `lang="{locale}"` on `<html>`
+- The static build renders every locale (`/es/...` output directories)
+
+Untranslated documents simply don't exist in the other locale: no hreflang,
+no switcher, a 404 under the prefix — no half-translated pages. Blade pages
+(`views/pages/*.blade.php`) serve every locale with localized data, since
+views are code rather than content.
 
 ### Deploying to Cloudflare Pages (serverless, no hub server)
 

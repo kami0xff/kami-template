@@ -227,11 +227,20 @@
 @section('content')
 <header class="site-header">
     <div class="site-header-inner">
-        <a class="site-brand" href="{{ $site->url('/') }}">{{ $site->name }}</a>
+        <a class="site-brand" href="{{ $site->localizedUrl('/') }}">{{ $site->name }}</a>
         <nav class="site-nav">
-            <a href="{{ $site->url('/blog') }}">{{ __('Blog') }}</a>
+            <a href="{{ $site->localizedUrl('/blog') }}">{{ __('Blog') }}</a>
             @if($site->search)
                 <a href="{{ $site->url('/search') }}">{{ __('Search') }}</a>
+            @endif
+            {{-- Language switcher: links to this page's translations
+                 (shared by the controller when they exist). --}}
+            @if(count($alternateUrls ?? []) > 1)
+                @foreach($alternateUrls as $altLocale => $altUrl)
+                    @if($altLocale !== app()->getLocale())
+                        <a href="{{ $altUrl }}" hreflang="{{ $altLocale }}" rel="alternate">{{ strtoupper($altLocale) }}</a>
+                    @endif
+                @endforeach
             @endif
         </nav>
     </div>

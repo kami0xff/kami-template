@@ -31,7 +31,7 @@
     @if($cluster && $cluster['role'] === 'spoke')
         <p class="cluster-hub">
             {{ __('Part of our guide:') }}
-            <a href="{{ $site->url('/blog/' . $cluster['pillar']->slug) }}">{{ $cluster['pillar']->title() }}</a>
+            <a href="{{ $site->localizedUrl('/blog/' . $cluster['pillar']->slug) }}">{{ $cluster['pillar']->title() }}</a>
         </p>
     @endif
 
@@ -54,7 +54,7 @@
             <ul class="post-list">
                 @foreach($cluster['spokes'] as $spoke)
                     <li class="post-list-item">
-                        <h3><a href="{{ $site->url('/blog/' . $spoke->slug) }}">{{ $spoke->title() }}</a></h3>
+                        <h3><a href="{{ $site->localizedUrl('/blog/' . $spoke->slug) }}">{{ $spoke->title() }}</a></h3>
                         <p>{{ $spoke->excerpt(120) }}</p>
                     </li>
                 @endforeach
@@ -143,7 +143,7 @@
         <ul class="post-list">
             @foreach($related as $rel)
                 <li class="post-list-item">
-                    <h3><a href="{{ $site->url('/blog/' . $rel->slug) }}">{{ $rel->title() }}</a></h3>
+                    <h3><a href="{{ $site->localizedUrl('/blog/' . $rel->slug) }}">{{ $rel->title() }}</a></h3>
                     <p>{{ $rel->excerpt(120) }}</p>
                 </li>
             @endforeach

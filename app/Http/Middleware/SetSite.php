@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Scopes the request to one static site (parameterized: `site:{key}`).
+ * Scopes the request to one static site (parameterized: `site:{key}` or
+ * `site:{key},{locale}` for a locale-prefixed route group).
  *
  * - 301-redirects secondary domains (e.g. www.) to the canonical domain.
  * - Overrides app.name/app.url and the seo config with the site's values.
+ * - Sets the app locale (route-group locale, or the site's default).
  * - Registers the `site::` view namespace: the site's own views first,
  *   then resources/views/sites as shared fallbacks.
  * - Binds the current Site instance in the container and shares it with views.
@@ -22,11 +24,12 @@ class SetSite
 {
     public function __construct(protected SiteRegistry $registry) {}
 
-    public function handle(Request $request, Closure $next, string $siteKey): Response
+    public function handle(Request $request, Closure $next, string $siteKey, ?string $locale = null): Response
     {
         $site = $this->registry->get($siteKey);
 
         abort_if($site === null, 404);
+        abort_if($locale !== null && !in_array($locale, $site->locales, true), 404);
 
         if ($request->getHost() !== $site->canonicalDomain()) {
             return redirect()->away($site->url($request->getRequestUri()), 301);
@@ -38,7 +41,7 @@ class SetSite
             'seo' => $site->seoConfig(app('seo.defaults')),
         ]);
 
-        app()->setLocale($site->locale);
+        app()->setLocale($locale ?? $site->locale);
 
         View::replaceNamespace('site', [
             $site->viewsPath(),

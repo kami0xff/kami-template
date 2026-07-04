@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Sites;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Sites\Concerns\SharesAlternates;
 use App\Services\Sites\ContentRepository;
 use App\Services\Sites\MarkdownDocument;
 use App\Services\Sites\Site;
@@ -10,6 +11,8 @@ use Illuminate\View\View;
 
 class PageController extends Controller
 {
+    use SharesAlternates;
+
     public function __construct(protected ContentRepository $content) {}
 
     public function home(Site $site): View
@@ -46,9 +49,14 @@ class PageController extends Controller
      */
     protected function render(Site $site, string $path): View
     {
+        $urlPath = $path === 'home' ? '/' : '/' . $path;
         $viewName = 'site::pages.' . str_replace('/', '.', $path);
 
         if (view()->exists($viewName)) {
+            // A Blade page renders in every locale (same view, localized
+            // data), so it is its own translation in all of them.
+            $this->shareAlternates($site, $urlPath, $site->locales);
+
             return view($viewName, [
                 'posts' => $this->content->posts($site, withDrafts: app()->environment('local')),
             ]);
@@ -58,7 +66,8 @@ class PageController extends Controller
 
         abort_if($doc === null, 404);
 
-        $this->applySeo($site, $doc, $path === 'home' ? '/' : '/' . $path);
+        $this->applySeo($site, $doc, $urlPath);
+        $this->shareAlternates($site, $urlPath, $this->content->pageLocales($site, $path));
 
         return view('site::page', ['doc' => $doc]);
     }
@@ -67,7 +76,7 @@ class PageController extends Controller
     {
         seo()->title($doc->title())
             ->description($doc->description())
-            ->canonical($site->url($urlPath));
+            ->canonical($site->localizedUrl($urlPath));
 
         if ($doc->image()) {
             seo()->image($doc->image());

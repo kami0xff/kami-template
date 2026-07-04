@@ -54,6 +54,9 @@ _ide_helper_models.php
 /data/
 /logs/
 
+# Database backups (db-backup sidecar writes here; ship offsite, don't commit)
+/backups/
+
 # Testing
 /coverage
 /.phpunit.cache

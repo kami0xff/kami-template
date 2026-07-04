@@ -13,7 +13,7 @@
     <ul class="post-list">
         @foreach($posts as $post)
             <li class="post-list-item">
-                <h2><a href="{{ $site->url('/blog/' . $post->slug) }}">{{ $post->title() }}</a></h2>
+                <h2><a href="{{ $site->localizedUrl('/blog/' . $post->slug) }}">{{ $post->title() }}</a></h2>
                 @if($post->date())
                     <time datetime="{{ $post->date()->toDateString() }}" class="post-meta">
                         {{ $post->date()->isoFormat('LL') }}

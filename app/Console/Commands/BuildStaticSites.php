@@ -193,17 +193,28 @@ class BuildStaticSites extends Command
         $paths[] = '/feed.xml';
         $paths[] = '/robots.txt';
 
+        // Every extra locale has its own RSS feed.
+        foreach ($site->extraLocales() as $locale) {
+            $paths[] = "/{$locale}/feed.xml";
+        }
+
         if ($site->search) {
             $paths[] = '/search';
         }
 
         // Blade-only pages (site::pages.*) that have no markdown counterpart.
+        // Blade views serve every locale (same view, localized data).
         $viewsDir = $site->viewsPath() . '/pages';
         if (is_dir($viewsDir)) {
             foreach (File::allFiles($viewsDir) as $view) {
                 $path = str_replace('.blade.php', '', $view->getRelativePathname());
+
                 if ($path !== 'home') {
                     $paths[] = '/' . $path;
+                }
+
+                foreach ($site->extraLocales() as $locale) {
+                    $paths[] = '/' . $locale . ($path === 'home' ? '' : '/' . $path);
                 }
             }
         }

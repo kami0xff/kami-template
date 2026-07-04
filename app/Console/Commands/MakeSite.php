@@ -58,6 +58,12 @@ class MakeSite extends Command
 
             'locale' => 'en',
 
+            // Multi-locale (optional): extra locales are served under
+            // /{locale}/... while the default locale stays at the root.
+            // Translations live in content/{locale}/ with matching slugs
+            // (same slug = same document, linked via hreflang).
+            // 'locales' => ['es'],
+
             // E-E-A-T author: byline + bio box on articles and Person schema
             // (with sameAs social profiles) in the article JSON-LD.
             'author' => [

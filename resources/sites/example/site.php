@@ -18,6 +18,11 @@ return [
 
     'locale' => 'en',
 
+    // Multi-locale: Spanish is served under /es/... (English stays at the
+    // root). Translations live in content/es/ with matching slugs — the
+    // matching slug is what links documents as hreflang alternates.
+    'locales' => ['es'],
+
     // E-E-A-T author: rendered as the byline + bio box on articles and as a
     // Person schema (with sameAs social profiles) in the article JSON-LD.
     'author' => [
