@@ -71,7 +71,9 @@ class PageSeoContent extends Model
 
     public static function clearCache(string $pageKey): void
     {
-        $locales = config('locales.priority', ['en']);
+        // Clear every supported locale, not just priority ones — content can be
+        // stored for any supported locale and would otherwise stay stale.
+        $locales = array_keys(config('locales.supported', ['en' => []]));
         foreach ($locales as $locale) {
             Cache::forget("page_seo:{$pageKey}:{$locale}");
         }

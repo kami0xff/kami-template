@@ -455,28 +455,37 @@ class SeoService
         return $schema;
     }
 
+    /**
+     * Build an associative map of hreflang code => absolute URL for the
+     * <x-seo.hreflang> component. The default locale uses the bare (prefix-less)
+     * URL; every other supported locale gets the locale-prefixed path.
+     *
+     * @return array<string, string>
+     */
     public function buildHreflangUrls(string $englishUrl, string $pathPattern, array $routeParams = []): array
     {
-        $locales = config('app.locales', ['en']);
+        $locales = array_keys(config('locales.supported', ['en' => []]));
+        $default = config('locales.default', 'en');
+        $baseUrl = rtrim(config('app.url'), '/');
+
         $hreflangs = [];
 
         foreach ($locales as $locale) {
+            if ($locale === $default) {
+                $hreflangs[$locale] = $englishUrl;
+                continue;
+            }
+
             $path = str_replace('{locale}', $locale, $pathPattern);
 
             foreach ($routeParams as $key => $value) {
                 $path = str_replace('{' . $key . '}', $value, $path);
             }
 
-            $hreflangs[] = [
-                'hreflang' => $locale,
-                'url' => rtrim(config('app.url'), '/') . $path,
-            ];
+            $hreflangs[$locale] = $baseUrl . $path;
         }
 
-        $hreflangs[] = [
-            'hreflang' => 'x-default',
-            'url' => $englishUrl,
-        ];
+        $hreflangs['x-default'] = $englishUrl;
 
         return $hreflangs;
     }

@@ -15,8 +15,12 @@ services:
     image: __APP_SLUG__:production
     container_name: __APP_SLUG__-app-prod
     restart: unless-stopped
+    # Bind to loopback only: the host's cloudflared reaches this via 127.0.0.1.
+    # NOTE: Docker bypasses UFW/firewalld, so do NOT use "80:80" (that publishes
+    # the origin on the public IP, bypassing Cloudflare). If you ever serve
+    # traffic directly without a tunnel, change this back to "80:80".
     ports:
-      - "80:80"
+      - "127.0.0.1:80:80"
     env_file:
       - .env.production
     volumes:
@@ -43,6 +47,16 @@ services:
       POSTGRES_DB: __APP_SLUG__
       POSTGRES_USER: __APP_SLUG__
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    # Preload pg_stat_statements so we can inspect slow/expensive queries.
+    # The matching `CREATE EXTENSION` runs via a Laravel migration.
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.track=all"
+      - "-c"
+      - "pg_stat_statements.max=5000"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -58,9 +72,9 @@ services:
     image: redis:7-alpine
     container_name: __APP_SLUG__-redis-prod
     restart: unless-stopped
-    command: redis-server --appendonly yes --maxmemory 128mb --maxmemory-policy allkeys-lru
-    volumes:
-      - redis_data:/data
+    # Cache only: evictable (allkeys-lru) and non-persistent. Durable data
+    # (sessions, queue) lives in Postgres, so losing this on restart is fine.
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru --save "" --appendonly no
     networks:
       - app-network
     healthcheck:
@@ -84,7 +98,9 @@ services:
         condition: service_healthy
     networks:
       - app-network
-    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+    # Uses the default QUEUE_CONNECTION (database). Change the env + this line
+    # together if you move the queue to a dedicated (non-evictable) Redis.
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
 
   scheduler:
     image: __APP_SLUG__:production
@@ -108,8 +124,6 @@ volumes:
     name: __APP_SLUG___storage
   postgres_data:
     name: __APP_SLUG___postgres
-  redis_data:
-    name: __APP_SLUG___redis
 
 networks:
   app-network:

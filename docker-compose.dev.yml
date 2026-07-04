@@ -25,9 +25,9 @@ services:
     build:
       context: .
       target: development
-    container_name: __APP_SLUG__-scheduler
+    container_name: __APP_SLUG__-scheduler-dev
     volumes:
-      - .:/var/www/html
+      - .:/app
     networks:
       - __APP_SLUG__
     environment:
@@ -51,6 +51,15 @@ services:
       POSTGRES_DB: __APP_SLUG__
       POSTGRES_USER: __APP_SLUG__
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    # Match production: preload pg_stat_statements for query insight.
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.track=all"
+      - "-c"
+      - "pg_stat_statements.max=5000"
     volumes:
       - __APP_SLUG__-db:/var/lib/postgresql/data
     healthcheck:

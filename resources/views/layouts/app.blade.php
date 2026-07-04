@@ -124,6 +124,10 @@
               href="{{ url(config('seo.feed.url', '/feed')) }}">
     @endif
 
+    {{-- ===== ASSETS (Vite build --watch → public/build) ===== --}}
+    <link rel="stylesheet" href="{{ vite_asset('assets/app.css') }}">
+    <script type="module" src="{{ vite_asset('assets/app.js') }}"></script>
+
     {{-- ===== STYLES ===== --}}
     @stack('styles')
     @stack('head')

@@ -15,12 +15,10 @@
         <h2 class="seo-text-title">{{ $seoContent->title }}</h2>
     @endif
 
+    {{-- Content is always escaped (e()) before nl2br to prevent stored XSS.
+         nl2br only injects <br> tags; the text itself is HTML-escaped. --}}
     <div class="seo-text-content">
-        @if(preg_match('/<[a-z][\s\S]*>/i', $seoContent->content))
-            {!! $seoContent->content !!}
-        @else
-            {!! nl2br(e($seoContent->content)) !!}
-        @endif
+        {!! nl2br(e($seoContent->content)) !!}
     </div>
 
     @if($seoContent->keywords_array)

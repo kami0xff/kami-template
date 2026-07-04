@@ -37,4 +37,9 @@ return [
         'project_key' => env('OPENREPLAY_PROJECT_KEY'),
     ],
 
+    // Used by `php artisan seo:generate-page-content` (AI SEO content).
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+    ],
+
 ];

@@ -145,9 +145,9 @@ seo()-&gt;rawTag('&lt;link rel="manifest" href="/manifest.json"&gt;');</code></p
     <section style="margin-bottom:3rem;">
         <h2 style="color:#82b1ff;font-size:1.5rem;margin-bottom:1rem;">On-Page SEO Checklist</h2>
         <ul style="color:#b0b0b0;line-height:2;">
-            <li>@section('title') — under 60 chars</li>
-            <li>@section('meta_description') — 150–160 chars</li>
-            <li>@section('canonical'), @section('og_image')</li>
+            <li>@@section('title') — under 60 chars</li>
+            <li>@@section('meta_description') — 150–160 chars</li>
+            <li>@@section('canonical'), @@section('og_image')</li>
             <li>One &lt;h1&gt;, breadcrumbs, hreflang, schema</li>
             <li>Paginated: link rel="prev" / rel="next"</li>
             <li>Robots meta — index/noindex, follow/nofollow (staging vs production)</li>

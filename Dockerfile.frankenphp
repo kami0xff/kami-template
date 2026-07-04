@@ -33,7 +33,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY resources ./resources
-COPY vite.config.js ./
+COPY vite.config.ts tsconfig.json ./
 COPY public ./public
 COPY --from=composer /app/vendor ./vendor
 

@@ -43,6 +43,29 @@ if (!function_exists('localized_route')) {
     }
 }
 
+if (!function_exists('vite_asset')) {
+    /**
+     * Resolve a Vite-built asset under public/build with a cache-busting query.
+     *
+     * Filenames are fixed (no content hash), so a ?v=<filemtime> param is added
+     * to bust browser/CDN caches whenever the file is rebuilt or redeployed.
+     *
+     * vite_asset('assets/app.css') => /build/assets/app.css?v=1719300000
+     */
+    function vite_asset(string $path): string
+    {
+        $relative = 'build/' . ltrim($path, '/');
+        $fullPath = public_path($relative);
+        $url = asset($relative);
+
+        if (is_file($fullPath)) {
+            $url .= '?v=' . filemtime($fullPath);
+        }
+
+        return $url;
+    }
+}
+
 if (!function_exists('country_flag')) {
     /**
      * Convert a 2-letter country code to a flag emoji.

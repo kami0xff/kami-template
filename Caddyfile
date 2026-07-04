@@ -4,6 +4,7 @@
             file /app/public/frankenphp-worker.php
             num {$FRANKENPHP_NUM_WORKERS:4}
         }
+        max_requests {$FRANKENPHP_MAX_REQUESTS:500}
     }
     auto_https off
     servers {
@@ -35,7 +36,19 @@
     @images path *.jpg *.jpeg *.png *.gif *.svg *.webp
     header @images Cache-Control "public, max-age=604800"
 
-    php_server
+    # Keep the Pulse/Telescope dashboards off the public internet. The Cloudflare
+    # tunnel forwards the real domain as the Host header, so 404 those paths when
+    # requested via the domain. They remain reachable over the VPN through an SSH
+    # port-forward to 127.0.0.1:80 (Host = localhost). The Laravel gate in
+    # AppServiceProvider enforces the same rule as a backstop.
+    @public_dash {
+        path /pulse* /telescope*
+        host __APP_DOMAIN__ www.__APP_DOMAIN__
+    }
+    route {
+        respond @public_dash 404
+        php_server
+    }
 
     log {
         output file /var/log/caddy/access.log {
