@@ -9,6 +9,8 @@ use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\FrontMatter\FrontMatterExtension;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
+use League\CommonMark\Extension\TableOfContents\TableOfContentsExtension;
 use League\CommonMark\MarkdownConverter;
 
 /**
@@ -111,10 +113,32 @@ class ContentRepository
                 // javascript:/data: links are always stripped.
                 'html_input' => 'allow',
                 'allow_unsafe_links' => false,
+                // Every heading gets an id + anchor link (jump links can
+                // surface as sitelinks in search results).
+                'heading_permalink' => [
+                    'insert' => 'after',
+                    'symbol' => '#',
+                    'aria_hidden' => true,
+                    'min_heading_level' => 2,
+                    'max_heading_level' => 3,
+                    'id_prefix' => '',
+                    'fragment_prefix' => '',
+                ],
+                // A linked table of contents renders wherever a [TOC]
+                // placeholder appears in the markdown.
+                'table_of_contents' => [
+                    'position' => 'placeholder',
+                    'placeholder' => '[TOC]',
+                    'min_heading_level' => 2,
+                    'max_heading_level' => 3,
+                    'html_class' => 'toc',
+                ],
             ]);
             $environment->addExtension(new CommonMarkCoreExtension());
             $environment->addExtension(new GithubFlavoredMarkdownExtension());
             $environment->addExtension(new FrontMatterExtension());
+            $environment->addExtension(new HeadingPermalinkExtension());
+            $environment->addExtension(new TableOfContentsExtension());
 
             $this->converter = new MarkdownConverter($environment);
         }

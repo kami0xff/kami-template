@@ -18,6 +18,13 @@ use Illuminate\Support\Str;
  *   tags:        List of tags/keywords
  *   image:       Absolute URL or /path for og:image and article schema
  *   draft:       true to hide everywhere except the local environment
+ *
+ * Rich article fields (all optional, rendered by the blog templates):
+ *   tldr:        List of takeaway bullets, rendered as a TL;DR box
+ *   faq:         List of {question, answer} — rendered section + FAQPage schema
+ *   quiz:        {question, options: [], answer: <index>, explanation}
+ *   related:     List of post slugs to feature as related articles
+ *   sources:     List of {title, url} — rendered as a References section
  */
 class MarkdownDocument
 {
@@ -93,6 +100,50 @@ class MarkdownDocument
     public function isDraft(): bool
     {
         return (bool) ($this->matter['draft'] ?? false);
+    }
+
+    /** @return string[] */
+    public function tldr(): array
+    {
+        return array_map('strval', (array) ($this->matter['tldr'] ?? []));
+    }
+
+    /** @return array<int, array{question: string, answer: string}> */
+    public function faq(): array
+    {
+        return array_values(array_filter(
+            (array) ($this->matter['faq'] ?? []),
+            fn($item) => is_array($item) && !empty($item['question']) && !empty($item['answer'])
+        ));
+    }
+
+    /** @return array{question: string, options: string[], answer: int, explanation?: string}|null */
+    public function quiz(): ?array
+    {
+        $quiz = $this->matter['quiz'] ?? null;
+
+        if (!is_array($quiz) || empty($quiz['question']) || count($quiz['options'] ?? []) < 2) {
+            return null;
+        }
+
+        $quiz['answer'] = (int) ($quiz['answer'] ?? 0);
+
+        return $quiz;
+    }
+
+    /** @return string[] */
+    public function related(): array
+    {
+        return array_map('strval', (array) ($this->matter['related'] ?? []));
+    }
+
+    /** @return array<int, array{title: string, url: string}> */
+    public function sources(): array
+    {
+        return array_values(array_filter(
+            (array) ($this->matter['sources'] ?? []),
+            fn($item) => is_array($item) && !empty($item['url'])
+        ));
     }
 
     public function excerpt(int $limit = 200): string

@@ -100,6 +100,74 @@
         color: var(--site-muted);
         font-size: 0.875rem;
     }
+    .toc {
+        background: #f9fafb;
+        border: 1px solid var(--site-border);
+        border-radius: 0.5rem;
+        padding: 1rem 1rem 1rem 2.25rem;
+        font-size: 0.9375rem;
+    }
+    .toc a { text-decoration: none; }
+    .heading-permalink {
+        color: var(--site-border);
+        text-decoration: none;
+        margin-left: 0.375rem;
+        font-size: 0.8em;
+    }
+    h2:hover .heading-permalink, h3:hover .heading-permalink { color: var(--site-accent); }
+    .tldr {
+        background: #eff6ff;
+        border-left: 3px solid var(--site-accent);
+        border-radius: 0 0.5rem 0.5rem 0;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+    }
+    .tldr ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
+    .post-faq details {
+        border-bottom: 1px solid var(--site-border);
+        padding: 0.75rem 0;
+    }
+    .post-faq summary { cursor: pointer; font-weight: 600; }
+    .post-faq p { margin: 0.75rem 0 0.25rem; }
+    .post-sources { font-size: 0.9375rem; }
+    .post-quiz {
+        background: #f9fafb;
+        border: 1px solid var(--site-border);
+        border-radius: 0.5rem;
+        padding: 1.25rem 1.5rem;
+        margin: 2rem 0;
+    }
+    .quiz-question { font-weight: 600; }
+    .quiz-options { display: grid; gap: 0.5rem; }
+    .quiz-option {
+        text-align: left;
+        padding: 0.625rem 1rem;
+        border: 1px solid var(--site-border);
+        border-radius: 0.5rem;
+        background: #fff;
+        cursor: pointer;
+        font: inherit;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--site-accent); }
+    .quiz-option.is-correct { border-color: #16a34a; background: #f0fdf4; }
+    .quiz-option.is-wrong { border-color: #dc2626; background: #fef2f2; }
+    .quiz-explanation { color: var(--site-muted); font-size: 0.9375rem; }
+    .author-box {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        background: #f9fafb;
+        border: 1px solid var(--site-border);
+        border-radius: 0.5rem;
+        padding: 1.25rem 1.5rem;
+        margin-top: 2.5rem;
+    }
+    .author-avatar { border-radius: 9999px; }
+    .author-title { color: var(--site-muted); margin-left: 0.5rem; font-size: 0.875rem; }
+    .author-box p { margin: 0.5rem 0; font-size: 0.9375rem; color: var(--site-muted); }
+    .author-links a { margin-right: 0.75rem; font-size: 0.875rem; }
+    .related-posts { margin-top: 2.5rem; }
+    .related-posts h3 { margin: 0 0 0.25rem; font-size: 1.0625rem; }
 </style>
 @endpush
 

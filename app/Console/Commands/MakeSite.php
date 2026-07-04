@@ -55,6 +55,20 @@ class MakeSite extends Command
 
             'locale' => 'en',
 
+            // E-E-A-T author: byline + bio box on articles and Person schema
+            // (with sameAs social profiles) in the article JSON-LD.
+            'author' => [
+                'name' => '',
+                'title' => '',
+                'bio' => '',
+                'url' => 'https://{$domain}/about',
+                'avatar' => '/img/author.jpg',
+                'same_as' => [
+                    // 'https://twitter.com/you',
+                    // 'https://www.linkedin.com/in/you',
+                ],
+            ],
+
             // Optional: override any key from config/seo.php for this site.
             'seo' => [
                 'description' => 'Welcome to {$name}.',

@@ -149,21 +149,44 @@ title: My Post Title
 description: Meta description for search results.
 date: 2026-07-01          # article:published_time + datePublished
 updated: 2026-07-10       # article:modified_time + dateModified
-author: Jane Doe
+author: Jane Doe          # omit to use the site author (E-E-A-T box + Person schema)
 section: Guides
 tags: [laravel, seo]
 image: https://myblog.com/img/cover.png   # og:image + schema image
 draft: true               # hidden everywhere except local dev
+tldr:                     # rendered as a TL;DR takeaway box
+  - First takeaway.
+faq:                      # rendered section + FAQPage JSON-LD
+  - question: Is this indexed?
+    answer: Yes — FAQ answers render on the page and as FAQPage schema.
+quiz:                     # interactive quick-check (crawlable text, inline JS)
+  question: Which field controls the URL?
+  options: [The title, The filename]
+  answer: 1
+  explanation: The filename is the slug.
+related: [other-post-slug]        # related articles (tops up by shared tags)
+sources:                          # rendered References section
+  - title: Google Search Central
+    url: https://developers.google.com/search
 ---
 
 # My Post Title
 
-GitHub-flavored markdown body...
+Direct answer paragraph first (featured snippet bait), then:
+
+[TOC]   <!-- renders a linked table of contents -->
+
+## Question-style H2s get anchor links automatically
 ```
 
 Every field feeds the SEO layer automatically: meta title/description,
-canonical URL, Open Graph article tags, BlogPosting + BreadcrumbList JSON-LD,
-and the sitemap. Only `title` is really needed — everything else has fallbacks.
+canonical URL, Open Graph article tags, BlogPosting + BreadcrumbList +
+FAQPage JSON-LD, the Person author schema, and the sitemap. Only `title` is
+really needed — everything else has fallbacks.
+
+The per-site `author` block in `site.php` (name, title, bio, avatar, url,
+`same_as` social links) powers the byline, the author bio box, and the Person
+schema on every article — the E-E-A-T backbone.
 
 ### Publishing workflow
 
@@ -174,16 +197,25 @@ and the sitemap. Only `title` is really needed — everything else has fallbacks
 
 ### AI-drafted articles
 
-With `ANTHROPIC_API_KEY` set, `site:write` drafts a full article straight into
-a site's content folder — markdown body plus SEO front matter:
+With `ANTHROPIC_API_KEY` set, `site:write` drafts a complete article straight
+into a site's content folder:
 
 ```bash
 php artisan site:write myblog "How to choose a standing desk" \
-    --keywords="standing desk, ergonomics" --words=1200 --author="Jane Doe"
+    --keywords="standing desk, ergonomics" --words=1500
 ```
 
-Posts are created with `draft: true`; review/edit the file, remove the flag,
-commit — or pass `--publish` to skip the draft stage.
+The draft follows the editorial skill in `resources/sites/writing-guide.md`
+(override per site with `resources/sites/{key}/writing-guide.md`): search
+intent match, a 40–60 word direct answer for the featured snippet, TL;DR,
+[TOC], question-style H2s answered in the first sentence, data tables with
+linked authority sources, internal links chosen from the site's existing
+articles, image placeholders with `TODO screenshot` comments, FAQ, quiz, a
+conclusion with one CTA, and a References list.
+
+Posts are created with `draft: true`; drop in the screenshots, add any manual
+in-text links, remove the flag, commit — or pass `--publish` to skip the
+draft stage.
 
 Caddy serves those files directly with a 5-minute cache header and falls back
 to dynamic rendering on a miss. To publish content without a code deploy, run

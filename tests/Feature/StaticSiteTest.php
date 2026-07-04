@@ -46,6 +46,46 @@ it('serves a blog post with article SEO and schema', function () {
         ->assertSee('rel="canonical" href="https://example.test/blog/hello-world"', false);
 });
 
+it('renders rich article sections from front matter', function () {
+    $response = $this->get('http://example.test/blog/hello-world')->assertOk();
+
+    // TL;DR box
+    $response->assertSee('TL;DR')
+        ->assertSee('The filename is the URL slug');
+
+    // Table of contents with heading anchors
+    $response->assertSee('class="toc"', false)
+        ->assertSee('href="#how-the-front-matter-feeds-seo"', false);
+
+    // FAQ section + FAQPage schema
+    $response->assertSee('Frequently asked questions')
+        ->assertSee('Where do blog posts live?')
+        ->assertSee('"@type": "FAQPage"', false);
+
+    // Quiz
+    $response->assertSee('Quick check')
+        ->assertSee('What determines a blog post&#039;s URL?', false)
+        ->assertSee('class="quiz-option"', false);
+
+    // Related articles (explicit slug from front matter)
+    $response->assertSee('Related articles')
+        ->assertSee('/blog/writing-content', false);
+
+    // References
+    $response->assertSee('References')
+        ->assertSee('developers.google.com/search', false);
+});
+
+it('renders the E-E-A-T author box and Person schema', function () {
+    $this->get('http://example.test/blog/hello-world')
+        ->assertOk()
+        ->assertSee('class="author-box"', false)
+        ->assertSee('Founder &amp; Web Performance Consultant', false)
+        ->assertSee('"@type": "Person"', false)
+        ->assertSee('twitter.com/janedoe', false)
+        ->assertSee('rel="author"', false);
+});
+
 it('hides draft posts outside the local environment', function () {
     $this->get('http://example.test/blog/unpublished-draft')->assertNotFound();
 });

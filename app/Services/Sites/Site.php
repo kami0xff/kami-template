@@ -17,6 +17,7 @@ class Site
         public readonly array $domains,
         public readonly string $locale,
         public readonly array $seo,
+        public readonly array $author,
         public readonly string $path,
     ) {
     }
@@ -33,8 +34,30 @@ class Site
             domains: array_values($config['domains']),
             locale: $config['locale'] ?? 'en',
             seo: $config['seo'] ?? [],
+            author: $config['author'] ?? [],
             path: $path,
         );
+    }
+
+    /**
+     * Person JSON-LD for the site's author (E-E-A-T). Embedded as the
+     * `author` of every article schema and rendered in the author bio box.
+     */
+    public function authorSchema(): ?array
+    {
+        if (empty($this->author['name'])) {
+            return null;
+        }
+
+        return array_filter([
+            '@type' => 'Person',
+            'name' => $this->author['name'],
+            'jobTitle' => $this->author['title'] ?? null,
+            'description' => $this->author['bio'] ?? null,
+            'url' => $this->author['url'] ?? null,
+            'image' => $this->author['avatar'] ?? null,
+            'sameAs' => array_values(array_filter($this->author['same_as'] ?? [])),
+        ]);
     }
 
     public function canonicalDomain(): string
