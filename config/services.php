@@ -37,9 +37,10 @@ return [
         'project_key' => env('OPENREPLAY_PROJECT_KEY'),
     ],
 
-    // Used by `php artisan seo:generate-page-content` (AI SEO content).
+    // Used by AI content commands (`seo:generate-page-content`, `site:write`).
     'anthropic' => [
         'api_key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-20250514'),
     ],
 
 ];

@@ -102,11 +102,18 @@ class MakeSite extends Command
         MD);
 
         $this->components->info("Site [{$key}] created at resources/sites/{$key}");
-        $this->components->bulletList([
-            "Point the domain: add {$domain} to your Cloudflare tunnel / DNS",
-            "Preview locally: curl -H 'Host: {$domain}' http://localhost:8787/",
-            "Build the static snapshot: php artisan site:build {$key}",
-        ]);
+
+        $steps = [];
+
+        if (!config('sites.enabled')) {
+            $steps[] = 'Enable static sites: set SITES_ENABLED=true in .env (and .env.production)';
+        }
+
+        $steps[] = "Point the domain: add {$domain} to your Cloudflare tunnel / DNS";
+        $steps[] = "Preview locally: curl -H 'Host: {$domain}' http://localhost:8787/";
+        $steps[] = "Build the static snapshot: php artisan site:build {$key}";
+
+        $this->components->bulletList($steps);
 
         return self::SUCCESS;
     }

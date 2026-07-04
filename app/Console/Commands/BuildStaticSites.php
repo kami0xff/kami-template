@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Services\Sites\ContentRepository;
 use App\Services\Sites\Site;
 use App\Services\Sites\SiteRegistry;
+use App\Services\Sites\SitemapGenerator;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Http\Request;
@@ -30,6 +31,12 @@ class BuildStaticSites extends Command
 
     public function handle(SiteRegistry $registry, ContentRepository $content): int
     {
+        if (!config('sites.enabled')) {
+            $this->components->info('Static sites are disabled (set SITES_ENABLED=true to enable) — nothing to build.');
+
+            return self::SUCCESS;
+        }
+
         $sites = $this->argument('site')
             ? array_filter([$registry->get($this->argument('site'))])
             : $registry->all();
@@ -83,13 +90,14 @@ class BuildStaticSites extends Command
     /** @return string[] */
     protected function collectPaths(Site $site, ContentRepository $content): array
     {
-        $paths = ['/', '/sitemap.xml'];
+        // The sitemap generator is the canonical list of content URLs.
+        $paths = app(SitemapGenerator::class)
+            ->urls($site)
+            ->map(fn(array $url) => '/' . ltrim(str_replace($site->url('/'), '', $url['loc']), '/'))
+            ->all();
 
-        foreach ($content->pages($site) as $page) {
-            if ($page['path'] !== 'home') {
-                $paths[] = '/' . $page['path'];
-            }
-        }
+        $paths[] = '/sitemap.xml';
+        $paths[] = '/feed.xml';
 
         // Blade-only pages (site::pages.*) that have no markdown counterpart.
         $viewsDir = $site->viewsPath() . '/pages';
@@ -99,15 +107,6 @@ class BuildStaticSites extends Command
                 if ($path !== 'home') {
                     $paths[] = '/' . $path;
                 }
-            }
-        }
-
-        $posts = $content->posts($site);
-
-        if ($posts->isNotEmpty()) {
-            $paths[] = '/blog';
-            foreach ($posts as $post) {
-                $paths[] = '/blog/' . $post->slug;
             }
         }
 

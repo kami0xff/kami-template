@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Sites\BlogController;
+use App\Http\Controllers\Sites\FeedController;
 use App\Http\Controllers\Sites\PageController;
 use App\Http\Controllers\Sites\SitemapController;
 use App\Services\Sites\SiteRegistry;
@@ -19,10 +20,17 @@ use Illuminate\Support\Facades\Route;
 |   /                 home  (site::pages.home Blade view or content/pages/home.md)
 |   /blog             blog index (markdown posts, newest first)
 |   /blog/{slug}      blog post   (content/blog/{slug}.md)
+|   /feed.xml         RSS feed of blog posts
 |   /sitemap.xml      generated sitemap
 |   /{path}           static page (site::pages.{path} view or content/pages/{path}.md)
 |
+| Opt-in: nothing is registered unless SITES_ENABLED=true (config/sites.php).
+|
 */
+
+if (!config('sites.enabled')) {
+    return;
+}
 
 foreach (app(SiteRegistry::class)->all() as $key => $site) {
     foreach ($site->domains as $i => $domain) {
@@ -36,6 +44,7 @@ foreach (app(SiteRegistry::class)->all() as $key => $site) {
                 Route::get('/blog/{slug}', [BlogController::class, 'show'])
                     ->where('slug', '[a-z0-9\-]+')
                     ->name('blog.show');
+                Route::get('/feed.xml', [FeedController::class, 'index'])->name('feed');
                 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
                 Route::get('/{path}', [PageController::class, 'show'])
                     ->where('path', '[a-z0-9\-_\/]+')

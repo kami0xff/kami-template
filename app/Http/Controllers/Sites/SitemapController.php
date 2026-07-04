@@ -3,51 +3,16 @@
 namespace App\Http\Controllers\Sites;
 
 use App\Http\Controllers\Controller;
-use App\Services\Sites\ContentRepository;
 use App\Services\Sites\Site;
+use App\Services\Sites\SitemapGenerator;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
-    public function __construct(protected ContentRepository $content)
+    public function index(Site $site, SitemapGenerator $sitemap): Response
     {
-    }
-
-    public function index(Site $site): Response
-    {
-        $posts = $this->content->posts($site);
-        $pages = $this->content->pages($site);
-
-        $urls = [
-            ['loc' => $site->url('/'), 'lastmod' => null],
-        ];
-
-        foreach ($pages as $page) {
-            if ($page['path'] === 'home') {
-                continue;
-            }
-            $urls[] = [
-                'loc' => $site->url('/' . $page['path']),
-                'lastmod' => $page['doc']->updated()?->toDateString(),
-            ];
-        }
-
-        if ($posts->isNotEmpty()) {
-            $urls[] = [
-                'loc' => $site->url('/blog'),
-                'lastmod' => $posts->first()->updated()?->toDateString(),
-            ];
-
-            foreach ($posts as $post) {
-                $urls[] = [
-                    'loc' => $site->url('/blog/' . $post->slug),
-                    'lastmod' => $post->updated()?->toDateString(),
-                ];
-            }
-        }
-
         return response()
-            ->view('site::sitemap', ['urls' => $urls])
+            ->view('site::sitemap', ['urls' => $sitemap->urls($site)])
             ->header('Content-Type', 'application/xml');
     }
 }

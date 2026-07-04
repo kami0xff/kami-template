@@ -55,6 +55,21 @@ it('returns 404 for unknown pages and slugs', function () {
     $this->get('http://example.test/blog/no-such-post')->assertNotFound();
 });
 
+it('serves an RSS feed of published posts', function () {
+    $this->get('http://example.test/feed.xml')
+        ->assertOk()
+        ->assertHeader('Content-Type', 'application/rss+xml; charset=UTF-8')
+        ->assertSee('<title>Hello World</title>', false)
+        ->assertSee('<link>https://example.test/blog/hello-world</link>', false)
+        ->assertDontSee('Unpublished Draft');
+});
+
+it('advertises the feed in the page head', function () {
+    $this->get('http://example.test/about')
+        ->assertSee('type="application/rss+xml"', false)
+        ->assertSee('example.test/feed.xml', false);
+});
+
 it('generates a sitemap for the site', function () {
     $this->get('http://example.test/sitemap.xml')
         ->assertOk()
@@ -83,6 +98,7 @@ it('builds static output for a site', function () {
             ->and(File::exists("{$out}/blog/index.html"))->toBeTrue()
             ->and(File::exists("{$out}/blog/hello-world/index.html"))->toBeTrue()
             ->and(File::exists("{$out}/sitemap.xml"))->toBeTrue()
+            ->and(File::exists("{$out}/feed.xml"))->toBeTrue()
             ->and(File::exists("{$out}/blog/unpublished-draft/index.html"))->toBeFalse();
 
         expect(File::get("{$out}/blog/hello-world/index.html"))

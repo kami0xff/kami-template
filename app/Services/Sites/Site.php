@@ -84,6 +84,14 @@ class Site
                 'name' => $this->name,
                 'url' => $this->url('/'),
             ],
+            // Every site gets an RSS feed; layouts.app renders the
+            // <link rel="alternate"> automatically from this.
+            'feed' => [
+                'enabled' => true,
+                'url' => '/feed.xml',
+                'title' => $this->name,
+                'type' => 'application/rss+xml',
+            ],
         ];
 
         return array_replace_recursive($base, $siteDefaults, $this->seo);
