@@ -473,6 +473,7 @@ class SeoService
         foreach ($locales as $locale) {
             if ($locale === $default) {
                 $hreflangs[$locale] = $englishUrl;
+
                 continue;
             }
 

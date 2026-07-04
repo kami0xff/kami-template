@@ -43,6 +43,7 @@ class DetectLocale
         }
 
         $response = $next($request);
+
         return $response->cookie('locale_detected', 'en', 60 * 24 * 365);
     }
 
@@ -58,7 +59,9 @@ class DetectLocale
         $preferred = [];
         foreach (explode(',', $acceptLanguage) as $part) {
             $part = trim($part);
-            if (empty($part)) continue;
+            if (empty($part)) {
+                continue;
+            }
 
             $segments = explode(';', $part);
             $locale = trim($segments[0]);

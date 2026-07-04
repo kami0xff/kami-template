@@ -15,4 +15,23 @@ class SitemapController extends Controller
             ->view('site::sitemap', ['urls' => $sitemap->urls($site)])
             ->header('Content-Type', 'application/xml');
     }
+
+    /**
+     * Per-site robots.txt with the sitemap location. Without this route,
+     * every static site would fall through to the main app's public/robots.txt
+     * (wrong Disallows, no Sitemap line).
+     */
+    public function robots(Site $site): Response
+    {
+        $lines = [
+            'User-agent: *',
+            'Allow: /',
+            'Disallow: /search',
+            '',
+            'Sitemap: ' . $site->url('/sitemap.xml'),
+        ];
+
+        return response(implode("\n", $lines) . "\n")
+            ->header('Content-Type', 'text/plain');
+    }
 }

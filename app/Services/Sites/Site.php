@@ -18,9 +18,11 @@ class Site
         public readonly string $locale,
         public readonly array $seo,
         public readonly array $author,
+        public readonly array $newsletter,
+        public readonly bool $search,
+        public readonly array $analytics,
         public readonly string $path,
-    ) {
-    }
+    ) {}
 
     public static function fromConfig(string $key, string $path, array $config): self
     {
@@ -35,6 +37,9 @@ class Site
             locale: $config['locale'] ?? 'en',
             seo: $config['seo'] ?? [],
             author: $config['author'] ?? [],
+            newsletter: $config['newsletter'] ?? [],
+            search: (bool) ($config['search'] ?? false),
+            analytics: $config['analytics'] ?? [],
             path: $path,
         );
     }
@@ -89,9 +94,9 @@ class Site
      * site-derived defaults (name, canonical URL), then explicit overrides
      * from site.php.
      *
-     * @param array $base Pristine config('seo') captured at boot, before any
-     *                    request mutated it (important for Octane/site:build
-     *                    where many requests share one process).
+     * @param  array  $base  Pristine config('seo') captured at boot, before any
+     *                       request mutated it (important for Octane/site:build
+     *                       where many requests share one process).
      */
     public function seoConfig(array $base): array
     {

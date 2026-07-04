@@ -132,6 +132,15 @@
     @stack('styles')
     @stack('head')
 
+    {{-- ===== UMAMI ANALYTICS (main app) ===== --}}
+    {{-- Static sites inject their own per-site snippet (site::layout), so
+         skip the app-level website here when a site is bound. --}}
+    @production
+    @if(config('services.umami.website_id') && !isset($site))
+        <script defer src="{{ config('services.umami.src') }}" data-website-id="{{ config('services.umami.website_id') }}"></script>
+    @endif
+    @endproduction
+
     {{-- ===== GOOGLE ANALYTICS ===== --}}
     @if(config('services.google.analytics_id'))
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>
@@ -143,9 +152,9 @@
         </script>
     @endif
 
-    {{-- ===== OPENREPLAY SESSION RECORDING ===== --}}
+    {{-- ===== OPENREPLAY SESSION RECORDING (opt-in: OPENREPLAY_ENABLED) ===== --}}
     @production
-    @if(config('services.openreplay.project_key'))
+    @if(config('services.openreplay.enabled') && config('services.openreplay.project_key'))
     <script>
       var initOpts = {
         projectKey: {!! json_encode(config('services.openreplay.project_key')) !!},

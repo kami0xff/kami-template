@@ -1,0 +1,18 @@
+# Topic cluster plan — created by `site:cluster`, meant to be hand-edited.
+# Posts opt in with `cluster: markdown-publishing` in their front matter;
+# the blog templates then render the spoke->pillar / pillar->spokes boxes.
+topic: 'Publishing with markdown'
+keyword: 'markdown publishing'
+pillar:
+  slug: writing-content
+  title: 'Writing Content in Markdown'
+  keyword: 'markdown publishing'
+  angle: 'The definitive workflow guide: files, front matter, drafts, builds.'
+  status: drafted
+spokes:
+  - slug: hello-world
+    title: 'Hello World'
+    keyword: 'markdown front matter reference'
+    intent: informational
+    angle: 'Show every front matter field and what it renders.'
+    status: drafted

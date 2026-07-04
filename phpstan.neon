@@ -1,0 +1,13 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+        - routes
+        - database/migrations
+
+    # Level 5: real bugs (wrong arguments, undefined properties/methods,
+    # impossible comparisons) without demanding generics annotations
+    # everywhere. Raise per-project if you want stricter typing.
+    level: 5

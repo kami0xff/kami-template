@@ -1,6 +1,9 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\SeoServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\SeoServiceProvider::class,
+    AppServiceProvider::class,
+    SeoServiceProvider::class,
 ];

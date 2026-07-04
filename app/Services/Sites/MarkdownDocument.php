@@ -25,6 +25,8 @@ use Illuminate\Support\Str;
  *   quiz:        {question, options: [], answer: <index>, explanation}
  *   related:     List of post slugs to feature as related articles
  *   sources:     List of {title, url} — rendered as a References section
+ *   cluster:     Topic cluster name (see site:cluster) — the templates render
+ *                the spoke->pillar / pillar->spokes link boxes from the plan
  */
 class MarkdownDocument
 {
@@ -35,8 +37,7 @@ class MarkdownDocument
         public readonly array $matter,
         public readonly string $html,
         public readonly int $mtime,
-    ) {
-    }
+    ) {}
 
     public function title(): string
     {
@@ -129,6 +130,11 @@ class MarkdownDocument
         $quiz['answer'] = (int) ($quiz['answer'] ?? 0);
 
         return $quiz;
+    }
+
+    public function cluster(): ?string
+    {
+        return $this->matter['cluster'] ?? null;
     }
 
     /** @return string[] */

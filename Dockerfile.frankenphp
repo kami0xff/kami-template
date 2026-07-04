@@ -46,6 +46,12 @@ FROM dunglas/frankenphp:1-php8.3-alpine AS production
 
 RUN apk add --no-cache curl
 
+# Pagefind: static search indexer used by `php artisan site:build` to index
+# the generated static sites (self-contained ~5 MB Rust binary, no node).
+ARG PAGEFIND_VERSION=1.5.2
+RUN curl -fsSL "https://github.com/Pagefind/pagefind/releases/download/v${PAGEFIND_VERSION}/pagefind-v${PAGEFIND_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz" \
+    | tar -xz -C /usr/local/bin pagefind
+
 RUN install-php-extensions \
     pdo_mysql \
     pdo_pgsql \

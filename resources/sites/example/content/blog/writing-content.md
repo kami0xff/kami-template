@@ -4,6 +4,7 @@ description: The editing workflow — drop a markdown file in the folder, rebuil
 date: 2026-06-20
 author: Jane Doe
 tags: [guide]
+cluster: markdown-publishing
 ---
 
 # Writing content in markdown

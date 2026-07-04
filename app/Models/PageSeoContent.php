@@ -52,12 +52,14 @@ class PageSeoContent extends Model
     public static function topContent(string $pageKey, ?string $locale = null): ?self
     {
         $content = self::forPage($pageKey, $locale);
+
         return $content?->position === 'top' ? $content : null;
     }
 
     public static function bottomContent(string $pageKey, ?string $locale = null): ?self
     {
         $content = self::forPage($pageKey, $locale);
+
         return $content?->position === 'bottom' ? $content : null;
     }
 
@@ -66,6 +68,7 @@ class PageSeoContent extends Model
         if (empty($this->keywords)) {
             return [];
         }
+
         return array_map('trim', explode(',', $this->keywords));
     }
 

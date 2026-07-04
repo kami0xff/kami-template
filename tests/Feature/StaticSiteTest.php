@@ -2,6 +2,45 @@
 
 use Illuminate\Support\Facades\File;
 
+it('injects the per-site Umami snippet in production only', function () {
+    // Not in testing/local...
+    $this->get('http://example.test/')
+        ->assertOk()
+        ->assertDontSee('data-website-id', false);
+
+    // ...but baked into production output (which is what site:build runs as).
+    $this->app['env'] = 'production';
+
+    $this->get('http://example.test/')
+        ->assertOk()
+        ->assertSee('data-website-id="00000000-0000-0000-0000-000000000000"', false);
+
+    $this->app['env'] = 'testing';
+});
+
+it('renders the branded minimal error page for site 404s', function () {
+    $this->get('http://example.test/no-such-page')
+        ->assertNotFound()
+        ->assertSee('error-code', false)      // minimal error layout, not Laravel's default
+        ->assertSee('Example Site')           // branded with this site's name only
+        ->assertSee('This page could not be found.');
+});
+
+it('serves a per-site robots.txt pointing at the site sitemap', function () {
+    $this->get('http://example.test/robots.txt')
+        ->assertOk()
+        ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
+        ->assertSee('Sitemap: https://example.test/sitemap.xml');
+});
+
+it('serves the search page with the Pagefind UI mount', function () {
+    $this->get('http://example.test/search')
+        ->assertOk()
+        ->assertSee('id="search"', false)
+        ->assertSee('/pagefind/pagefind-ui.js', false)
+        ->assertSee('noindex', false); // search pages must not be indexed
+});
+
 it('serves a site home page by domain', function () {
     $this->get('http://example.test/')
         ->assertOk()

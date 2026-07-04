@@ -33,8 +33,19 @@ return [
         'analytics_id' => env('GOOGLE_ANALYTICS_ID'),
     ],
 
+    // OpenReplay session recording. Off by default — a project key alone
+    // is not enough, recording must be explicitly enabled per project.
     'openreplay' => [
+        'enabled' => env('OPENREPLAY_ENABLED', false),
         'project_key' => env('OPENREPLAY_PROJECT_KEY'),
+    ],
+
+    // Umami (privacy-friendly, cookieless analytics) for the MAIN app.
+    // Static sites configure their own website_id per site in site.php
+    // ('analytics' block) so each site is a separate Umami website.
+    'umami' => [
+        'src' => env('UMAMI_SRC', 'https://cloud.umami.is/script.js'),
+        'website_id' => env('UMAMI_WEBSITE_ID'),
     ],
 
     // Used by AI content commands (`seo:generate-page-content`, `site:write`).

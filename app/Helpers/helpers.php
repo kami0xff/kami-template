@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\SeoManager;
+use Illuminate\Support\Facades\Route;
 
 if (!function_exists('seo')) {
     /**
@@ -31,11 +32,12 @@ if (!function_exists('localized_route')) {
 
         $localizedName = $name . '.localized';
 
-        if (\Illuminate\Support\Facades\Route::has($localizedName)) {
+        if (Route::has($localizedName)) {
             if (!is_array($parameters)) {
                 $parameters = [$parameters];
             }
             $parameters['locale'] = $locale;
+
             return route($localizedName, $parameters, $absolute);
         }
 

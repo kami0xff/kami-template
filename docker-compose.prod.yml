@@ -83,6 +83,34 @@ services:
       timeout: 5s
       retries: 3
 
+  # Automated Postgres backups: daily pg_dump with rotation (7 daily,
+  # 4 weekly, 6 monthly) into ./backups on the host. Restore with
+  # `make prod-db-restore FILE=...`; take an extra one now with
+  # `make prod-db-backup`. Ship ./backups offsite (rclone/restic) — a backup
+  # on the same disk protects against bad migrations, not a dead server.
+  db-backup:
+    image: prodrigestivill/postgres-backup-local:16
+    container_name: __APP_SLUG__-db-backup-prod
+    restart: unless-stopped
+    user: postgres:postgres
+    volumes:
+      - ./backups:/backups
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: __APP_SLUG__
+      POSTGRES_USER: __APP_SLUG__
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: "7"
+      BACKUP_KEEP_WEEKS: "4"
+      BACKUP_KEEP_MONTHS: "6"
+      HEALTHCHECK_PORT: "8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
   worker:
     image: __APP_SLUG__:production
     container_name: __APP_SLUG__-worker-prod

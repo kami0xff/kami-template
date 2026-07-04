@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Sites;
 
 use App\Http\Controllers\Controller;
-use App\Services\Sites\ContentRepository;
-use App\Services\Sites\Site;
 use App\Services\SeoService;
+use App\Services\Sites\ClusterRepository;
+use App\Services\Sites\ContentRepository;
+use App\Services\Sites\MarkdownDocument;
+use App\Services\Sites\Site;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -13,8 +15,8 @@ class BlogController extends Controller
     public function __construct(
         protected ContentRepository $content,
         protected SeoService $seoService,
-    ) {
-    }
+        protected ClusterRepository $clusters,
+    ) {}
 
     public function index(Site $site): View
     {
@@ -109,7 +111,38 @@ class BlogController extends Controller
             'schemas' => $schemas,
             'related' => $this->relatedPosts($site, $post),
             'bySiteAuthor' => $bySiteAuthor,
+            'cluster' => $this->clusterContext($site, $post),
         ]);
+    }
+
+    /**
+     * Topic cluster context for the template-enforced link boxes: a spoke
+     * always links up to its pillar, a pillar always lists its published
+     * spokes — even if the article body forgot the links (they are what
+     * makes the cluster work as an SEO structure).
+     */
+    protected function clusterContext(Site $site, MarkdownDocument $post): ?array
+    {
+        if (!$post->cluster() || !($plan = $this->clusters->get($site, $post->cluster()))) {
+            return null;
+        }
+
+        if ($this->clusters->isPillar($plan, $post->slug)) {
+            $spokes = collect($plan['spokes'] ?? [])
+                ->map(fn(array $spoke) => $this->content->post($site, $spoke['slug'] ?? ''))
+                ->filter()
+                ->values();
+
+            return $spokes->isEmpty()
+                ? null
+                : ['role' => 'pillar', 'topic' => $plan['topic'] ?? $post->cluster(), 'spokes' => $spokes];
+        }
+
+        $pillar = $this->content->post($site, $plan['pillar']['slug'] ?? '');
+
+        return $pillar === null
+            ? null
+            : ['role' => 'spoke', 'topic' => $plan['topic'] ?? $post->cluster(), 'pillar' => $pillar];
     }
 
     /**
@@ -129,7 +162,7 @@ class BlogController extends Controller
         $byTag = $this->content->posts($site)
             ->reject(fn($candidate) => $candidate->slug === $post->slug
                 || $explicit->contains(fn($p) => $p->slug === $candidate->slug))
-            ->filter(fn($candidate) => array_intersect($candidate->tags(), $post->tags()));
+            ->filter(fn($candidate) => array_intersect($candidate->tags(), $post->tags()) !== []);
 
         return $explicit->concat($byTag)->take($limit)->values();
     }

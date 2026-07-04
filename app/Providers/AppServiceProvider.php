@@ -3,8 +3,12 @@
 namespace App\Providers;
 
 use App\Services\Sites\SiteRegistry;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +32,18 @@ class AppServiceProvider extends ServiceProvider
         // site's overrides into another's.
         $this->app->instance('seo.defaults', config('seo'));
 
+        // Default `site::` view namespace (the shared templates). SetSite
+        // re-registers it per request with the current site's own views
+        // first; registering the fallback at boot means site:: views also
+        // resolve outside a site request (artisan, static analysis).
+        View::addNamespace('site', resource_path('views/sites'));
+
+        // Lead capture endpoint (POST /lead on static site domains): the
+        // form is public and CSRF-exempt, so cap submissions per IP.
+        RateLimiter::for('leads', fn(Request $request) => Limit::perMinute(
+            (int) config('leads.throttle', 10)
+        )->by($request->ip()));
+
         $this->authorizeDashboards();
     }
 
@@ -44,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
      */
     private function authorizeDashboards(): void
     {
-        $allow = fn ($user = null) => ! $this->app->isProduction()
+        $allow = fn($user = null) => !$this->app->isProduction()
             || in_array(request()->getHost(), ['localhost', '127.0.0.1'], true);
 
         Gate::define('viewPulse', $allow);

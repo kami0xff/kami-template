@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\DetectLocale;
+use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\SetSite;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -22,10 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
             '192.168.0.0/16',
         ]);
         $middleware->alias([
-            'set.locale' => \App\Http\Middleware\SetLocale::class,
-            'detect.locale' => \App\Http\Middleware\DetectLocale::class,
-            'site' => \App\Http\Middleware\SetSite::class,
+            'set.locale' => SetLocale::class,
+            'detect.locale' => DetectLocale::class,
+            'site' => SetSite::class,
         ]);
+
+        // Static-site lead forms are baked into pre-rendered HTML and cannot
+        // carry a live CSRF token; the endpoint is protected by a honeypot
+        // and per-IP throttling instead (see LeadController).
+        $middleware->validateCsrfTokens(except: ['lead']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Report unhandled exceptions to Sentry (no-op until SENTRY_LARAVEL_DSN

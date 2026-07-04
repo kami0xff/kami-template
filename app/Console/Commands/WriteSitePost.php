@@ -2,21 +2,22 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Anthropic;
+use App\Services\Sites\ClusterRepository;
 use App\Services\Sites\ContentRepository;
 use App\Services\Sites\Site;
 use App\Services\Sites\SiteRegistry;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Drafts a full SEO article for a static site with AI (Anthropic Claude),
- * following the editorial skill in resources/sites/writing-guide.md (or the
- * site's own writing-guide.md override). Output is a markdown file with rich
- * front matter: tldr, faq, quiz, related, sources — all rendered by the blog
- * templates with matching JSON-LD.
+ * following an editorial skill from resources/skills/ (default: seo-article,
+ * pick another with --skill, per-site overrides in the site's skills/ dir).
+ * Output is a markdown file with rich front matter: tldr, faq, quiz, related,
+ * sources — all rendered by the blog templates with matching JSON-LD.
  *
  *   php artisan site:write example "How to choose a standing desk"
  *   php artisan site:write example "..." --keywords="standing desk, ergonomics" --words=1500
@@ -33,13 +34,26 @@ class WriteSitePost extends Command
                             {--keywords= : Comma-separated target keywords to work in naturally}
                             {--words=1200 : Approximate target word count}
                             {--author= : Author for the front matter (defaults to the site author)}
+                            {--skill=seo-article : Editorial skill from resources/skills/{skill}.md}
+                            {--cluster= : Topic cluster this article belongs to (see site:cluster)}
                             {--publish : Create the post published instead of as a draft}
                             {--force : Overwrite an existing file with the same slug}';
 
     protected $description = 'Draft a full SEO article (TL;DR, TOC, FAQ, quiz, sources) as markdown for a static site';
 
-    public function handle(SiteRegistry $registry, ContentRepository $content): int
-    {
+    protected Anthropic $anthropic;
+
+    protected ClusterRepository $clusters;
+
+    public function handle(
+        SiteRegistry $registry,
+        ContentRepository $content,
+        Anthropic $anthropic,
+        ClusterRepository $clusters,
+    ): int {
+        $this->anthropic = $anthropic;
+        $this->clusters = $clusters;
+
         $site = $registry->get($this->argument('site'));
 
         if ($site === null) {
@@ -85,35 +99,7 @@ class WriteSitePost extends Command
 
     protected function generate(Site $site, ContentRepository $content, string $topic, string $slug): array
     {
-        $apiKey = config('services.anthropic.api_key');
-
-        if (!$apiKey) {
-            throw new \RuntimeException('ANTHROPIC_API_KEY is not set (config/services.php).');
-        }
-
-        $prompt = $this->buildPrompt($site, $content, $topic, $slug);
-
-        $response = Http::withHeaders([
-            'x-api-key' => $apiKey,
-            'anthropic-version' => '2023-06-01',
-            'content-type' => 'application/json',
-        ])->timeout(300)->post('https://api.anthropic.com/v1/messages', [
-            'model' => config('services.anthropic.model', 'claude-sonnet-4-20250514'),
-            'max_tokens' => 16384,
-            'messages' => [['role' => 'user', 'content' => $prompt]],
-        ]);
-
-        if (!$response->successful()) {
-            throw new \RuntimeException('Anthropic API error: ' . $response->body());
-        }
-
-        $text = $response->json('content.0.text', '');
-
-        if (preg_match('/\{[\s\S]*\}/u', $text, $m)) {
-            $text = $m[0];
-        }
-
-        $data = json_decode($text, true);
+        $data = $this->anthropic->completeJson($this->buildPrompt($site, $content, $topic, $slug));
 
         if (empty($data['markdown'])) {
             throw new \RuntimeException('AI response did not contain article markdown.');
@@ -148,6 +134,8 @@ class WriteSitePost extends Command
             ? "Existing articles on this site (link to them in the body where genuinely relevant, and pick `related` slugs from this list ONLY):\n{$existing}"
             : 'This site has no other articles yet — leave `related` empty and use no internal links.';
 
+        $clusterBlock = $this->clusterBlock($site, $slug);
+
         return <<<PROMPT
         You are an elite SEO content writer. Follow this editorial guide exactly:
 
@@ -161,7 +149,7 @@ class WriteSitePost extends Command
         {$authorContext}
         {$existingBlock}
         </site_context>
-
+        {$clusterBlock}
         <assignment>
         Write an article about: {$topic}
         URL slug (already decided): /blog/{$slug}
@@ -185,14 +173,85 @@ class WriteSitePost extends Command
         PROMPT;
     }
 
+    /**
+     * Hub-and-spoke instructions when the article belongs to a topic cluster
+     * (see site:cluster). Spokes must link up to the pillar; the pillar must
+     * link down to every drafted spoke. Only drafted articles are linkable —
+     * in-body links to planned-but-unwritten slugs would 404.
+     */
+    protected function clusterBlock(Site $site, string $slug): string
+    {
+        $name = $this->option('cluster');
+
+        if (!$name) {
+            return '';
+        }
+
+        $plan = $this->clusters->get($site, $name);
+
+        if (!$plan) {
+            throw new \RuntimeException("Cluster [{$name}] not found — plan it first: php artisan site:cluster {$site->key} \"topic\"");
+        }
+
+        $pillar = $plan['pillar'] ?? [];
+        $spokeLine = fn(array $s) => "- /blog/{$s['slug']} — \"{$s['title']}\" (keyword: {$s['keyword']})";
+
+        $drafted = collect($plan['spokes'] ?? [])
+            ->where('status', 'drafted')
+            ->reject(fn($s) => $s['slug'] === $slug)
+            ->map($spokeLine)
+            ->implode("\n");
+
+        if ($this->clusters->isPillar($plan, $slug)) {
+            $links = $drafted ?: '(none drafted yet — use no spoke links)';
+
+            return <<<TEXT
+
+            <topic_cluster>
+            This article is the PILLAR page of the "{$plan['topic']}" topic cluster.
+            It must comprehensively cover the head keyword "{$pillar['keyword']}" and act as the hub:
+            link to EACH of these spoke articles from the section where its subtopic comes up,
+            with descriptive keyword-rich anchor text (not "click here"):
+            {$links}
+            </topic_cluster>
+
+            TEXT;
+        }
+
+        $siblings = $drafted ?: '(none drafted yet)';
+
+        return <<<TEXT
+
+        <topic_cluster>
+        This article is a SPOKE in the "{$plan['topic']}" topic cluster.
+        The pillar page is /blog/{$pillar['slug']} — "{$pillar['title']}".
+        Link to the pillar ONCE early in the article (first or second section) with anchor
+        text containing "{$pillar['keyword']}", and once more in the conclusion.
+        Sibling spokes already published (link where genuinely relevant):
+        {$siblings}
+        </topic_cluster>
+
+        TEXT;
+    }
+
+    /**
+     * Resolve the editorial skill: the site's own override wins, then the
+     * app-level skill in resources/skills/.
+     */
     protected function writingGuide(Site $site): string
     {
-        $override = $site->path . '/writing-guide.md';
-        $default = resource_path('sites/writing-guide.md');
+        $skill = basename($this->option('skill'));
 
-        return File::exists($override)
-            ? File::get($override)
-            : (File::exists($default) ? File::get($default) : '');
+        foreach ([
+            $site->path . "/skills/{$skill}.md",
+            resource_path("skills/{$skill}.md"),
+        ] as $file) {
+            if (File::exists($file)) {
+                return File::get($file);
+            }
+        }
+
+        throw new \RuntimeException("Skill [{$skill}] not found in resources/skills/.");
     }
 
     protected function siteDescription(Site $site): string
@@ -209,6 +268,7 @@ class WriteSitePost extends Command
             'author' => $this->option('author') ?: ($site->author['name'] ?? null),
             'section' => $data['section'] ?? null,
             'tags' => $data['tags'] ?? null,
+            'cluster' => $this->option('cluster') ?: null,
             'tldr' => $data['tldr'] ?? null,
             'faq' => $data['faq'] ?? null,
             'quiz' => $data['quiz'] ?? null,

@@ -1,8 +1,10 @@
-# SEO Article Writing Guide
+# SEO Article Skill
 
-This file is the editorial "skill" injected into every `site:write` prompt.
-Edit it to change how AI-drafted articles are written for all sites, or
-override it per site with `resources/sites/{key}/writing-guide.md`.
+Editorial skills live in `resources/skills/*.md` and are injected into the
+`site:write` prompt. This is the default (`--skill=seo-article`); add more
+skills (e.g. `product-review.md`, `comparison.md`) and pick one with
+`site:write ... --skill=product-review`. A site can override any skill with
+`resources/sites/{key}/skills/{skill}.md`.
 
 ## Search intent first
 
@@ -29,9 +31,11 @@ override it per site with `resources/sites/{key}/writing-guide.md`.
 7. **Listicles** — when the format calls for it, number the H2s (e.g.
    "1. Standing desks improve posture") so the list structure is explicit.
 8. **Images** — add placeholder images where a screenshot or diagram genuinely
-   helps: `![descriptive alt text with keyword](/img/posts/{slug}/short-name.png)`
+   helps: `![descriptive alt text with keyword](/images/{slug}/short-name.png)`
    plus an HTML comment `<!-- TODO screenshot: what to capture -->`. Never
-   fabricate image URLs to external sites.
+   fabricate image URLs to external sites. (The site serves images from its
+   `images/` folder; the pipeline converts them to responsive WebP
+   automatically, so plain `.png`/`.jpg` references are correct.)
 9. **Conclusion** — H2 "Conclusion" (or a sharper variant): summarize the
    position, then one clear CTA (try the tool, read the linked guide, follow
    the author).

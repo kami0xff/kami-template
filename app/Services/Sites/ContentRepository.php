@@ -26,6 +26,8 @@ class ContentRepository
 {
     protected ?MarkdownConverter $converter = null;
 
+    public function __construct(protected ImageProcessor $images) {}
+
     /**
      * All blog posts for a site, newest first. Drafts are excluded unless
      * explicitly requested (the local environment requests them so you can
@@ -38,7 +40,7 @@ class ContentRepository
         return collect(glob($site->contentPath('blog') . '/*.md') ?: [])
             ->map(fn(string $file) => $this->parse($site, $file))
             ->filter(fn(MarkdownDocument $doc) => $withDrafts || !$doc->isDraft())
-            ->sortByDesc(fn(MarkdownDocument $doc) => $doc->date()?->timestamp ?? 0)
+            ->sortByDesc(fn(MarkdownDocument $doc) => $doc->date()?->getTimestamp() ?? 0)
             ->values();
     }
 
@@ -71,7 +73,11 @@ class ContentRepository
         return (!$withDrafts && $doc->isDraft()) ? null : $doc;
     }
 
-    /** All markdown static pages of a site (used by sitemap + static build). */
+    /**
+     * All markdown static pages of a site (used by sitemap + static build).
+     *
+     * @return Collection<int, array{path: string, doc: MarkdownDocument}>
+     */
     public function pages(Site $site, bool $withDrafts = false): Collection
     {
         $base = $site->contentPath('pages');
@@ -92,14 +98,17 @@ class ContentRepository
         $slug = basename($file, '.md');
         $key = "site:{$site->key}:md:" . md5($file) . ":{$mtime}";
 
-        [$matter, $html] = Cache::remember($key, now()->addDay(), function () use ($file) {
+        [$matter, $html] = Cache::remember($key, now()->addDay(), function () use ($site, $file) {
             $result = $this->converter()->convert((string) file_get_contents($file));
 
             $matter = $result instanceof RenderedContentWithFrontMatter
                 ? (array) $result->getFrontMatter()
                 : [];
 
-            return [$matter, $result->getContent()];
+            // /images/ tags get WebP srcset + intrinsic dimensions + lazy
+            // loading. (Cached with the content: replacing an image with one
+            // of different dimensions needs a content touch or cache clear.)
+            return [$matter, $this->images->transformHtml($site, $result->getContent())];
         });
 
         return new MarkdownDocument($slug, $matter, $html, $mtime);
@@ -134,11 +143,11 @@ class ContentRepository
                     'html_class' => 'toc',
                 ],
             ]);
-            $environment->addExtension(new CommonMarkCoreExtension());
-            $environment->addExtension(new GithubFlavoredMarkdownExtension());
-            $environment->addExtension(new FrontMatterExtension());
-            $environment->addExtension(new HeadingPermalinkExtension());
-            $environment->addExtension(new TableOfContentsExtension());
+            $environment->addExtension(new CommonMarkCoreExtension);
+            $environment->addExtension(new GithubFlavoredMarkdownExtension);
+            $environment->addExtension(new FrontMatterExtension);
+            $environment->addExtension(new HeadingPermalinkExtension);
+            $environment->addExtension(new TableOfContentsExtension);
 
             $this->converter = new MarkdownConverter($environment);
         }

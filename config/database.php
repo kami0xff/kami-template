@@ -61,7 +61,7 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
-            ], fn ($value) => $value !== null) : [],
+            ], fn($value) => $value !== null) : [],
         ],
 
         'mariadb' => [
@@ -81,7 +81,7 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
-            ], fn ($value) => $value !== null) : [],
+            ], fn($value) => $value !== null) : [],
         ],
 
         'pgsql' => [
@@ -92,6 +92,29 @@ return [
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
+        // Read-only connection for Query classes that read from a Postgres
+        // replica or a shared admin database. Point DB_READ_* at a database
+        // user with SELECT-only grants (ideally on admin-exposed views, not
+        // raw tables) and use it explicitly:
+        //
+        //     User::on('read')->...   or   DB::connection('read')->...
+        //
+        // Falls back to the main connection when DB_READ_* is not set, so
+        // code written against it works before a replica exists.
+        'read' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_READ_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('DB_READ_PORT', env('DB_PORT', '5432')),
+            'database' => env('DB_READ_DATABASE', env('DB_DATABASE', 'laravel')),
+            'username' => env('DB_READ_USERNAME', env('DB_USERNAME', 'root')),
+            'password' => env('DB_READ_PASSWORD', env('DB_PASSWORD', '')),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
@@ -149,7 +172,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-database-'),
+            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-database-'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 

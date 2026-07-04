@@ -51,6 +51,15 @@ make ide-helper   # regenerate _ide_helper.php, model docs, and meta
 
 Generated files are git-ignored and refreshed automatically on `composer update`.
 
+### Code Quality (Pint + Larastan)
+
+```bash
+make lint       # code style check (Pint, rules in pint.json)
+make lint-fix   # auto-fix style
+make stan       # static analysis (Larastan, level 5 — phpstan.neon)
+make check      # lint + stan + test — run before pushing
+```
+
 ### Testing (Pest)
 
 Tests live in `tests/` and run with [Pest](https://pestphp.com). Feature tests use an
@@ -91,6 +100,44 @@ Setup steps after cloning the template:
 Keep guidelines current as packages change with `make boost-update`. Boost's generated
 guideline/config files (`boost.json`, `.mcp.json`, `AGENTS.md`, `CLAUDE.md`) are git-ignored;
 `.cursor/mcp.json` is committed intentionally.
+
+## Application Architecture (Actions / Queries / DTOs)
+
+Dynamic application code follows a read/write split — the same architecture the
+static sites use at the network level (reads from baked output or a read-only
+source, writes through the admin API):
+
+| Layer | Folder | Rule |
+|-------|--------|------|
+| **DTOs** | `app/DTOs/` | Immutable (`final readonly`) data crossing layer boundaries. Controllers validate, build a DTO, pass it on — Actions and Queries never touch the request. |
+| **Actions** | `app/Actions/` | Every write. One class per operation, one `handle(SomeData $data)` method. The single place for side effects (events, cache busting, notifications). |
+| **Queries** | `app/Queries/` | Every read. The only layer that knows the schema, so a schema change breaks one folder — not thirty controllers. Queries never write. |
+
+Scaffold with the bundled generators (nesting by domain works):
+
+```bash
+php artisan make:dto Orders/OrderData
+php artisan make:action Orders/CreateOrder
+php artisan make:query Orders/OrderIndexQuery
+```
+
+Reference implementations for the `User` model ship in each folder
+(`UserData`, `CreateUser`, `UserIndexQuery`).
+
+### Reading from a replica or a shared admin database
+
+`config/database.php` defines a `read` connection for Query classes that read
+from a Postgres replica or another project's database. Point `DB_READ_*` at a
+**SELECT-only database user** (ideally querying views the owning project
+exposes as its read contract, not raw tables) and use it explicitly:
+
+```php
+User::on('read')->...
+DB::connection('read')->...
+```
+
+It falls back to the main connection when `DB_READ_*` is unset, so Query
+classes written against it work before a replica exists.
 
 ## Static Sites (multi-domain)
 
@@ -205,8 +252,10 @@ php artisan site:write myblog "How to choose a standing desk" \
     --keywords="standing desk, ergonomics" --words=1500
 ```
 
-The draft follows the editorial skill in `resources/sites/writing-guide.md`
-(override per site with `resources/sites/{key}/writing-guide.md`): search
+The draft follows an editorial skill from `resources/skills/` — the default is
+`seo-article.md`, pick another with `--skill=product-review`, and any site can
+override a skill with `resources/sites/{key}/skills/{skill}.md`. The default
+skill enforces: search
 intent match, a 40–60 word direct answer for the featured snippet, TL;DR,
 [TOC], question-style H2s answered in the first sentence, data tables with
 linked authority sources, internal links chosen from the site's existing
@@ -216,6 +265,30 @@ conclusion with one CTA, and a References list.
 Posts are created with `draft: true`; drop in the screenshots, add any manual
 in-text links, remove the flag, commit — or pass `--publish` to skip the
 draft stage.
+
+### Topic clusters
+
+Single articles compete alone; clusters rank. `site:cluster` plans one
+**pillar page** for a broad head keyword plus N **spoke articles** targeting
+long-tail queries, all interlinked so the spokes push authority up to the
+pillar:
+
+```bash
+php artisan site:cluster myblog "pergola"           # AI plans the cluster
+php artisan site:cluster myblog pergola --write=3   # draft the next 3 articles
+php artisan site:cluster myblog                     # progress across all clusters
+```
+
+The plan lands in `resources/sites/{key}/clusters/pergola.yaml` — review it,
+prune spokes, tweak titles/keywords, then draft in batches. Spokes are
+written first (each prompt tells the AI to link up to the pillar and to
+published siblings); the pillar is drafted last so it can link to every spoke
+that actually exists.
+
+The links are also template-enforced: any post with `cluster: pergola` in its
+front matter gets a "Part of our guide" box linking to the pillar, and the
+pillar renders an "In this guide" list of its published spokes — so the
+hub-and-spoke structure holds even where the article body forgot a link.
 
 Caddy serves those files directly with a 5-minute cache header and falls back
 to dynamic rendering on a miss. To publish content without a code deploy, run
@@ -232,6 +305,165 @@ site can override it (or any shared view) by creating the same file under
 
 The `example` site under `resources/sites/example/` is a living reference and
 is used by the test suite (domain `example.test`).
+
+### Image pipeline
+
+Drop images into `resources/sites/{key}/images/` and reference them from
+markdown as `/images/foo.png` — nothing else. When the page renders, the
+tag comes out as:
+
+```html
+<img src="/images/foo-800.webp"
+     srcset="/images/foo-480.webp 480w, /images/foo-800.webp 800w, /images/foo-1600.webp 1600w"
+     sizes="(max-width: 768px) 100vw, 720px"
+     width="800" height="450" alt="..." loading="lazy" decoding="async">
+```
+
+WebP variants (typically 80–90% smaller than a raw screenshot), a responsive
+`srcset` so phones never download desktop sizes, intrinsic dimensions so the
+layout never shifts, and lazy loading — except the first image on the page
+(the likely LCP), which gets `fetchpriority="high"` instead. That is Core
+Web Vitals covered end to end.
+
+`site:build` pre-generates every variant (incrementally — only new/changed
+sources are reprocessed); a dynamic fallback route generates on demand, so
+local dev needs no build step and a production cache miss heals itself.
+SVG and GIF pass through untouched. Widths are whitelisted, so the dynamic
+route can't be abused to generate arbitrary sizes.
+
+### Deploying to Cloudflare Pages (serverless, no hub server)
+
+Each site can be hosted on Cloudflare Pages instead of (or alongside) the
+Caddy hub — free static hosting at the edge, no server load:
+
+```bash
+npx wrangler login          # once (or set CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID)
+php artisan site:deploy mysite
+```
+
+`site:deploy` builds the site with `--pages` and pushes it to a Pages
+project named after the site key (creating the project on first run). The
+`--pages` build emits two extra artifacts into the output:
+
+- `_worker.js` — a serverless stand-in for the one dynamic endpoint the
+  sites have: `POST /lead`. It mirrors `LeadController` (honeypot,
+  validation, HMAC-SHA256-signed relay to the admin API).
+- `_routes.json` — restricts worker invocation to `/lead`, so every other
+  request is served as a pure static asset (no function invocations burned).
+
+Every build (with or without `--pages`) also writes a branded `404.html`,
+which Pages serves automatically for unknown paths.
+
+Once per site, in the Cloudflare dashboard:
+
+1. **Custom domains** — attach the site's domain(s) to the Pages project.
+2. **Settings → Variables** — set `LEADS_WEBHOOK_URL` and
+   `LEADS_WEBHOOK_SECRET` (the worker rejects leads without them; unlike
+   the hub, Pages has no disk to park leads on).
+
+Caveat vs the hub: on Pages there is no PHP fallback — everything must be
+pre-built (which `site:build` does: pages, feeds, sitemaps, robots, search
+index, all image variants), and if the admin API is down at submission
+time the visitor sees the form's error message instead of a silent retry.
+
+### Analytics (Umami)
+
+Cookieless, GDPR-friendly, ~2 KB script — no consent banner needed. Each
+static site sets its own Umami website id in `site.php` (`'analytics'`), the
+main app uses `UMAMI_WEBSITE_ID` from the env; snippets are injected in
+production only. Lead form submits fire a `lead-{form}` event automatically —
+mark it as a goal in Umami to see which articles convert. Setup notes in
+`DEPLOYMENT.md`.
+
+### Error pages
+
+`resources/views/errors/{404,500,503}.blade.php` render a minimal centered
+status page. On a static site domain it carries that site's name and accent
+color — and nothing that reveals the other sites in the project; everywhere
+else it is just the code.
+
+### Site search (Pagefind)
+
+Set `'search' => true` in `site.php` and the site gets a `/search` page (plus
+a nav link) powered by [Pagefind](https://pagefind.app): `site:build` indexes
+the generated HTML and writes a static search bundle to
+`public/static/{domain}/pagefind/`, which Caddy serves like any other static
+file — no server, no database, ~100 KB of bandwidth per search. Only page
+content is indexed (`data-pagefind-body` on `<main>`), the search page is
+`noindex`, and the binary ships in the production image (dev uses the npm
+package after `npm install`).
+
+### Lead capture
+
+Every site exposes `POST /lead` on its own domain — Caddy only serves GETs
+from the static cache, so form submissions always reach PHP even on fully
+cached pages. Nothing is stored in this project: a queued job relays the lead
+to the admin project's API (`LEADS_WEBHOOK_URL`), retrying with backoff
+(1m/5m/15m/1h) if it is down. Exhausted retries stay in `failed_jobs` with
+the full payload — re-send with `php artisan queue:retry all`. With no
+webhook configured, leads append to `storage/app/leads.jsonl` so they are
+never dropped.
+
+Enable the newsletter box under every article in `site.php`:
+
+```php
+'newsletter' => [
+    'enabled' => true,
+    'heading' => 'Get new articles by email',
+    'text'    => 'One email per new article. No spam.',
+    'button'  => 'Subscribe',
+],
+```
+
+For contact forms (or any other lead magnet), include the same partial in any
+Blade view:
+
+```blade
+@include('site::partials.lead-form', [
+    'form' => 'contact',
+    'heading' => 'Work with us',
+    'button' => 'Send',
+    'withName' => true,
+    'withMessage' => true,
+])
+```
+
+The form works on static HTML with no framework JS: it submits via `fetch`
+(inline script, which also captures the live page path and `utm_*` params for
+attribution) and falls back to a plain POST + redirect without JavaScript.
+Spam is handled by a honeypot field and per-IP throttling (`LEADS_THROTTLE`,
+default 10/min); the endpoint is CSRF-exempt because pre-rendered pages can't
+carry a live token.
+
+The relayed request is JSON, signed with HMAC-SHA256 over the exact body:
+
+```json
+{
+  "id": "9c2f…", "site": "myblog", "domain": "myblog.com",
+  "form": "newsletter", "email": "visitor@example.com",
+  "name": null, "message": null, "page": "/blog/hello-world",
+  "utm": {"utm_source": "twitter"}, "meta": {"ip": "…", "referrer": "…"},
+  "created_at": "2026-07-04T09:00:00+00:00"
+}
+```
+
+Verify it in the admin project (Laravel) before trusting the payload:
+
+```php
+// routes/api.php in the admin project
+Route::post('/api/leads', function (Request $request) {
+    $signature = hash_hmac('sha256', $request->getContent(), config('services.leads.secret'));
+
+    abort_unless(hash_equals($signature, $request->header('X-Webhook-Signature', '')), 401);
+
+    Lead::updateOrCreate(['uuid' => $request->json('id')], $request->json()->all());
+
+    return response()->json(['ok' => true]);
+});
+```
+
+The `X-Webhook-Id` header carries the lead's UUID — use it as the idempotency
+key (retries re-send the same lead with the same id).
 
 ## SEO Infrastructure
 
@@ -317,10 +549,30 @@ docker compose -f docker-compose.prod.yml up -d --build
 
 See `DEPLOYMENT.md` for full production setup guide.
 
+### Database backups
+
+The `db-backup` sidecar (docker-compose.prod.yml) runs `pg_dump` daily and
+rotates automatically: 7 daily, 4 weekly, 6 monthly dumps in `./backups/`
+(git-ignored).
+
+```bash
+make prod-db-backup                    # take an extra backup right now
+make prod-db-backups                   # list available dumps
+make prod-db-restore FILE=backups/...  # restore (destructive, 5s to abort)
+```
+
+Backups on the same disk protect against bad migrations and fat-fingered
+deletes — not against a dead server. Ship `./backups/` offsite with a nightly
+`rclone sync` / `restic backup` cron to object storage (B2/S3), and do a
+restore drill once after setting up.
+
 ## File Structure
 
 ```
 app/
+  Actions/CreateUser.php            # writes (one class per operation)
+  Queries/UserIndexQuery.php        # reads (only layer that knows the schema)
+  DTOs/UserData.php                 # immutable validated data between layers
   Console/Commands/GeneratePageSeoContent.php
   Helpers/helpers.php
   Http/Middleware/{DetectLocale,SetLocale}.php

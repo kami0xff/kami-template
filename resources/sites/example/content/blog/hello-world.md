@@ -5,6 +5,7 @@ date: 2026-06-01
 updated: 2026-06-15
 section: Announcements
 tags: [news, example]
+cluster: markdown-publishing
 image: https://example.test/img/hello-world.png
 tldr:
   - The filename is the URL slug, so this file is served at /blog/hello-world.
@@ -60,6 +61,17 @@ Every field above feeds the SEO layer automatically:
 The post also gets a BreadcrumbList schema, a canonical URL, a Person author
 schema from `site.php`, and an entry in `/sitemap.xml` with its `lastmod` —
 nothing to wire up per post.
+
+## Content images
+
+Drop images into the site's `images/` folder and reference them normally:
+
+![The example dashboard placeholder](/images/hello-dashboard.png)
+
+The pipeline rewrites that tag with a WebP `src`, a responsive `srcset`,
+intrinsic `width`/`height` (no layout shift), and lazy loading — the first
+image on the page gets `fetchpriority="high"` instead, since it is usually
+the Largest Contentful Paint.
 
 ## Conclusion
 

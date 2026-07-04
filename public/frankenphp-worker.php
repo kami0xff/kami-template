@@ -7,8 +7,8 @@ use Laravel\Octane\Stream;
 use Laravel\Octane\Worker;
 use Symfony\Component\HttpFoundation\Response;
 
-if ((! ($_SERVER['FRANKENPHP_WORKER'] ?? false)) || ! function_exists('frankenphp_handle_request')) {
-    require __DIR__.'/../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php';
+if ((!($_SERVER['FRANKENPHP_WORKER'] ?? false)) || !function_exists('frankenphp_handle_request')) {
+    require __DIR__ . '/../vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php';
 
     return;
 }
@@ -22,7 +22,7 @@ $_ENV['APP_RUNNING_IN_CONSOLE'] = false;
 
 require_once "{$basePath}/vendor/autoload.php";
 
-$frankenPhpClient = new FrankenPhpClient();
+$frankenPhpClient = new FrankenPhpClient;
 
 $worker = tap(new Worker(
     new ApplicationFactory($basePath), $frankenPhpClient
@@ -32,7 +32,7 @@ $requestCount = 0;
 $maxRequests = $_ENV['MAX_REQUESTS'] ?? $_SERVER['MAX_REQUESTS'] ?? 1000;
 $requestMaxExecutionTime = $_ENV['REQUEST_MAX_EXECUTION_TIME'] ?? $_SERVER['REQUEST_MAX_EXECUTION_TIME'] ?? null;
 
-if (PHP_OS_FAMILY === 'Linux' && ! is_null($requestMaxExecutionTime)) {
+if (PHP_OS_FAMILY === 'Linux' && !is_null($requestMaxExecutionTime)) {
     set_time_limit((int) $requestMaxExecutionTime);
 }
 
@@ -41,7 +41,7 @@ try {
         $debugMode = $_ENV['APP_DEBUG'] ?? $_SERVER['APP_DEBUG'] ?? 'false';
 
         try {
-            [$request, $context] = $frankenPhpClient->marshalRequest(new RequestContext());
+            [$request, $context] = $frankenPhpClient->marshalRequest(new RequestContext);
 
             $worker->handle($request, $context);
         } catch (Throwable $e) {

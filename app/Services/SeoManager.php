@@ -8,9 +8,13 @@ use Illuminate\Support\Str;
 class SeoManager
 {
     protected array $values = [];
+
     protected array $defaults = [];
+
     protected array $modifiers = [];
+
     protected array $tags = [];
+
     protected array $rawTags = [];
 
     public function __construct()
@@ -47,6 +51,7 @@ class SeoManager
                 if ($title === $default || Str::endsWith($title, $suffix)) {
                     return $title;
                 }
+
                 return $title . $separator . $suffix;
             };
         }
@@ -59,6 +64,7 @@ class SeoManager
     public function set(string $key, string|Closure|null $value): static
     {
         $this->values[$key] = $value;
+
         return $this;
     }
 
@@ -77,6 +83,7 @@ class SeoManager
     public function raw(string $key): ?string
     {
         $value = $this->values[$key] ?? $this->defaults[$key] ?? null;
+
         return $value instanceof Closure ? $value() : $value;
     }
 
@@ -127,6 +134,7 @@ class SeoManager
         if ($alt !== null) {
             $this->set('og_image_alt', $alt);
         }
+
         return $this;
     }
 
@@ -183,12 +191,14 @@ class SeoManager
         if (!empty($tags)) {
             $this->set('article_tags', implode(',', $tags));
         }
+
         return $this;
     }
 
     public function tag(string $property, string $content): static
     {
         $this->tags[$property] = e($content);
+
         return $this;
     }
 
@@ -199,6 +209,7 @@ class SeoManager
         } else {
             $this->rawTags[$keyOrHtml] = $html;
         }
+
         return $this;
     }
 
@@ -225,6 +236,7 @@ class SeoManager
             $tag .= ' type="' . e($type) . '"';
         }
         $tag .= '>';
+
         return $this->rawTag("preload:{$url}", $tag);
     }
 
@@ -252,6 +264,7 @@ class SeoManager
             if (isset($this->modifiers[$key])) {
                 return $this->modifiers[$key]($bladeFallback);
             }
+
             return $bladeFallback;
         }
 
@@ -316,11 +329,13 @@ class SeoManager
         }
         if ($value !== null) {
             $this->set($key, $value);
+
             return $this;
         }
         if ($default !== null || $modify !== null) {
             return $this;
         }
+
         return $this->get($key);
     }
 }

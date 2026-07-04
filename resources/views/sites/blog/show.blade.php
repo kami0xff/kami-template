@@ -28,6 +28,13 @@
         &middot; {{ $post->readingMinutes() }} {{ __('min read') }}
     </div>
 
+    @if($cluster && $cluster['role'] === 'spoke')
+        <p class="cluster-hub">
+            {{ __('Part of our guide:') }}
+            <a href="{{ $site->url('/blog/' . $cluster['pillar']->slug) }}">{{ $cluster['pillar']->title() }}</a>
+        </p>
+    @endif
+
     @if($post->tldr())
         <aside class="tldr" aria-label="{{ __('Summary') }}">
             <strong>{{ __('TL;DR') }}</strong>
@@ -40,6 +47,20 @@
     @endif
 
     {!! $post->html !!}
+
+    @if($cluster && $cluster['role'] === 'pillar')
+        <section class="cluster-spokes">
+            <h2>{{ __('In this guide') }}</h2>
+            <ul class="post-list">
+                @foreach($cluster['spokes'] as $spoke)
+                    <li class="post-list-item">
+                        <h3><a href="{{ $site->url('/blog/' . $spoke->slug) }}">{{ $spoke->title() }}</a></h3>
+                        <p>{{ $spoke->excerpt(120) }}</p>
+                    </li>
+                @endforeach
+            </ul>
+        </section>
+    @endif
 
     @if($post->quiz())
         @include('site::partials.quiz', ['quiz' => $post->quiz()])
@@ -76,6 +97,15 @@
         </div>
     @endif
 </article>
+
+@if(!empty($site->newsletter['enabled']))
+    @include('site::partials.lead-form', [
+        'form' => 'newsletter',
+        'heading' => $site->newsletter['heading'] ?? __('Get new articles by email'),
+        'text' => $site->newsletter['text'] ?? null,
+        'button' => $site->newsletter['button'] ?? __('Subscribe'),
+    ])
+@endif
 
 @if($bySiteAuthor)
     <aside class="author-box">

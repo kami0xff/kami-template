@@ -42,6 +42,9 @@ class MakeSite extends Command
         File::ensureDirectoryExists("{$path}/content/blog");
         File::ensureDirectoryExists("{$path}/content/pages");
         File::ensureDirectoryExists("{$path}/views/pages");
+        // Content images: reference as /images/foo.png in markdown — the
+        // pipeline generates WebP variants + srcset automatically.
+        File::ensureDirectoryExists("{$path}/images");
 
         File::put("{$path}/site.php", <<<PHP
         <?php
@@ -67,6 +70,24 @@ class MakeSite extends Command
                     // 'https://twitter.com/you',
                     // 'https://www.linkedin.com/in/you',
                 ],
+            ],
+
+            // Client-side search (Pagefind): /search page + nav link, indexed
+            // from the static build by `php artisan site:build`.
+            'search' => false,
+
+            // Umami analytics (production only): one Umami "website" per site.
+            // 'analytics' => [
+            //     'website_id' => '',
+            //     'src' => 'https://analytics.example.com/script.js',
+            // ],
+
+            // Newsletter signup box under every article (leads are relayed to
+            // the admin API — set LEADS_WEBHOOK_URL / LEADS_WEBHOOK_SECRET).
+            'newsletter' => [
+                'enabled' => false,
+                'heading' => 'Get new articles by email',
+                'button' => 'Subscribe',
             ],
 
             // Optional: override any key from config/seo.php for this site.

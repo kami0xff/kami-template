@@ -33,6 +33,29 @@ return [
         ],
     ],
 
+    // Client-side search (Pagefind): adds /search + a nav link; the index is
+    // generated from the static build by `php artisan site:build`.
+    'search' => true,
+
+    // Umami analytics (production only). Create one Umami "website" per
+    // site and paste its id here. 'src' defaults to Umami Cloud — point it
+    // at your self-hosted instance's script.js if you run your own.
+    'analytics' => [
+        'website_id' => '00000000-0000-0000-0000-000000000000',
+        // 'src' => 'https://analytics.your-admin-domain.com/script.js',
+    ],
+
+    // Newsletter signup box under every article. Submissions POST to /lead
+    // and are relayed to the admin project (LEADS_WEBHOOK_URL). For contact
+    // forms, include site::partials.lead-form in any view with
+    // withName/withMessage.
+    'newsletter' => [
+        'enabled' => true,
+        'heading' => 'Get new articles by email',
+        'text' => 'One email per new article. No spam, unsubscribe anytime.',
+        'button' => 'Subscribe',
+    ],
+
     // Optional: override any key from config/seo.php for this site.
     'seo' => [
         'description' => 'An example static site demonstrating markdown content, blog posts, and per-site SEO.',

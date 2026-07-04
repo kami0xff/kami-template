@@ -25,7 +25,7 @@ class GeneratePageSeoContent extends Command
         $translate = $this->option('translate');
 
         $locales = $this->getTargetLocales();
-        $this->info("Generating SEO content for " . count($locales) . " locale(s)");
+        $this->info('Generating SEO content for ' . count($locales) . ' locale(s)');
 
         $pages = $this->option('pages');
         if (empty($pages)) {
@@ -38,6 +38,7 @@ class GeneratePageSeoContent extends Command
 
             if ($translate && $locale !== 'en') {
                 $this->translateExistingContent($locale, $force);
+
                 continue;
             }
 
@@ -47,6 +48,7 @@ class GeneratePageSeoContent extends Command
         }
 
         $this->info('SEO content generation complete!');
+
         return 0;
     }
 
@@ -67,6 +69,7 @@ class GeneratePageSeoContent extends Command
 
         if ($existing && !$force) {
             $this->line("  Skipping {$pageKey} ({$locale}) - already exists");
+
             return;
         }
 
@@ -82,6 +85,7 @@ class GeneratePageSeoContent extends Command
 
             if (empty($content['content'])) {
                 $this->error("  Failed to generate content for {$pageKey}");
+
                 return;
             }
 
@@ -98,7 +102,7 @@ class GeneratePageSeoContent extends Command
 
             $this->info("  Generated content for {$pageKey}");
         } catch (\Exception $e) {
-            $this->error("  Error: " . $e->getMessage());
+            $this->error('  Error: ' . $e->getMessage());
         }
     }
 

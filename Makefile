@@ -8,7 +8,7 @@
 #   make help       - Show all commands
 # ==============================================
 
-.PHONY: help configure setup dev dev-up dev-down dev-logs dev-shell prod prod-up prod-down prod-logs prod-shell migrate fresh test build ide-helper boost-install boost-update assets assets-build site-new sites-build \
+.PHONY: help configure setup dev dev-up dev-down dev-logs dev-shell prod prod-up prod-down prod-logs prod-shell migrate fresh test lint lint-fix stan check build ide-helper boost-install boost-update assets assets-build site-new sites-build \
 	prod-status prod-stats prod-health prod-logs-laravel prod-logs-access prod-slow-requests prod-logs-worker prod-logs-scheduler prod-queue prod-schedule prod-frankenphp-process-list prod-db-activity prod-db-connections prod-db-slow-queries prod-db-stats-reset prod-redis prod-telescope-prune
 
 # Default
@@ -28,6 +28,10 @@ help:
 	@echo "  make migrate      Run migrations (dev)"
 	@echo "  make fresh        Fresh migrate + seed (dev)"
 	@echo "  make test         Run tests"
+	@echo "  make lint         Check code style (Pint, no changes)"
+	@echo "  make lint-fix     Fix code style (Pint)"
+	@echo "  make stan         Static analysis (Larastan)"
+	@echo "  make check        lint + stan + test (run before pushing)"
 	@echo "  make assets       Build assets in watch mode (vite build --watch)"
 	@echo "  make assets-build One-off production asset build"
 	@echo "  make ide-helper   Generate IDE helper files"
@@ -66,6 +70,9 @@ help:
 	@echo "  make prod-db-stats-reset  Reset pg_stat_statements counters"
 	@echo "  make prod-redis        Redis hit/miss + memory"
 	@echo "  make prod-telescope-prune Trim Telescope data now"
+	@echo "  make prod-db-backup    Take a Postgres backup now (daily runs automatically)"
+	@echo "  make prod-db-backups   List available backups"
+	@echo "  make prod-db-restore FILE=...  Restore a backup (destructive)"
 	@echo "  Dashboards: /pulse (always-on)  /telescope (debug; off in prod)"
 	@echo ""
 	@echo "  Git Workflow"
@@ -154,6 +161,20 @@ fresh:
 
 test:
 	docker compose -f docker-compose.dev.yml exec app php artisan test
+
+# Code style check / fix (rules in pint.json)
+lint:
+	docker compose -f docker-compose.dev.yml exec app ./vendor/bin/pint --test
+
+lint-fix:
+	docker compose -f docker-compose.dev.yml exec app ./vendor/bin/pint
+
+# Static analysis (level in phpstan.neon)
+stan:
+	docker compose -f docker-compose.dev.yml exec app ./vendor/bin/phpstan analyse --memory-limit=1G
+
+# The full local quality gate: style, static analysis, tests
+check: lint stan test
 
 # Scaffold a new static site: make site-new KEY=myblog DOMAIN=myblog.com
 site-new:
@@ -289,6 +310,30 @@ prod-db-stats-reset:
 # Trim Telescope data on demand (scheduler also prunes daily)
 prod-telescope-prune:
 	$(DC_PROD) exec app php artisan telescope:prune --hours=48
+
+# ==============================================
+# Database Backups (db-backup sidecar, see docker-compose.prod.yml)
+# ==============================================
+
+# Take an extra backup right now (on top of the daily schedule)
+prod-db-backup:
+	$(DC_PROD) exec db-backup /backup.sh
+	@echo "" && ls -lht backups/daily | head -5
+
+# List available backups (daily/weekly/monthly rotation)
+prod-db-backups:
+	@ls -lhR backups/ | grep -E "\.sql\.gz$$|:$$" || echo "No backups yet"
+
+# Restore a backup INTO THE LIVE DATABASE (destructive!):
+#   make prod-db-restore FILE=backups/daily/__APP_SLUG__-20260704.sql.gz
+prod-db-restore:
+ifndef FILE
+	@echo "Usage: make prod-db-restore FILE=backups/daily/<dump>.sql.gz"
+	@exit 1
+endif
+	@echo "Restoring $(FILE) — this OVERWRITES the current database. Ctrl-C to abort."
+	@sleep 5
+	gunzip -c $(FILE) | $(DC_PROD) exec -T db sh -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
 
 # Redis: cache hit/miss, evictions, and memory usage
 prod-redis:

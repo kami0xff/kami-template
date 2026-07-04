@@ -115,6 +115,40 @@ Go to **Settings → Secrets and variables → Actions** and add:
 | `SSH_PRIVATE_KEY` | Contents of `~/.ssh/id_ed25519` (private key) |
 | `DEPLOY_PATH` | `/var/www/__APP_SLUG__` |
 
+## Monitoring Setup
+
+### Sentry (error tracking)
+
+Already wired into the app (`bootstrap/app.php` + queue/scheduler containers
+share the same env) — it only needs the DSN:
+
+1. Create a Laravel project at sentry.io → copy the DSN from
+   **Settings → Client Keys (DSN)**.
+2. Set `SENTRY_LARAVEL_DSN=...` in `.env.production` and redeploy
+   (`make prod-up` is enough — no image rebuild needed for env changes).
+3. Verify from the server: `make prod-shell` then `php artisan sentry:test`
+   — a test event should appear in the Sentry dashboard.
+
+Optional tuning in `.env.production`: `SENTRY_TRACES_SAMPLE_RATE=0.2` samples
+20% of requests as performance transactions (0.0 = errors only, no overhead);
+`SENTRY_SEND_DEFAULT_PII=true` attaches IPs/cookies to events.
+
+### Umami (analytics)
+
+Cookieless, GDPR-friendly analytics — no consent banner needed. Either use
+[Umami Cloud](https://umami.is) (free tier) or self-host the
+`ghcr.io/umami-software/umami` image next to your admin project. Create one
+Umami *website* per domain you track:
+
+- Main app: set `UMAMI_WEBSITE_ID` (and `UMAMI_SRC` if self-hosted) in
+  `.env.production`.
+- Each static site: add its own id in `site.php` under `'analytics'`.
+
+Snippets are injected in production only, so local/dev traffic never
+pollutes the numbers. Lead form submissions are tracked automatically as
+`lead-{form}` events (via `data-umami-event`), which you can mark as a
+conversion goal in Umami.
+
 ## Architecture
 
 ```

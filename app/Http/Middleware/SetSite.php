@@ -20,9 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SetSite
 {
-    public function __construct(protected SiteRegistry $registry)
-    {
-    }
+    public function __construct(protected SiteRegistry $registry) {}
 
     public function handle(Request $request, Closure $next, string $siteKey): Response
     {

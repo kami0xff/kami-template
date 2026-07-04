@@ -16,6 +16,7 @@ RUN apk add --no-cache \
     postgresql-dev \
     libpng \
     libjpeg-turbo \
+    libwebp \
     freetype \
     libzip \
     oniguruma \
@@ -33,12 +34,13 @@ RUN apk add --no-cache --virtual .build-deps \
     make \
     libpng-dev \
     libjpeg-turbo-dev \
+    libwebp-dev \
     freetype-dev \
     libzip-dev \
     oniguruma-dev \
     icu-dev \
     linux-headers \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install \
         pdo_pgsql \
         mbstring \
