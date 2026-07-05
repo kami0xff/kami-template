@@ -300,6 +300,15 @@ Posts are created with `draft: true`; drop in the screenshots, add any manual
 in-text links, remove the flag, commit — or pass `--publish` to skip the
 draft stage.
 
+A second skill ships for **programmatic local SEO** (`--skill=local-seo`):
+city × service landing pages for businesses with a physical service area.
+It encodes the whole strategy — gate each city page on unique assets (a real
+photo, a testimonial naming the town), tier the structure (service pillar →
+proven towns → one "zone d'intervention" page for the rest) instead of the
+full city × service matrix, differentiate through genuinely local angles
+(housing stock, ABF constraints, climate, drive time), per-town FAQs, cluster
+linking, and pruning pages that never earn impressions.
+
 ### Topic clusters
 
 Single articles compete alone; clusters rank. `site:cluster` plans one
