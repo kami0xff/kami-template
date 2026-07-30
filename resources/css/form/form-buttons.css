@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORM ACTION BUTTONS — primary, success, metal, ghost, link
+   Designed for form submit rows; complement the main button system.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space2);
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-size: var(--text-lead);
+    font-weight: var(--font-bold4);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background var(--form-input-transition),
+        box-shadow var(--form-input-transition),
+        transform var(--form-input-transition),
+        color var(--form-input-transition);
+}
+
+.form-btn:active {
+    transform: scale(0.97);
+}
+
+/* ───── PRIMARY (silver/white gradient) ───── */
+.form-btn-primary {
+    background: linear-gradient(135deg, var(--silver8), #fff);
+    color: var(--gray1);
+    box-shadow:
+        0 0 12px rgba(255, 255, 255, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.form-btn-primary:hover {
+    box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.25),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ───── SUCCESS (green) ───── */
+.form-btn-success {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-success) 80%, black), var(--color-success));
+    color: var(--gray1);
+    box-shadow:
+        0 0 12px color-mix(in srgb, var(--color-success) 20%, transparent),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.form-btn-success:hover {
+    box-shadow:
+        0 0 20px color-mix(in srgb, var(--color-success) 35%, transparent),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ───── METAL (subtle silver outline) ───── */
+.form-btn-metal {
+    background: var(--white7);
+    border: 1px solid var(--white-alpha-120);
+    color: var(--text-primary);
+}
+
+.form-btn-metal:hover {
+    background: var(--white6);
+    border-color: var(--silver1);
+}
+
+/* ───── GHOST (transparent) ───── */
+.form-btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+}
+
+.form-btn-ghost:hover {
+    background: var(--white7);
+    color: var(--text-primary);
+}
+
+/* ───── LINK (text-like) ───── */
+.form-btn-link {
+    background: transparent;
+    padding: 10px 8px;
+    color: var(--text-muted);
+    font-weight: var(--font-bold5);
+}
+
+.form-btn-link:hover {
+    color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-btn {
+        transition: none;
+    }
+}

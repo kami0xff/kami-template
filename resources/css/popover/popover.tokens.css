@@ -1,0 +1,22 @@
+/*
+    Popover shell — same surface language as panels / chat settings.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --popover-bg: var(--panel-bg, #2a2a2a);
+    --popover-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --popover-fg: var(--text-primary);
+
+    /* ===== B) Layout ================================================= */
+    --popover-min-width: 200px;
+    --popover-radius: var(--panel-radius, 10px);
+    --popover-gap: 6px;
+    --popover-padding: var(--panel-padding, 6px);
+    --popover-z: var(--z-dropdown);
+
+    /* ===== C) Effects ================================================ */
+    --popover-elevation: var(--panel-shadow, 0 12px 40px rgba(0, 0, 0, 0.55));
+    --popover-transition: opacity var(--duration1) var(--ease-out),
+        transform var(--duration1) var(--ease-out),
+        visibility var(--duration1);
+}

@@ -1,0 +1,8 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --resizable-handle-bg: var(--border-default);
+    --resizable-handle-bg-active: var(--color-primary);
+
+    /* ===== B) Layout ================================================= */
+    --resizable-handle-size: 5px;
+}

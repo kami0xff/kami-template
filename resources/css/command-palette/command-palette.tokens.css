@@ -1,0 +1,15 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --command-bg: var(--gray3);
+    --command-border: var(--border-strong);
+    --command-item-fg: var(--text-muted);
+    --command-item-fg-active: var(--text-primary);
+    --command-item-bg-active: var(--white7);
+
+    /* ===== B) Layout ================================================= */
+    --command-width: 560px;
+    --command-top: 15vh;
+    --command-radius: var(--radius-container);
+    --command-max-height: 320px;
+    --command-z: var(--modal-z-index);
+}

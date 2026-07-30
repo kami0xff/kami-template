@@ -1,3 +1,652 @@
-/* Global stylesheet.
-   Compiled by Vite and loaded via the @vite directive in the layout.
-   Add your base styles here (no CSS framework bundled by default). */
+/*
+    Design system — base stylesheet.
+
+    Cascade is enforced by CSS layers (not import order):
+
+      reset         — element defaults
+      tokens        — primitives + effects + component tokens (custom props only)
+      themes        — optional token-override specs (themes/*.css)
+      components    — one folder per component, reads only its tokens + globals
+      compositions  — named assemblies of components for a specific context
+      pages         — page-level layout (this file's tail)
+
+    Later layers win, and any UNLAYERED site CSS wins over all of them —
+    which is exactly what a per-site override should do.
+
+    Per-project re-skin strategy:
+      - same structure, new look      → override tokens (theme file)
+      - new effect language           → override tokens/effects.css values
+      - genuinely new geometry/scale  → override tokens/primitives.css values
+      - never                         → edit component CSS from a site
+*/
+@layer reset, tokens, themes, components, compositions, pages;
+
+/* 1) Reset */
+@import './tokens/reset.css' layer(reset);
+
+/* 2) Global tokens (primitives + effects) */
+@import './tokens/primitives.css' layer(tokens);
+@import './tokens/effects.css' layer(tokens);
+
+/* 3) Component tokens */
+@import './button/button.tokens.css' layer(tokens);
+@import './button/liquid-metal-button/liquid-metal-button.tokens.css' layer(tokens);
+@import './link/link.tokens.css' layer(tokens);
+@import './data-table/data-table.tokens.css' layer(tokens);
+@import './navbar/navbar.tokens.css' layer(tokens);
+@import './chip/broadcaster-chip/broadcaster-chip.tokens.css' layer(tokens);
+@import './search/search.tokens.css' layer(tokens);
+@import './sidebar/sidebar.tokens.css' layer(tokens);
+@import './button/corner-highlight-button/corner-highlight-button.tokens.css' layer(tokens);
+@import './chip/token-balance-chip/token-balance-chip.tokens.css' layer(tokens);
+@import './user-avatar/user-avatar.tokens.css' layer(tokens);
+@import './panel/panel.tokens.css' layer(tokens);
+@import './modal/modal.tokens.css' layer(tokens);
+@import './toast/toast.tokens.css' layer(tokens);
+@import './banner/banner.tokens.css' layer(tokens);
+@import './checkbox/checkbox.tokens.css' layer(tokens);
+@import './form/form.tokens.css' layer(tokens);
+@import './tab/tab.tokens.css' layer(tokens);
+@import './card/card.tokens.css' layer(tokens);
+@import './select-row/select-row.tokens.css' layer(tokens);
+@import './footer/footer.tokens.css' layer(tokens);
+@import './pill/pill.tokens.css' layer(tokens);
+@import './popover/popover.tokens.css' layer(tokens);
+@import './menu/menu.tokens.css' layer(tokens);
+@import './tooltip/tooltip.tokens.css' layer(tokens);
+@import './collapsible/collapsible.tokens.css' layer(tokens);
+@import './badge/badge.tokens.css' layer(tokens);
+@import './skeleton/skeleton.tokens.css' layer(tokens);
+@import './spinner/spinner.tokens.css' layer(tokens);
+@import './progress/progress.tokens.css' layer(tokens);
+@import './kbd/kbd.tokens.css' layer(tokens);
+@import './divider/divider.tokens.css' layer(tokens);
+@import './breadcrumbs/breadcrumbs.tokens.css' layer(tokens);
+@import './alert/alert.tokens.css' layer(tokens);
+@import './empty-state/empty-state.tokens.css' layer(tokens);
+@import './pagination/pagination.tokens.css' layer(tokens);
+@import './infinite-scroll/infinite-scroll.tokens.css' layer(tokens);
+@import './overflow-list/overflow-list.tokens.css' layer(tokens);
+@import './drawer/drawer.tokens.css' layer(tokens);
+@import './stat/stat.tokens.css' layer(tokens);
+@import './chart/chart.tokens.css' layer(tokens);
+@import './description-list/description-list.tokens.css' layer(tokens);
+@import './table/table.tokens.css' layer(tokens);
+@import './thumbnail/thumbnail.tokens.css' layer(tokens);
+@import './lightbox/lightbox.tokens.css' layer(tokens);
+@import './video-player/video-player.tokens.css' layer(tokens);
+@import './carousel/carousel.tokens.css' layer(tokens);
+@import './command-palette/command-palette.tokens.css' layer(tokens);
+@import './calendar/calendar.tokens.css' layer(tokens);
+@import './tree/tree.tokens.css' layer(tokens);
+@import './toolbar/toolbar.tokens.css' layer(tokens);
+@import './resizable/resizable.tokens.css' layer(tokens);
+@import './prose/prose.tokens.css' layer(tokens);
+@import './chat/chat.tokens.css' layer(tokens);
+@import './bottom-nav/bottom-nav.tokens.css' layer(tokens);
+@import './mega-menu/mega-menu.tokens.css' layer(tokens);
+@import './comments/comments.tokens.css' layer(tokens);
+@import './reactions/reactions.tokens.css' layer(tokens);
+@import './creator-sections/creator-sections.tokens.css' layer(tokens);
+@import './wallet/wallet.tokens.css' layer(tokens);
+@import './payment/payment.tokens.css' layer(tokens);
+@import './ai/ai.tokens.css' layer(tokens);
+@import './shader-hero/shader-hero.tokens.css' layer(tokens);
+@import './forum/forum.tokens.css' layer(tokens);
+@import './explore/explore.tokens.css' layer(tokens);
+@import './stories/stories.tokens.css' layer(tokens);
+@import './goal-bar/goal-bar.tokens.css' layer(tokens);
+@import './tip-menu/tip-menu.tokens.css' layer(tokens);
+@import './tipping/tipping.tokens.css' layer(tokens);
+@import './model-heatmap/model-heatmap.tokens.css' layer(tokens);
+
+/* 4) Components — atoms / utilities */
+@import './interaction/interaction.css' layer(components); /* Astryx-style hover/press/focus for all pressables */
+@import './button/button.css' layer(components);
+@import './button/liquid-metal-button/liquid-metal-button.css' layer(components);
+@import './pill/pill.css' layer(components);
+@import './link/link.css' layer(components);
+@import './checkbox/checkbox.css' layer(components);
+@import './form/form.css' layer(components);
+@import './form/form-input-wrap.css' layer(components);
+@import './form/form-states.css' layer(components);
+@import './form/form-checkbox.css' layer(components);
+@import './form/form-segmented.css' layer(components);
+@import './form/form-slider.css' layer(components);
+@import './form/form-dropdown.css' layer(components);
+@import './form/form-pin.css' layer(components);
+@import './form/form-token-picker.css' layer(components);
+@import './form/form-tags.css' layer(components);
+@import './form/form-combobox.css' layer(components);
+@import './form/form-dropzone.css' layer(components);
+@import './form/form-fields-extra.css' layer(components);
+@import './form/form-uploader.css' layer(components);
+@import './form/form-card-payment.css' layer(components);
+@import './form/form-pwd-strength.css' layer(components);
+@import './form/form-date.css' layer(components);
+@import './form/form-rating.css' layer(components);
+@import './form/form-wizard.css' layer(components);
+@import './form/form-multipart.css' layer(components);
+@import './form/form-sections.css' layer(components);
+@import './form/form-buttons.css' layer(components);
+@import './tab/tab.css' layer(components);
+@import './data-table/data-table.css' layer(components);
+@import './badge/badge.css' layer(components);
+@import './count-badge/count-badge.css' layer(components);
+@import './skeleton/skeleton.css' layer(components);
+@import './skeleton/skeleton-comp.css' layer(components);
+@import './spinner/spinner.css' layer(components);
+@import './progress/progress.css' layer(components);
+@import './kbd/kbd.css' layer(components);
+@import './divider/divider.css' layer(components);
+@import './breadcrumbs/breadcrumbs.css' layer(components);
+@import './collapsible/collapsible.css' layer(components);
+@import './tooltip/tooltip.css' layer(components);
+@import './alert/alert.css' layer(components);
+@import './empty-state/empty-state.css' layer(components);
+@import './pagination/pagination.css' layer(components);
+@import './infinite-scroll/infinite-scroll.css' layer(components);
+@import './overflow-list/overflow-list.css' layer(components);
+@import './stat/stat.css' layer(components);
+@import './chart/chart.css' layer(components);
+@import './description-list/description-list.css' layer(components);
+@import './table/table.css' layer(components);
+@import './thumbnail/thumbnail.css' layer(components);
+@import './carousel/carousel.css' layer(components);
+@import './calendar/calendar.css' layer(components);
+@import './tree/tree.css' layer(components);
+@import './toolbar/toolbar.css' layer(components);
+@import './resizable/resizable.css' layer(components);
+@import './prose/prose.css' layer(components);
+@import './form/form-number.css' layer(components);
+
+/* 4) Components — chrome */
+@import './navbar/navbar.css' layer(components);
+@import './chip/broadcaster-chip/broadcaster-chip.css' layer(components);
+@import './search/search.css' layer(components);
+@import './sidebar/sidebar.css' layer(components);
+@import './sidebar/sub-sidebar.css' layer(components); /* drill-in second-level panel */
+@import './button/corner-highlight-button/corner-highlight-button.css' layer(components);
+@import './chip/token-balance-chip/token-balance-chip.css' layer(components);
+@import './user-avatar/user-avatar.css' layer(components);
+
+/* 4) Components — panels (fixed, anchored, dropdown) */
+@import './popover/popover.css' layer(components);
+@import './menu/menu.css' layer(components);
+@import './menu/context-menu.css' layer(components);
+@import './panel/panel.css' layer(components);
+@import './panel/panel-head.css' layer(components);
+@import './panel/panel-divider.css' layer(components);
+@import './panel/panel-list-item.css' layer(components);
+@import './panel/panel-item-list.css' layer(components);
+@import './panel/panel-feed.css' layer(components);
+@import './panel/user-panel/user-level.css' layer(components);
+
+/* 4) Components — select-row */
+@import './select-row/select-row.css' layer(components);
+
+/* 4) Components — modals / drawers / command palette / lightbox */
+@import './modal/modal.css' layer(components);
+@import './drawer/drawer.css' layer(components);
+@import './command-palette/command-palette.css' layer(components);
+@import './lightbox/lightbox.css' layer(components);
+@import './video-player/video-player.css' layer(components);
+
+/* 4) Components — toasts */
+@import './toast/toast.css' layer(components);
+
+/* 4) Components — chat dock (bottom-anchored collapsible chats) */
+@import './chat/chat.css' layer(components);
+
+/* 4) Components — mega menu (full-bleed nav panel) */
+@import './mega-menu/mega-menu.css' layer(components);
+
+/* 4) Components — comments thread */
+@import './comments/comments.css' layer(components);
+
+/* 4) Components — reactions (post / gallery) */
+@import './reactions/reactions.css' layer(components);
+
+/* 4) Components — creator custom sections */
+@import './creator-sections/creator-sections.css' layer(components);
+
+/* 4) Components — wallet + payment checkout */
+@import './wallet/wallet.css' layer(components);
+@import './payment/payment.css' layer(components);
+
+/* 4) Components — AI chat + model studio */
+@import './ai/ai-chat.css' layer(components);
+@import './ai/ai-studio.css' layer(components);
+@import './ai/ai-orb.css' layer(components);
+@import './ai/ai-dock.css' layer(components);
+@import './shader-hero/shader-hero.css' layer(components);
+
+/* 4) Components — forum / imageboard */
+@import './forum/forum.css' layer(components);
+
+/* 4) Components — explore (mixed-media discovery feed) */
+@import './explore/explore.css' layer(components);
+
+/* 4) Components — stories (rings / highlights / viewer) */
+@import './stories/stories.css' layer(components);
+
+/* 4) Components — tip goal / tip menu / schedule heatmap */
+@import './goal-bar/goal-bar.css' layer(components);
+@import './tip-menu/tip-menu.css' layer(components);
+@import './tipping/tipping.css' layer(components);
+@import './model-heatmap/model-heatmap.css' layer(components);
+@import './media/media-lock.css' layer(components);
+@import './page-header/page-header.css' layer(components);
+@import './filter-bar/filter-bar.css' layer(components);
+@import './list-row/list-row.css' layer(components);
+@import './follow-button/follow-button.css' layer(components);
+@import './live-meta/live-meta.css' layer(components);
+@import './bottom-nav/bottom-nav.css' layer(components);
+@import './sticky-actions/sticky-actions.css' layer(components);
+
+/* 4) Components — banners */
+@import './banner/banner.css' layer(components);
+
+/* 4) Components — cards / surfaces */
+@import './card/card.css' layer(components);
+
+/* 4) Components — regions */
+@import './layout/app-layout.css' layer(components);
+@import './footer/footer.css' layer(components);
+
+/* 5) Compositions — named assemblies (kept generic in the base bundle) */
+@import './modal/compositions/buy-tokens.css' layer(compositions);
+@import './modal/compositions/auth-guest.css' layer(compositions);
+@import './panel/compositions/notification-setting.css' layer(compositions);
+@import './notifications/notifications.css' layer(compositions);
+
+/* 6) Page-level layout */
+@import './pages/design-theme-lab.css' layer(pages);
+
+@layer pages {
+    html,
+    body {
+        font-family: var(--font-body);
+        background: var(--surface-black);
+        color: var(--text-primary);
+    }
+
+    .container.page-section {
+        width: min(100%, 1680px);
+        margin-inline: auto;
+        padding: var(--space5);
+    }
+
+    .page-title-bar,
+    .page-stats,
+    .seo-text-top,
+    .seo-text-bottom,
+    .mobile-filters {
+        margin-bottom: var(--space4);
+    }
+
+    .page-title-bar {
+        display: flex;
+        align-items: center;
+        gap: var(--space3);
+    }
+
+    .page-title-icon {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        color: var(--color-accent);
+        border-radius: var(--radius2);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .page-title-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .page-title-text {
+        font-size: clamp(1.4rem, 3vw, 2.2rem);
+        line-height: 1;
+    }
+
+    .page-stats {
+        display: flex;
+        align-items: center;
+        gap: var(--space2);
+        color: var(--text-muted);
+        font-size: var(--text-small);
+    }
+
+    .page-layout {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+        align-items: start;
+        gap: var(--space5);
+    }
+
+    .page-main {
+        min-width: 0;
+    }
+
+    .page-layout > .sidebar {
+        position: sticky;
+        top: calc(var(--navbar-height) + 42px + var(--space4));
+        gap: var(--space3);
+        align-self: start;
+    }
+
+    .sidebar-section,
+    .filter-panel,
+    .stats-bar,
+    .favorites-section,
+    .country-section,
+    .seo-section {
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius2);
+        background: var(--surface1);
+    }
+
+    .sidebar-section {
+        padding: var(--space3);
+    }
+
+    .sidebar-section-title {
+        display: flex;
+        align-items: center;
+        gap: var(--space2);
+        margin-bottom: var(--space3);
+        color: var(--text-primary);
+        font-size: var(--text-small);
+        font-weight: var(--font-bold4);
+    }
+
+    .sidebar-search-wrap {
+        position: relative;
+    }
+
+    .sidebar-search-icon {
+        position: absolute;
+        top: 50%;
+        left: var(--space3);
+        width: 16px;
+        height: 16px;
+        transform: translateY(-50%);
+        color: var(--text-faint);
+    }
+
+    .sidebar-search-input,
+    .sidebar-field input,
+    .sidebar-field select {
+        width: 100%;
+        min-height: 38px;
+        border: 1px solid var(--border-default);
+        border-radius: var(--radius2);
+        color: var(--text-primary);
+        background: var(--surface2);
+        padding: 0 var(--space3);
+    }
+
+    .sidebar-search-input {
+        padding-left: var(--space7);
+    }
+
+    .sidebar-filter-fields,
+    .sidebar-platforms,
+    .sidebar-tags,
+    .sidebar-nav {
+        display: grid;
+        gap: var(--space2);
+    }
+
+    .sidebar-field label {
+        display: block;
+        margin-bottom: var(--space1);
+        color: var(--text-muted);
+        font-size: var(--text-small);
+    }
+
+    .sidebar-age-row,
+    .sidebar-checkboxes,
+    .sidebar-filter-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space2);
+    }
+
+    .sidebar-filter-actions {
+        margin-top: var(--space3);
+        justify-content: space-between;
+    }
+
+    .sidebar-filter-btn,
+    .sidebar-platform-link,
+    .sidebar-nav-link,
+    .sidebar-tag {
+        display: flex;
+        align-items: center;
+        gap: var(--space2);
+        color: var(--text-muted);
+        text-decoration: none;
+    }
+
+    .sidebar-platform-link,
+    .sidebar-nav-link {
+        min-height: 34px;
+        padding: 0 var(--space2);
+        border-radius: var(--radius2);
+    }
+
+    .sidebar-platform-link:hover,
+    .sidebar-platform-link.active,
+    .sidebar-nav-link:hover {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .sidebar-platform-icon {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
+
+    .sidebar-tags {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    .sidebar-tag {
+        justify-content: center;
+        min-height: 28px;
+        border-radius: var(--radius-pill);
+        background: rgba(255, 255, 255, 0.05);
+        font-size: var(--text-small);
+    }
+
+    .filter-panel {
+        padding: var(--space4);
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: var(--space3);
+    }
+
+    .filter-field-row,
+    .filter-checkbox-group,
+    .filter-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space2);
+    }
+
+    .filter-actions {
+        justify-content: flex-end;
+        margin-top: var(--space3);
+    }
+
+    .stats-bar,
+    .results-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space3);
+        margin-bottom: var(--space4);
+    }
+
+    .stats-bar {
+        padding: var(--space3);
+    }
+
+    .models-grid,
+    .favorites-grid,
+    .seo-section-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: var(--space4);
+    }
+
+    .favorites-section,
+    .country-section,
+    .seo-section {
+        padding: var(--space4);
+        margin-bottom: var(--space5);
+    }
+
+    .favorites-header,
+    .country-section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space3);
+        margin-bottom: var(--space3);
+    }
+
+    .model-card-wrapper {
+        position: relative;
+    }
+
+    .model-card {
+        display: grid;
+        overflow: hidden;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius2);
+        color: var(--text-primary);
+        text-decoration: none;
+        background: var(--surface1);
+    }
+
+    .model-card-image {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background: var(--surface2);
+    }
+
+    .model-card-thumb,
+    .model-card-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .model-card-video,
+    .model-card-overlay {
+        position: absolute;
+        inset: 0;
+    }
+
+    .model-card-overlay {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.76), transparent 55%);
+    }
+
+    .model-card-info {
+        position: absolute;
+        left: var(--space3);
+        right: var(--space3);
+        bottom: var(--space3);
+        z-index: 1;
+    }
+
+    .model-card-name {
+        font-size: 1rem;
+    }
+
+    .model-card-meta {
+        display: flex;
+        gap: var(--space2);
+        color: var(--text-muted);
+        font-size: var(--text-small);
+    }
+
+    .model-card-live-dot,
+    .model-card-offline-tag,
+    .model-card-new-badge,
+    .model-card-rating,
+    .model-card-flag,
+    .model-card-favorite {
+        position: absolute;
+        z-index: 2;
+    }
+
+    .model-card-live-dot {
+        top: var(--space3);
+        left: var(--space3);
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--color-live);
+    }
+
+    .model-card-rating {
+        top: var(--space2);
+        right: var(--space2);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space1);
+        padding: 3px 7px;
+        border-radius: var(--radius-pill);
+        background: rgba(0, 0, 0, 0.55);
+        font-size: var(--text-small);
+    }
+
+    .model-card-favorite {
+        top: var(--space2);
+        left: var(--space2);
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border: 0;
+        border-radius: var(--radius-pill);
+        color: var(--text-primary);
+        background: rgba(0, 0, 0, 0.55);
+        cursor: pointer;
+    }
+
+    .model-card-goal,
+    .model-card-stream-title {
+        padding: var(--space3);
+        color: var(--text-muted);
+        font-size: var(--text-small);
+    }
+
+    .mobile-filters {
+        display: none;
+    }
+
+    @media (max-width: 900px) {
+        .container.page-section {
+            padding: var(--space3);
+        }
+
+        .models-grid,
+        .favorites-grid,
+        .seo-section-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: var(--space3);
+        }
+    }
+}

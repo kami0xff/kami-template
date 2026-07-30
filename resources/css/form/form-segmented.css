@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SEGMENTED CONTROL — mutually exclusive pill bar
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-segmented {
+    display: inline-flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--white7);
+    border: 1px solid var(--white-alpha-120);
+    border-radius: var(--radius-pill);
+}
+
+.form-seg {
+    padding: 6px 18px;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        background var(--form-input-transition),
+        color var(--form-input-transition),
+        box-shadow var(--form-input-transition);
+}
+
+.form-seg:hover {
+    color: var(--text-primary);
+}
+
+.form-seg.active {
+    background: var(--white6);
+    color: var(--text-primary);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-seg {
+        transition: none;
+    }
+}

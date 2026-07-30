@@ -1,0 +1,30 @@
+/*
+    Comments — thread with one-level replies + vote rail.
+    Surface language matches panels / chat settings.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --comment-fg: var(--text-primary);
+    --comment-muted: var(--text-muted);
+    --comment-faint: var(--text-faint);
+    --comment-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --comment-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.06));
+    --comment-composer-bg: rgba(255, 255, 255, 0.03);
+    --comment-composer-focus: rgba(255, 255, 255, 0.05);
+    --comment-vote-up: #4ade80;
+    --comment-vote-down: #f87171;
+    --comment-reply-rail: rgba(255, 255, 255, 0.1);
+
+    /* ===== B) Layout ================================================= */
+    --comment-gap: var(--space4);
+    --comment-pad: var(--space3);
+    --comment-radius: 10px;
+    --comment-avatar-gap: var(--space3);
+    --comment-vote-width: 32px;
+    --comment-reply-indent: 28px;
+    --comment-font-size: 14px;
+    --comment-meta-size: 12px;
+
+    /* ===== C) Effects ================================================ */
+    --comment-transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}

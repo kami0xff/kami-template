@@ -1,0 +1,216 @@
+/* ───── COLUMN LABEL ───── */
+.select-col-label {
+    margin-bottom: var(--space3);
+    font-size: var(--select-label-size);
+    font-weight: var(--select-label-weight);
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+}
+
+/* ───── SELECTABLE ROW ───── */
+.select-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--select-row-gap);
+    padding: var(--select-row-padding);
+    min-height: var(--select-row-min-height);
+    background: var(--select-row-bg);
+    border: 1.5px solid var(--select-row-border);
+    border-radius: var(--select-row-radius);
+    cursor: pointer;
+    transition: all var(--modal-transition);
+}
+
+.select-row+.select-row {
+    margin-top: 10px;
+}
+
+.select-row:hover {
+    background: var(--select-row-bg-hover);
+    border-color: var(--select-row-border-hover);
+}
+
+/* Active states — tab trigger or JS-driven */
+.select-row.selected,
+.select-row.tab-active,
+.select-row[data-active="true"] {
+    background: var(--select-row-sel-bg);
+    border-color: var(--select-row-sel-border);
+    box-shadow: var(--select-row-sel-shadow);
+}
+
+/* ───── RADIO-AS-LABEL ───── */
+label.select-row {
+    user-select: none;
+}
+
+label.select-row:has(input:checked) {
+    background: var(--select-row-sel-bg);
+    border-color: var(--select-row-sel-border);
+    box-shadow: var(--select-row-sel-shadow);
+}
+
+label.select-row:has(input:checked) .select-radio {
+    background: var(--select-radio-sel-bg);
+    border-color: var(--select-radio-sel-border);
+    box-shadow: var(--select-radio-sel-glow);
+}
+
+label.select-row:has(input:checked) .select-radio::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--select-radio-dot-size);
+    height: var(--select-radio-dot-size);
+    border-radius: 50%;
+    background: var(--modal-bg);
+}
+
+/* ───── RADIO MARK ───── */
+.select-radio {
+    position: relative;
+    flex-shrink: 0;
+    width: var(--select-radio-size);
+    height: var(--select-radio-size);
+    border: 1.5px solid var(--select-radio-border);
+    border-radius: 50%;
+    transition: all var(--modal-transition);
+}
+
+.select-row:hover .select-radio {
+    border-color: var(--select-radio-border-hover);
+}
+
+.select-row.selected .select-radio,
+.select-row.tab-active .select-radio,
+.select-row[data-active="true"] .select-radio {
+    background: var(--select-radio-sel-bg);
+    border-color: var(--select-radio-sel-border);
+    box-shadow: var(--select-radio-sel-glow);
+}
+
+.select-row.selected .select-radio::after,
+.select-row.tab-active .select-radio::after,
+.select-row[data-active="true"] .select-radio::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--select-radio-dot-size);
+    height: var(--select-radio-dot-size);
+    border-radius: 50%;
+    background: var(--modal-bg);
+}
+
+/* ───── ROW CONTENT ───── */
+.select-row-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.select-row-title {
+    font-size: var(--select-row-title-size);
+    font-weight: var(--select-row-title-weight);
+    color: var(--text-primary);
+    letter-spacing: 0.1px;
+}
+
+.select-row-sub {
+    font-size: var(--select-row-sub-size);
+    color: var(--select-row-sub-color);
+}
+
+.select-row.selected .select-row-sub,
+.select-row.tab-active .select-row-sub,
+.select-row[data-active="true"] .select-row-sub {
+    color: var(--white3);
+}
+
+.select-row-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+/* ───── HIGHLIGHT ROW (brushed metal) ───── */
+.select-row--highlight {
+    background-color: var(--gray7);
+    background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.02) 1px, rgba(255, 255, 255, 0.02) 2px),
+        repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(255, 255, 255, 0.012) 6px, rgba(255, 255, 255, 0.012) 7px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(0, 0, 0, 0.2) 100%);
+    border: 1.5px solid var(--silver2);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.select-row--highlight::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+    animation: modal-glint 5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.select-row--highlight .select-radio {
+    border-color: var(--silver5);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.select-row--highlight.selected .select-radio,
+.select-row--highlight.tab-active .select-radio,
+.select-row--highlight[data-active="true"] .select-radio {
+    background: linear-gradient(135deg, #fff, var(--silver10));
+    border-color: #fff;
+}
+
+.select-row--highlight .select-row-title {
+    color: #fff;
+    font-weight: var(--font-bold4);
+}
+
+.select-row--highlight .select-row-sub {
+    color: var(--silver9);
+    font-weight: var(--font-bold5);
+}
+
+/* ───── PRICING ───── */
+.select-price {
+    font-size: 15px;
+    font-weight: var(--font-bold4);
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+}
+
+.select-price-strike {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--white4);
+}
+
+.select-price-save {
+    font-size: 11px;
+    font-weight: var(--font-bold4);
+    color: var(--select-save-color);
+}
+
+/* ───── REDUCED MOTION ───── */
+@media (prefers-reduced-motion: reduce) {
+    .select-row--highlight::before {
+        animation: none;
+    }
+}

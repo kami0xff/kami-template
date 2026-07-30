@@ -1,0 +1,10 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --divider-line: var(--border-default);
+    --divider-fg: var(--text-faint);
+
+    /* ===== B) Layout ================================================= */
+    --divider-gap: var(--space3);
+    --divider-margin-block: var(--space4);
+    --divider-font-size: var(--text-small);
+}

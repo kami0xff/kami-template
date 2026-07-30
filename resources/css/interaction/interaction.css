@@ -1,0 +1,140 @@
+/*
+    Interaction layer (adapted from Astryx).
+
+    One place defines how every pressable control feels:
+
+    1. Overlay hover/press — a translucent white layer stacked on the
+       control's own background via background-image, so ONE token pair
+       gives a consistent hover/press on any variant color.
+    2. Press scale — :active { scale(0.98) } for tactile feedback
+       (chrome controls only — dense list rows skip scale).
+    3. Focus — 2px accent outline, 3px offset, on :focus-visible only.
+
+    :where() keeps specificity at zero so any component can override.
+    Hover only applies on devices that actually hover; everything
+    respects prefers-reduced-motion.
+
+    Component CSS must use `background-color` (not the `background`
+    shorthand) on hover/active so it doesn't wipe the overlay image.
+*/
+
+/* ── Chrome controls: overlay + press + focus ─────────────────────── */
+:where(.btn, .pill, .btn-icon, .search-chip, .form-token-chip,
+    .search-tool, .search-example, .search-promo-toggle) {
+    transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-standard),
+        transform var(--duration-fast) var(--ease-standard);
+}
+
+/* Real class selectors here (not :where) — variants set the `background:`
+   shorthand at (0,1,0), so the overlay needs (0,2,0) to survive it. */
+@media (hover: hover) {
+    .btn:hover,
+    .pill:hover,
+    .btn-icon:hover,
+    .search-chip:hover,
+    .form-token-chip:hover,
+    .search-tool:hover,
+    .search-example:hover,
+    .search-promo-toggle:hover {
+        background-image: linear-gradient(var(--overlay-hover), var(--overlay-hover));
+    }
+}
+
+.btn:active,
+.pill:active,
+.btn-icon:active,
+.search-chip:active,
+.form-token-chip:active,
+.search-tool:active,
+.search-example:active,
+.search-promo-toggle:active {
+    background-image: linear-gradient(var(--overlay-pressed), var(--overlay-pressed));
+    transform: scale(0.98);
+}
+
+/* ── Dense rows: overlay + focus only (no press scale) ────────────── */
+:where(.sidebar-link, .dropdown-trigger, .dropdown-item,
+    .panel-list-item, .search-item, .menu-item,
+    .notif-setting-link, .notif-setting-app) {
+    transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-standard);
+}
+
+@media (hover: hover) {
+    .sidebar-link:not(.sidebar-link--active):hover,
+    .dropdown-trigger:hover,
+    .dropdown-item:hover,
+    .panel-list-item:hover,
+    .search-item:hover,
+    .search-item[data-active],
+    .menu-item:hover,
+    .notif-setting-link:hover,
+    .notif-setting-app:hover {
+        background-image: linear-gradient(var(--overlay-hover), var(--overlay-hover));
+    }
+}
+
+.sidebar-link:not(.sidebar-link--active):active,
+.dropdown-trigger:active,
+.dropdown-item:active,
+.panel-list-item:active,
+.search-item:active,
+.menu-item:active {
+    background-image: linear-gradient(var(--overlay-pressed), var(--overlay-pressed));
+}
+
+/* Selected / active rows keep a solid tint — no overlay wash */
+.sidebar-link--active,
+.sidebar-link--active:hover,
+.sidebar-link--active:active {
+    background-image: none;
+}
+
+/* Focus outline — accent ring for every interactive control */
+:where(.btn, .pill, .btn-icon, .search-chip, .form-token-chip,
+    .search-tool, .search-example, .search-promo-toggle, .search-item,
+    .nav-icon-btn, .pagination-item, .tab-trigger,
+    .menu-item, .form-number-btn, .carousel-arrow, .overflow-list-arrow,
+    .lightbox-btn, .drawer-close, .modal-close,
+    .sidebar-link, .dropdown-trigger, .dropdown-item,
+    .panel-list-item):focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+}
+
+/* Destructive controls signal with the danger color instead */
+:where(.btn-danger, .menu-item--danger):focus-visible {
+    outline-color: var(--color-danger);
+}
+
+/* Disabled: flat, no feedback */
+.btn:disabled,
+.pill:disabled,
+.btn-icon:disabled,
+.btn[aria-disabled='true'],
+.pill[aria-disabled='true'],
+.btn-icon[aria-disabled='true'],
+.dropdown-trigger--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-image: none;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn:active,
+    .pill:active,
+    .btn-icon:active,
+    .search-chip:active,
+    .form-token-chip:active,
+    .search-tool:active,
+    .search-example:active,
+    .search-promo-toggle:active {
+        transform: none;
+    }
+}

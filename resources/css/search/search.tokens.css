@@ -1,0 +1,87 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    /* Bar */
+    --search-bg: rgba(255, 255, 255, 0.06);
+    --search-bg-focus: rgba(255, 255, 255, 0.1);
+    --search-border: transparent;
+    --search-border-focus: rgba(255, 255, 255, 0.16);
+    --search-fg: var(--text-primary);
+    --search-placeholder: var(--text-faint);
+    --search-icon-fg: var(--text-muted);
+
+    /* Tool buttons (filter / clear, inside the bar) */
+    --search-tool-fg: var(--text-muted);
+    --search-tool-fg-hover: var(--text-primary);
+    --search-tool-bg-hover: var(--white6);
+
+    /* Action chip ("Magic Search" pill inside the bar) */
+    --search-chip-bg: var(--silver11);
+    --search-chip-fg: var(--gray2);
+    --search-chip-bg-hover: #fff;
+    --search-chip-count-bg: var(--gray2);
+    --search-chip-count-fg: var(--silver11);
+
+    /* Suggestion panel — charcoal surface, soft chrome */
+    --search-panel-bg: var(--gray5);
+    --search-panel-border: transparent;
+    --search-section-title-fg: var(--text-faint);
+    --search-item-fg: var(--text-primary);
+    --search-item-sub-fg: var(--text-muted);
+    --search-item-bg-hover: rgba(255, 255, 255, 0.05);
+    --search-item-icon-fg: var(--text-muted);
+    --search-item-count-fg: var(--text-faint);
+    --search-mark-fg: var(--neon-pink);
+
+    /* Promo card (Magic Search intro) */
+    --search-promo-bg: var(--gray7);
+    --search-promo-fg: var(--text-primary);
+    --search-promo-accent: var(--neon-pink);
+    --search-promo-link: var(--text-primary);
+
+    /* Magic example chips — gradient-bordered pills */
+    --search-example-bg: rgba(0, 0, 0, 0.35);
+    --search-example-fg: var(--text-primary);
+    --search-example-border-from: #ff4fd8;
+    --search-example-border-to: #9b30ff;
+    --search-example-glow: color-mix(in srgb, var(--neon-pink) 35%, transparent);
+
+    /* ===== B) Layout ================================================= */
+    --search-height: 38px;
+    --search-radius: var(--radius-pill);
+    --search-padding-inline: var(--space3);
+    --search-gap: var(--space2);
+    --search-font-size: var(--text-small);
+    --search-icon-size: 16px;
+    --search-tool-size: 28px;
+
+    --search-chip-height: 26px;
+    --search-chip-padding: 0 var(--space2) 0 var(--space3);
+    --search-chip-font-size: var(--text-micro);
+    --search-chip-count-size: 18px;
+
+    --search-panel-gap: 8px;
+    --search-panel-radius: var(--radius-container);
+    --search-panel-max-height: min(560px, 75vh);
+    --search-panel-padding: var(--space3);
+    --search-panel-z: var(--z-overlay);
+    --search-section-title-size: 11px;
+    --search-item-height: 40px;
+    --search-item-padding: 0 var(--space2);
+    --search-item-radius: var(--radius-element);
+    --search-item-icon-size: 18px;
+    --search-item-avatar-size: 26px;
+
+    --search-promo-radius: var(--radius-container);
+    --search-promo-padding: var(--space3);
+    --search-promo-gap: var(--space3);
+    --search-promo-thumb-size: 52px;
+
+    --search-example-height: 36px;
+    --search-example-padding: 0 var(--space4);
+    --search-example-gap: var(--space2);
+    --search-example-font-size: var(--text-small);
+
+    /* ===== C) Effects ================================================ */
+    --search-transition: var(--duration-fast) var(--ease-standard);
+    --search-panel-elevation: var(--elevation3);
+}

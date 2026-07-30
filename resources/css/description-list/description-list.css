@@ -1,0 +1,33 @@
+/* Description list — aligned label/value rows.
+   (Astryx: MetadataList, adapted.) */
+.description-list {
+    display: grid;
+    font-size: var(--dl-font-size);
+}
+
+.description-list > div {
+    display: grid;
+    grid-template-columns: var(--dl-term-width) 1fr;
+    gap: var(--space3);
+    padding: var(--dl-row-padding);
+}
+
+.description-list > div + div {
+    border-top: 1px solid var(--dl-divider);
+}
+
+.description-list dt {
+    color: var(--dl-term-fg);
+}
+
+.description-list dd {
+    margin: 0;
+    color: var(--dl-desc-fg);
+}
+
+@media (max-width: 560px) {
+    .description-list > div {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+}

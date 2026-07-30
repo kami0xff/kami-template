@@ -1,0 +1,88 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FIELD STATES — focus, valid, error, checking
+   Applied as classes on .form-field: .is-focus, .is-valid, .is-error, .is-checking
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───── FOCUS (demo-only forced state) ───── */
+.form-field.is-focus .form-input-wrap {
+    border-color: var(--form-input-focus-border);
+    box-shadow: 0 0 0 3px var(--form-input-focus-ring);
+    background: var(--form-wrap-focus-bg);
+}
+
+/* ───── VALID ───── */
+.form-field.is-valid .form-input-wrap {
+    border-color: var(--form-state-success);
+}
+
+.form-field.is-valid .form-input-wrap:focus-within {
+    box-shadow: 0 0 0 3px var(--form-state-success-ring);
+}
+
+.form-field.is-valid .form-status {
+    color: var(--form-state-success);
+}
+
+/* ───── ERROR ───── */
+.form-field.is-error .form-input-wrap {
+    border-color: var(--form-state-error);
+}
+
+.form-field.is-error .form-input-wrap:focus-within {
+    box-shadow: 0 0 0 3px var(--form-state-error-ring);
+}
+
+.form-field.is-error .form-status {
+    color: var(--form-state-error);
+}
+
+/* ───── CHECKING (loading / async validation) ───── */
+.form-field.is-checking .form-input-wrap {
+    border-color: var(--form-input-focus-border);
+}
+
+/* ───── HELP TEXT VARIANTS ───── */
+.form-help-success {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space1);
+    color: var(--form-state-success);
+}
+
+.form-help-success svg {
+    flex-shrink: 0;
+}
+
+.form-help-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space1);
+    color: var(--form-state-error);
+}
+
+.form-help-error svg {
+    flex-shrink: 0;
+}
+
+/* ───── INLINE HELP (small text below checkbox/radio) ───── */
+.form-help-inline {
+    display: block;
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    font-weight: var(--font-normal);
+    margin-top: 2px;
+}
+
+/* ───── STATUS PILL (file upload, etc.) ───── */
+.form-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space1);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--color-success) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-success) 20%, transparent);
+    color: var(--color-success);
+    font-size: 11px;
+    font-weight: var(--font-bold4);
+}

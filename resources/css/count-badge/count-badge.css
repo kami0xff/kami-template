@@ -1,0 +1,34 @@
+/* Count badge */
+
+.count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--color-danger, #e44545);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.count-badge--accent {
+    background: var(--color-accent);
+    color: var(--gray1, #111);
+}
+
+.count-badge--muted {
+    background: var(--gray5);
+    color: var(--text-primary);
+}
+
+.count-badge--dot {
+    min-width: 8px;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+}

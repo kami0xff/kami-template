@@ -1,0 +1,145 @@
+/*
+    Config library cards + shared chip styles.
+    Same floating charcoal as panels / chat settings.
+*/
+
+.chat-ai-chip,
+.ai-dock-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 5px 9px;
+    border-radius: var(--ai-radius-pill, 999px);
+    border: 1px solid var(--ai-border, rgba(255, 255, 255, 0.1));
+    background: var(--ai-input-bg, rgba(255, 255, 255, 0.06));
+    color: var(--ai-muted, rgba(255, 255, 255, 0.48));
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.chat-ai-chip strong,
+.ai-dock-chip strong {
+    color: var(--ai-fg-strong, #fff);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+/* Saved configs library (page UI, not the dock) */
+.ai-configs {
+    display: grid;
+    gap: var(--space4);
+}
+
+.ai-configs-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space3);
+}
+
+.ai-configs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.ai-config-card {
+    display: grid;
+    gap: 10px;
+    padding: 12px;
+    border-radius: var(--ai-radius, 18px);
+    border: 1px solid var(--ai-border, rgba(255, 255, 255, 0.1));
+    background: var(--ai-bg, #222);
+    box-shadow: var(--ai-shadow, 0 14px 40px rgba(0, 0, 0, 0.55));
+}
+
+.ai-config-card-top {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.ai-config-card-top img,
+.ai-config-card-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #111;
+    border: 1px solid var(--ai-border, rgba(255, 255, 255, 0.1));
+}
+
+.ai-config-card-avatar {
+    display: grid;
+    place-items: center;
+    color: var(--ai-muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.ai-config-card-title {
+    margin: 0;
+    color: var(--ai-fg-strong, #fff);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.ai-config-card-sub {
+    margin: 2px 0 0;
+    color: var(--ai-muted);
+    font-size: var(--text-small);
+}
+
+.ai-config-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ai-config-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ai-config-form {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    border-radius: var(--ai-radius, 18px);
+    border: 1px solid var(--ai-border, rgba(255, 255, 255, 0.1));
+    background: var(--ai-bg, #222);
+    box-shadow: var(--ai-shadow-soft, 0 10px 28px rgba(0, 0, 0, 0.48));
+    max-width: 420px;
+}
+
+.ai-config-form .form-label,
+.ai-config-form label {
+    display: grid;
+    gap: 6px;
+    color: var(--ai-muted);
+    font-size: var(--text-small);
+}
+
+.ai-config-form input[type='text'],
+.ai-config-form input[type='url'],
+.ai-config-form textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--ai-border, rgba(255, 255, 255, 0.1));
+    background: var(--ai-input-bg, rgba(255, 255, 255, 0.06));
+    color: var(--ai-fg, rgba(255, 255, 255, 0.88));
+    font: inherit;
+}
+
+.ai-config-form textarea {
+    min-height: 64px;
+    resize: vertical;
+}

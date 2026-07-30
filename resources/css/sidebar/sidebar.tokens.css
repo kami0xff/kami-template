@@ -1,0 +1,150 @@
+:root {
+    /* Layout */
+    --sidebar-width: 240px;
+    --sidebar-min-width: 240px;
+    --sidebar-rail-width: 56px; /* icon-only navigation rail */
+    --sidebar-drawer-width: 380px;
+    --sidebar-padding: var(--space1);
+    --sidebar-position: fixed;
+    --sidebar-z-index: var(--z-overlay);
+    --sidebar-shadow: none;
+
+    /* Visibility / drawer states */
+    --sidebar-opacity: 1;
+    --sidebar-visibility: visible;
+    --sidebar-transform: translateX(0);
+    --sidebar-backdrop-opacity: 0;
+    --sidebar-backdrop-pointer-events: none;
+
+    /* Surface */
+    --sidebar-background: var(--surface3);
+    --sidebar-border: var(--border-inverse-muted);
+    --sidebar-border-active: rgba(255, 255, 255, 0.18);
+    --sidebar-radius: var(--radius2);
+
+    /* Motion */
+    --sidebar-transition: var(--duration2);
+    --sidebar-transition-ease: var(--ease-out);
+
+    /* Typography */
+    --sidebar-font-family: var(--font-body);
+    --sidebar-font-size: var(--text-body);
+    --sidebar-font-weight: var(--font-normal);
+    --sidebar-font-color: var(--text-primary);
+    --sidebar-font-color-muted: var(--text-muted);
+    --sidebar-font-color-faint: var(--text-faint);
+    --sidebar-font-color-accent: var(--color-accent);
+    --sidebar-font-color-notification: var(--color-notification);
+    --sidebar-small-font-size: 0.72rem;
+
+    /* Group header */
+    --sidebar-group-header-font-size: var(--text-lead);
+    --sidebar-group-header-font-weight: var(--font-bold4);
+    --sidebar-group-header-letter-spacing: var(--letter-spacing-tight);
+    --sidebar-group-header-text-transform: uppercase;
+    --sidebar-group-header-color: var(--sidebar-font-color-muted);
+
+    /* Link */
+    --sidebar-link-height: 28px;
+    --sidebar-link-main-height: 38px;
+    --sidebar-link-padding: 0 var(--space2);
+    --sidebar-link-gap: var(--space2);
+    --sidebar-link-border-radius: var(--radius2);
+    --sidebar-link-font-size: var(--text-small);
+    --sidebar-link-font-weight: var(--font-bold6);
+    --sidebar-link-text-decoration: none;
+    --sidebar-link-transition: color var(--duration2), background var(--duration2);
+    --sidebar-link-color: var(--sidebar-font-color);
+    --sidebar-link-background: transparent;
+    --sidebar-link-hover-background: var(--surface-muted-hover);
+    --sidebar-link-active-background: var(--surface-muted-active);
+    --sidebar-link-active-color: var(--text-active-link);
+
+    /* Icon */
+    --sidebar-icon-size: 28px;
+    --sidebar-icon-svg-size: 16px;
+
+    /* Counter badge */
+    --sidebar-counter-bg: rgba(255, 255, 255, 0.07);
+    --sidebar-counter-min-width: 28px;
+    --sidebar-counter-padding: 1px 7px;
+
+    /* Scrollbar */
+    --sidebar-scrollbar-width: 4px;
+    --sidebar-scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    --sidebar-scrollbar-thumb: rgba(255, 255, 255, 0.14);
+    --sidebar-scrollbar-thumb-hover: rgba(255, 255, 255, 0.22);
+
+    /* Card */
+    --sidebar-card-border: var(--sidebar-border);
+    --sidebar-card-background: var(--surface-muted);
+    --sidebar-card-hover-background: var(--surface-muted-hover);
+
+    /* Banner */
+    --sidebar-banner-min-height: 48px;
+    --sidebar-banner-border: rgba(255, 255, 255, 0.12);
+    --sidebar-banner-background: var(--surface-muted);
+    --sidebar-banner-hover-background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 45%);
+    --sidebar-banner-icon-color: var(--sidebar-font-color-accent);
+    --sidebar-banner-pulse-background: rgba(255, 255, 255, 0.10);
+
+    /* Separator */
+    --sidebar-separator-height: 1px;
+    --sidebar-separator-flat-background: var(--sidebar-border);
+    --sidebar-separator-gradient-background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+    --sidebar-separator-diamond-size: 7px;
+    --sidebar-separator-diamond-background: rgba(255, 255, 255, 0.18);
+
+    /* Dropdown */
+    --sidebar-dropdown-content-padding: var(--space1) 0;
+    --sidebar-dropdown-trigger-height: var(--sidebar-link-height);
+    --sidebar-dropdown-trigger-padding: 0 var(--space2);
+    --sidebar-dropdown-trigger-gap: var(--space2);
+    --sidebar-dropdown-trigger-radius: var(--sidebar-link-border-radius);
+    --sidebar-dropdown-trigger-font-size: var(--sidebar-link-font-size);
+    --sidebar-dropdown-trigger-font-weight: var(--sidebar-link-font-weight);
+    --sidebar-dropdown-trigger-color: var(--sidebar-font-color-muted);
+    --sidebar-dropdown-trigger-hover-color: var(--sidebar-font-color);
+    --sidebar-dropdown-trigger-hover-background: var(--sidebar-link-hover-background);
+    --sidebar-dropdown-trigger-active-color: var(--sidebar-link-active-color);
+    --sidebar-dropdown-trigger-chevron-size: 14px;
+    --sidebar-dropdown-item-height: var(--sidebar-link-height);
+    --sidebar-dropdown-item-padding: 0 var(--space3);
+    --sidebar-dropdown-item-radius: var(--sidebar-link-border-radius);
+    --sidebar-dropdown-item-font-size: var(--sidebar-link-font-size);
+    --sidebar-dropdown-item-color: var(--sidebar-font-color);
+    --sidebar-dropdown-item-hover-background: var(--sidebar-link-hover-background);
+    --sidebar-dropdown-group-gap: var(--space1);
+    --sidebar-dropdown-group-title-padding: var(--space1) var(--space3);
+    --sidebar-dropdown-group-title-font-size: var(--sidebar-small-font-size);
+    --sidebar-dropdown-group-title-font-weight: var(--sidebar-group-header-font-weight);
+    --sidebar-dropdown-group-title-color: var(--sidebar-font-color-muted);
+
+    /* Focus */
+    --sidebar-focus-ring: 2px solid var(--sidebar-font-color-accent);
+    --sidebar-focus-ring-offset: var(--focus-ring-offset);
+
+    /* Content gap */
+    --sidebar-content-gap: var(--space3);
+    --sidebar-section-gap: var(--space1);
+}
+/* ── Sub-sidebar — contextual second-level panel (drill-in) ────────── */
+:root {
+    /* A) Settings */
+    /* Opaque, one step lighter than the sidebar — reads as a second level */
+    --sub-sidebar-background: var(--gray2);
+    --sub-sidebar-border: 1px solid var(--border-default);
+    --sub-sidebar-title-color: var(--text-primary);
+    --sub-sidebar-back-color: var(--text-muted);
+    --sub-sidebar-back-hover-color: var(--text-primary);
+    --sub-sidebar-back-hover-background: var(--white6);
+
+    /* B) Layout */
+    --sub-sidebar-width: 260px;
+    --sub-sidebar-padding: var(--space2);
+    --sub-sidebar-z: calc(var(--z-overlay) - 1);
+
+    /* C) Effects */
+    --sub-sidebar-shadow: var(--elevation2);
+    --sub-sidebar-transition: var(--duration-fast) var(--ease-standard);
+}

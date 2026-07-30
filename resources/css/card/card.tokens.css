@@ -1,0 +1,39 @@
+/*
+   Card surface — component tokens
+
+   Base shell + opt-in effect variants (border-glow, corner-glow).
+   Per-product cards (model-card / pick-card) keep their own tokens.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --card-bg: var(--surface3);
+    --card-bg-hover: var(--surface2);
+    --card-border: 1px solid var(--border-strong);
+    --card-fg: var(--text-primary);
+    --card-fg-muted: var(--text-muted);
+
+    /* ===== B) Layout ================================================= */
+    --card-radius: var(--radius-container);
+    --card-padding: var(--space4);
+    --card-gap: var(--space2);
+    --card-min-height: 0;
+
+    /* ===== C) Effects ================================================ */
+    --card-shadow-rest: var(--elevation1);
+    --card-shadow-hover: var(--elevation2);
+    --card-shadow-emphasis: var(--elevation3);
+
+    /* Border-glow variant */
+    --card-glow-from: color-mix(in srgb, var(--color-primary) 70%, white);
+    --card-glow-to: color-mix(in srgb, var(--color-primary) 35%, transparent);
+    --card-glow-mid: color-mix(in srgb, var(--main2, var(--color-primary)) 55%, transparent);
+    --card-glow-outline: 0 0 0 1px color-mix(in srgb, var(--color-primary) 25%, transparent),
+        0 0 28px color-mix(in srgb, var(--color-primary) 22%, transparent);
+
+    /* Corner-glow variant */
+    --card-corner-glow: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    --card-corner-glow-size: 140px;
+    --card-corner-glow-blur: 48px;
+    --card-corner-glow-top: -48px;
+    --card-corner-glow-left: -48px;
+}

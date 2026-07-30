@@ -10,4 +10,5 @@ return [
     'next' => 'Next',
     'previous' => 'Previous',
     'loading' => 'Loading...',
+    'goal' => 'Goal',
 ];

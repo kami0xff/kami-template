@@ -1,0 +1,10 @@
+:root {
+    --tab-height: 38px;
+    --tab-font-size: var(--text-small);
+    --tab-font-weight: var(--font-bold4);
+    --tab-color: var(--text-muted);
+    --tab-active-color: var(--text-primary);
+    --tab-indicator-color: var(--color-primary);
+    --tab-indicator-height: 2px;
+    --tab-border: var(--white-alpha-120);
+}

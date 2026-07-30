@@ -1,0 +1,19 @@
+/* ProgressBar. (Astryx: ProgressBar, adapted.) */
+.progress {
+    width: 100%;
+    height: var(--progress-height);
+    border-radius: var(--progress-radius);
+    background: var(--progress-bg);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--progress-fill);
+    transition: var(--progress-transition);
+}
+
+.progress--success .progress-fill { background: var(--color-success); }
+.progress--warning .progress-fill { background: var(--color-warning); }
+.progress--danger  .progress-fill { background: var(--color-danger); }

@@ -1,0 +1,18 @@
+/*
+    Gaycam sidebar composition tokens.
+
+    The shared sidebar component owns structure; this file owns the Gaycam skin.
+    Only override tokens that differ from the base sidebar.tokens.css.
+*/
+
+:root {
+    --sidebar-width: 260px;
+    --sidebar-min-width: 240px;
+    --sidebar-drawer-width: 420px;
+
+    --sidebar-banner-border: rgba(255, 129, 245, 0.22);
+    --sidebar-banner-background: linear-gradient(135deg, rgba(255, 160, 126, 0.12), rgba(255, 129, 245, 0.14));
+    --sidebar-banner-hover-background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.16), transparent 45%);
+    --sidebar-banner-icon-color: #ff9ed8;
+    --sidebar-banner-pulse-background: rgba(255, 129, 245, 0.12);
+}

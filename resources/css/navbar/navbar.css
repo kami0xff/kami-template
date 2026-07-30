@@ -1,0 +1,107 @@
+
+.navbar{
+    width: 100%;
+    height: var(--navbar-height);
+    border-bottom: 1px solid var(--navbar-border);
+    display: flex; align-items: center;
+    padding: 0 var(--navbar-padding-inline);
+    gap: var(--navbar-gap);
+    position: relative;
+    z-index: var(--navbar-z);
+    background-color: var(--navbar-bg);
+    box-shadow: var(--navbar-shadow);
+    background-image: var(--navbar-texture);
+}
+
+
+
+.nav-left{display:flex;align-items:center;gap:var(--navbar-side-gap);flex-shrink:0}
+
+.nav-hamburger{
+    width: var(--navbar-icon-size); height: var(--navbar-icon-size); border-radius: var(--navbar-icon-radius);
+    background: transparent; border:none; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap:3px;
+    transition: var(--navbar-transition);
+    padding: var(--space3);
+    content: none;
+}
+
+.hb-line{width:var(--navbar-hamburger-line-width);height:var(--navbar-hamburger-line-height);background:var(--white1);border-radius:1px;transition:var(--navbar-transition)}
+.hamburger:hover .hb-line{background:var(--text-primary)}
+
+.nav-logo {
+    font-family: var(--navbar-logo-font);
+    font-size: var(--navbar-logo-size);
+    letter-spacing: var(--navbar-logo-tracking);
+    background: var(--navbar-logo-fill);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    user-select: none; text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-hamburger:hover{
+    background: var(--navbar-icon-hover-bg);
+}
+
+
+/*TODO make a laravel project or in the kami admin a design category with all
+   design systems and components buttons forms dropdowns effects etc categorised and
+   organised usable for other project maybe as a package ?
+*/
+/*TODO use var for border color and background color */
+/*TODO var for the font color #ccc*/
+/*TODO rgba(255,255,255,.04);*/
+.live-pill {
+    display: inline-flex; align-items: center; gap: var(--space1);
+    border:1px solid var(--navbar-live-border);
+    font-size:10px;font-weight:var(--font-bold4);color:var(--navbar-live-fg);
+    background:var(--navbar-live-bg);
+    white-space:nowrap;
+    padding:3px 9px 3px 7px;border-radius:var(--radius-pill);
+    box-shadow:var(--navbar-live-shadow)
+
+}
+.live-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--navbar-live-dot-bg);
+    border:1.5px solid rgba(74,222,128,.3);
+    animation:pulse-dot 1.8s ease-in-out infinite;flex-shrink:0
+}
+
+.nav-center {
+    flex:1; max-width: var(--navbar-center-max-width);margin: 0 auto; position: relative;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--navbar-right-gap);
+    flex-shrink: 0;
+    margin-left: auto;
+    position: relative;
+}
+
+.nav-icon-btn {
+    width: var(--navbar-icon-size); height: var(--navbar-icon-size); border-radius: var(--navbar-icon-radius);
+    background: transparent; border: none; cursor:pointer;
+    display: flex; justify-content: center; align-items: center;
+    color: var(--navbar-icon-fg); transition: var(--navbar-transition); position:relative;
+}
+.nav-icon-btn:hover{
+    background: var(--navbar-icon-hover-bg);
+}
+.nav-icon-btn--promo {
+    color: color-mix(in srgb, var(--color-primary, #e85d4c) 75%, var(--navbar-icon-fg));
+}
+.nav-icon-btn--promo:hover {
+    color: var(--color-primary, #e85d4c);
+}
+.nav-icon-notification-dot{
+    position: absolute; top:4px; right: 4px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background:var(--navbar-notification-dot-bg); border:1.5px solid var(--navbar-notification-dot-border);
+    animation:pulse-dot 2s ease-in-out infinite
+}
+
+

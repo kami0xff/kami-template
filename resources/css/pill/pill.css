@@ -1,0 +1,100 @@
+/* Pill / chip — compact rounded control for filters, categories, tags,
+   counters and live indicators (stripchat-style). */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pill-gap);
+    min-height: var(--pill-height);
+    height: var(--pill-height);
+    padding: 0 var(--pill-padding-inline);
+    border: 1px solid var(--pill-border);
+    border-radius: var(--pill-radius);
+    background: var(--pill-bg);
+    color: var(--pill-fg);
+    font-size: var(--pill-font-size);
+    font-weight: var(--pill-font-weight);
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    max-width: 100%;
+    cursor: pointer;
+    transition: var(--pill-transition);
+}
+
+.pill > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pill:hover {
+    background: var(--pill-bg-hover);
+    border-color: var(--pill-bg-hover);
+}
+
+.pill--sm {
+    height: var(--pill-height-sm);
+    padding: 0 10px;
+    font-size: var(--text-small);
+}
+
+.pill--active {
+    background: var(--pill-bg-active);
+    border-color: var(--pill-border-active);
+}
+
+.pill--outline {
+    background: transparent;
+    border-color: var(--pill-border-outline);
+    color: var(--pill-fg-outline);
+}
+
+.pill--outline:hover {
+    background: var(--surface-muted);
+    border-color: var(--pill-border-outline);
+    color: var(--pill-fg);
+}
+
+.pill--accent {
+    background: var(--pill-bg-accent);
+    border-color: var(--pill-bg-accent);
+    color: var(--pill-fg-accent);
+}
+
+.pill--money {
+    background: var(--pill-bg-money);
+    border-color: var(--pill-bg-money);
+    color: var(--pill-fg-money);
+    font-weight: var(--font-bold3);
+}
+
+.pill-icon {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+}
+
+.pill-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.pill-count {
+    color: var(--pill-count-fg);
+    font-size: var(--text-small);
+}
+
+.pill--accent .pill-count,
+.pill--money .pill-count {
+    color: inherit;
+    opacity: 0.75;
+}
+
+.pill-dot {
+    width: var(--pill-dot-size);
+    height: var(--pill-dot-size);
+    border-radius: 50%;
+    background: var(--pill-dot-live);
+    flex-shrink: 0;
+}

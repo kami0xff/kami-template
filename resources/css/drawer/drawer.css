@@ -1,0 +1,321 @@
+/* Drawer / sheet — edge-anchored overlay with charcoal chrome.
+   Opened by ModalManager (window.drawers) toggling `drawer-open`. */
+.drawer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--drawer-z);
+    background: var(--drawer-overlay-bg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--duration2), visibility var(--duration2);
+}
+
+.drawer-overlay.drawer-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Clear backdrop — page stays bright; clicks pass through to close via document listener */
+.drawer-overlay--clear {
+    background: transparent;
+    pointer-events: none;
+}
+
+.drawer-overlay--clear .drawer {
+    pointer-events: auto;
+}
+
+body:has(.drawer-overlay.drawer-open:not(.drawer-overlay--clear)) {
+    overflow: hidden;
+}
+
+.drawer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: var(--drawer-bg);
+    color: var(--drawer-fg);
+    box-shadow: var(--drawer-shadow);
+    transition: var(--drawer-transition);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.drawer--right {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(var(--drawer-width), 90vw);
+    border-left: 1px solid var(--drawer-border);
+    translate: 100% 0;
+}
+
+.drawer--left {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(var(--drawer-width), 90vw);
+    border-right: 1px solid var(--drawer-border);
+    translate: -100% 0;
+}
+
+.drawer--bottom {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: var(--drawer-height);
+    border-top: 1px solid var(--drawer-border);
+    border-radius: var(--panel-radius, 18px) var(--panel-radius, 18px) 0 0;
+    translate: 0 100%;
+}
+
+.drawer-overlay.drawer-open .drawer {
+    translate: 0 0;
+}
+
+/* Float — fade in, inset from edges, rounded (optional; default remains edge slide) */
+.drawer--float {
+    border: 1px solid var(--drawer-float-border);
+    border-radius: var(--drawer-radius-float);
+    box-shadow: var(--drawer-float-shadow);
+    translate: none;
+    opacity: 0;
+    transition: var(--drawer-transition-float);
+}
+
+.drawer--float.drawer--right {
+    top: var(--drawer-inset);
+    right: var(--drawer-inset);
+    bottom: var(--drawer-inset);
+    width: min(var(--drawer-width), calc(100vw - (2 * var(--drawer-inset))));
+    border-left: 1px solid var(--drawer-float-border);
+}
+
+.drawer--float.drawer--left {
+    top: var(--drawer-inset);
+    left: var(--drawer-inset);
+    bottom: var(--drawer-inset);
+    width: min(var(--drawer-width), calc(100vw - (2 * var(--drawer-inset))));
+    border-right: 1px solid var(--drawer-float-border);
+}
+
+.drawer--float.drawer--bottom {
+    left: var(--drawer-inset);
+    right: var(--drawer-inset);
+    bottom: var(--drawer-inset);
+    width: auto;
+    max-height: min(var(--drawer-height), calc(100dvh - (2 * var(--drawer-inset))));
+    border-top: 1px solid var(--drawer-float-border);
+    border-radius: var(--drawer-radius-float);
+}
+
+.drawer-overlay.drawer-open .drawer--float {
+    translate: none;
+    opacity: 1;
+}
+
+.drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space3);
+    padding: 16px var(--drawer-padding) 14px;
+    border-bottom: 1px solid var(--drawer-border);
+    color: var(--panel-head-title-fg, #fff);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+}
+
+.drawer-body {
+    flex: 1;
+    padding: 8px var(--drawer-padding) var(--drawer-padding);
+}
+
+.drawer-close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--drawer-muted);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.drawer-close:hover {
+    color: var(--panel-list-item-fg-hover, #fff);
+    background: var(--drawer-hover);
+}
+
+/* Notifications drawer — feed rows use panel chrome */
+.drawer--notifications .panel-feed {
+    max-height: none;
+}
+
+.drawer--notifications .panel-divider {
+    margin: 10px 0;
+}
+
+/* Promo float drawer */
+.drawer-promo {
+    display: grid;
+    gap: 14px;
+}
+
+.drawer-promo-banner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+        "icon copy dismiss"
+        "qr qr qr";
+    gap: 10px 12px;
+    padding: 14px;
+    border: 1px solid var(--drawer-border);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--drawer-bg) 70%, #000);
+}
+
+.drawer-promo-banner-icon {
+    grid-area: icon;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary, #e85d4c) 16%, transparent);
+    color: var(--color-primary, #e85d4c);
+}
+
+.drawer-promo-banner-copy {
+    grid-area: copy;
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.drawer-promo-banner-copy strong {
+    color: var(--panel-head-title-fg, #fff);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.drawer-promo-banner-copy span {
+    color: var(--drawer-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.drawer-promo-banner-dismiss {
+    grid-area: dismiss;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--drawer-muted);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.drawer-promo-banner-dismiss:hover {
+    color: #fff;
+    background: var(--drawer-hover);
+}
+
+.drawer-promo-qr {
+    grid-area: qr;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 36px;
+    border: 1px solid var(--drawer-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--drawer-fg);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.drawer-promo-qr:hover {
+    background: var(--drawer-hover);
+}
+
+.drawer-promo-list {
+    display: grid;
+    gap: 4px;
+}
+
+.drawer-promo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.12s ease;
+}
+
+.drawer-promo-item:hover {
+    background: var(--drawer-hover);
+}
+
+.drawer-promo-item-body {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.drawer-promo-item-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--panel-head-title-fg, #fff);
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.drawer-promo-item-text {
+    color: var(--drawer-muted);
+    font-size: 12px;
+}
+
+.drawer-promo-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 7px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-primary, #e85d4c) 45%, transparent);
+    color: var(--color-primary, #e85d4c);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.drawer-promo-foot {
+    appearance: none;
+    width: 100%;
+    min-height: 40px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--drawer-muted);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.drawer-promo-foot:hover {
+    color: var(--drawer-fg);
+    background: var(--drawer-hover);
+}

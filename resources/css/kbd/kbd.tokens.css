@@ -1,0 +1,11 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --kbd-bg: var(--white7);
+    --kbd-fg: var(--text-muted);
+    --kbd-border: var(--border-inverse-subtle);
+
+    /* ===== B) Layout ================================================= */
+    --kbd-font-size: 11px;
+    --kbd-padding: 2px 6px;
+    --kbd-radius: var(--radius1);
+}

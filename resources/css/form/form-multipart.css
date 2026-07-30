@@ -1,0 +1,190 @@
+/*
+    Multipart / wizard form layout.
+    Step dots reuse .form-steps / .form-step from form-wizard.css.
+    Save pill reuses .form-save.
+*/
+
+.form-multipart {
+    gap: var(--space5);
+}
+
+.form-multipart-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space4);
+}
+
+.form-multipart-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space1);
+}
+
+.form-multipart-intro h2 {
+    margin: 0;
+    font-size: var(--text-subheading);
+    color: var(--text-primary);
+}
+
+.form-multipart-intro p {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 52ch;
+}
+
+.form-multipart-meta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space3);
+}
+
+.form-multipart-meta .form-steps {
+    flex: 1;
+    min-width: 0;
+}
+
+.form-multipart-meta .form-save {
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.form-multipart-progress {
+    height: 3px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+}
+
+.form-multipart-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: var(--form-accent);
+    transition: width var(--duration-medium) var(--ease-standard);
+}
+
+/* Clickable stepper */
+.form-multipart .form-step {
+    cursor: default;
+}
+
+.form-multipart .form-step[data-clickable] {
+    cursor: pointer;
+}
+
+.form-multipart .form-step[data-clickable]:hover .form-step-label {
+    color: var(--text-primary);
+}
+
+/* Panels */
+.form-multipart-panels {
+    display: grid;
+}
+
+.form-multipart-panel[hidden] {
+    display: none !important;
+}
+
+.form-multipart-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space4);
+    animation: form-multipart-in var(--duration-medium) var(--ease-standard);
+}
+
+@keyframes form-multipart-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.form-multipart-panel-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space1);
+}
+
+.form-multipart-panel-title {
+    margin: 0;
+    font-size: var(--text-lead);
+    font-weight: var(--font-bold3);
+    color: var(--text-primary);
+}
+
+.form-multipart-panel-desc {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 48ch;
+}
+
+.form-multipart-panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space4);
+}
+
+/* Nav */
+.form-multipart-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space2);
+    padding-top: var(--space2);
+    border-top: 1px solid var(--white-alpha-080);
+}
+
+.form-multipart-nav-spacer {
+    flex: 1;
+    min-width: var(--space3);
+}
+
+.form-multipart-nav [hidden] {
+    display: none !important;
+}
+
+/* Field error shake inside current step */
+.form-multipart-panel .form-field.is-error .form-input,
+.form-multipart-panel .form-field.is-error .form-textarea,
+.form-multipart-panel .form-field.is-error .form-select {
+    border-color: var(--form-state-error);
+}
+
+@media (max-width: 640px) {
+    .form-multipart-meta {
+        flex-direction: column;
+    }
+
+    .form-multipart .form-step-label {
+        font-size: 10px;
+    }
+
+    .form-multipart-nav {
+        gap: var(--space2);
+    }
+
+    .form-multipart-nav-spacer {
+        display: none;
+    }
+
+    .form-multipart-nav .btn {
+        flex: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-multipart-panel,
+    .form-multipart-progress-fill {
+        animation: none;
+        transition: none;
+    }
+}

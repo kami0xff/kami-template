@@ -1,0 +1,66 @@
+.link {
+    font-size: var(--link-font-size);
+    font-weight: var(--link-font-weight);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* sizes */
+.link-xs {
+    font-size: var(--link-font-size-xs);
+}
+
+.link-sm {
+    font-size: var(--link-font-size-sm);
+}
+
+.link-md {
+    font-size: var(--link-font-size);
+}
+
+.link-lg {
+    font-size: var(--link-font-size-lg);
+}
+
+.link-xl {
+    font-size: var(--link-font-size-xl);
+}
+
+/* variants */
+.link-primary {
+    color: var(--link-fg-primary);
+}
+
+.link-danger {
+    color: var(--link-fg-danger);
+}
+
+.link-success {
+    color: var(--link-fg-success);
+}
+
+.link-muted {
+    color: var(--link-fg-muted);
+}
+
+.link-warning {
+    color: var(--link-fg-warning);
+}
+
+.link-underline {
+    text-decoration: underline
+}
+
+/* link-specific states */
+.link:hover {
+    text-decoration: underline;
+    opacity: var(--link-hover-opacity);
+}
+
+.link:visited {
+    opacity: var(--link-visited-opacity);
+}
+
+.link:active {
+    opacity: var(--link-active-opacity);
+}

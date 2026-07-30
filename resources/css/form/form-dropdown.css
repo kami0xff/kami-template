@@ -1,0 +1,103 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CUSTOM DROPDOWN — trigger + floating menu
+   Controlled via [data-open="true"] on .form-dropdown wrapper.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-dropdown {
+    position: relative;
+}
+
+.form-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: var(--form-input-height);
+    padding: 0 var(--space3);
+    font-size: var(--form-input-font-size);
+    font-family: inherit;
+    color: var(--form-input-color);
+    background: var(--form-input-bg);
+    border: 1px solid var(--form-input-border);
+    border-radius: var(--form-input-radius);
+    cursor: pointer;
+    transition:
+        border-color var(--form-input-transition),
+        box-shadow var(--form-input-transition);
+}
+
+.form-dropdown-trigger:hover {
+    border-color: var(--form-input-hover-border);
+}
+
+.form-dropdown[data-open="true"] .form-dropdown-trigger {
+    border-color: var(--form-input-focus-border);
+    box-shadow: 0 0 0 3px var(--form-input-focus-ring);
+}
+
+.form-dropdown-value {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+}
+
+.form-flag {
+    font-size: var(--text-lead);
+}
+
+/* Menu */
+.form-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    padding: var(--space1) 0;
+    background: var(--gray4);
+    border: 1px solid var(--gray8);
+    border-radius: var(--form-input-radius);
+    box-shadow: var(--shadow3);
+    z-index: var(--z-dropdown);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition:
+        opacity var(--form-input-transition),
+        transform var(--form-input-transition),
+        visibility var(--form-input-transition);
+}
+
+.form-dropdown[data-open="true"] .form-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.form-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    padding: var(--space2) var(--space3);
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+        background var(--form-input-transition),
+        color var(--form-input-transition);
+}
+
+.form-dropdown-item:hover {
+    background: var(--white7);
+    color: var(--text-primary);
+}
+
+.form-dropdown-item.selected {
+    color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-dropdown-menu,
+    .form-dropdown-trigger,
+    .form-dropdown-item {
+        transition: none;
+    }
+}

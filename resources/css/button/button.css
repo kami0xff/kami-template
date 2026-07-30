@@ -1,0 +1,98 @@
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--btn-gap);
+    padding: var(--btn-padding);
+    border-radius: var(--btn-radius);
+    font-size: var(--btn-font-size);
+    font-weight: var(--btn-font-weight);
+    line-height: 1;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-xs  { padding: var(--btn-padding-xs); font-size: var(--btn-font-size-xs); }
+.btn-sm  { padding: var(--btn-padding-sm); font-size: var(--btn-font-size-sm); }
+.btn-md  { padding: var(--btn-padding); font-size: var(--btn-font-size); }
+.btn-lg  { padding: var(--btn-padding-lg); font-size: var(--btn-font-size-lg); }
+.btn-xl  { padding: var(--btn-padding-xl); font-size: var(--btn-font-size-xl); }
+.btn-block { width: 100%; justify-content: center; }
+
+.btn-primary { background: var(--btn-bg-primary); color: var(--btn-fg); }
+.btn-danger  { background: var(--btn-bg-danger); color: var(--btn-fg-danger); }
+.btn-success { background: var(--btn-bg-success); color: var(--btn-fg-success); }
+.btn-back    { background: var(--btn-bg-back); color: var(--btn-fg-back); }
+.btn-muted   { background: var(--btn-bg-muted); color: var(--btn-fg-muted); }
+.btn-warning { background: var(--btn-bg-warning); color: var(--btn-fg-warning); }
+.btn-money   { background: var(--btn-bg-money); color: var(--btn-fg-money); font-weight: var(--font-bold3); }
+.btn-light   { background: var(--btn-bg-light); color: var(--btn-fg-light); }
+
+.btn:disabled { opacity: var(--btn-disabled-opacity); cursor: not-allowed; pointer-events: none; }
+
+/* ── Icon button — square, icon-only (Astryx: IconButton) ─────────── */
+.btn-icon {
+    width: var(--btn-icon-size);
+    height: var(--btn-icon-size);
+    padding: 0;
+    justify-content: center;
+}
+
+.btn-icon svg {
+    width: 45%;
+    height: 45%;
+}
+
+.btn-icon.btn-sm { width: var(--btn-icon-size-sm); height: var(--btn-icon-size-sm); }
+.btn-icon.btn-lg { width: var(--btn-icon-size-lg); height: var(--btn-icon-size-lg); }
+
+/* ── Button group — visually attached buttons (Astryx: ButtonGroup) ── */
+.btn-group {
+    display: inline-flex;
+}
+
+.btn-group > .btn {
+    border-radius: 0;
+}
+
+.btn-group > .btn:first-child {
+    border-top-left-radius: var(--btn-radius);
+    border-bottom-left-radius: var(--btn-radius);
+}
+
+.btn-group > .btn:last-child {
+    border-top-right-radius: var(--btn-radius);
+    border-bottom-right-radius: var(--btn-radius);
+}
+
+.btn-group > .btn + .btn {
+    border-left: 1px solid var(--border-inverse-subtle);
+}
+
+.btn-group > .btn--group-active {
+    background: var(--white7);
+    color: var(--text-primary);
+}
+
+/* ── Toggle button (Astryx: ToggleButton) ──────────────────────────────
+   State lives in aria-pressed — no extra class. Unpressed reads like the
+   variant it wears; pressed lights up with an accent tint + inset ring. */
+.btn[aria-pressed='true'] {
+    background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+    color: var(--color-primary);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+
+.btn-spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin var(--btn-spinner-duration) linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

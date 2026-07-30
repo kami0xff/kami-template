@@ -1,0 +1,47 @@
+/*
+    Forum / imageboard — 4chan-style boards, catalog, threads, posts.
+    Dense utilitarian layout; sites re-skin via these tokens only.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --forum-fg: var(--text-primary);
+    --forum-muted: var(--text-muted);
+    --forum-faint: var(--text-faint);
+    --forum-bg: var(--gray2);
+    --forum-surface: var(--gray1);
+    --forum-border: var(--border-default);
+    --forum-border-strong: var(--border-strong);
+    --forum-hover: rgba(255, 255, 255, 0.04);
+    --forum-highlight: color-mix(in srgb, var(--color-accent) 18%, transparent);
+    --forum-name: #c5a46a;
+    --forum-trip: var(--text-faint);
+    --forum-subject: #8eb4e6;
+    --forum-link: var(--color-accent);
+    --forum-quote: #789922;
+    --forum-post-num: var(--text-faint);
+    --forum-op-bg: color-mix(in srgb, var(--color-accent) 6%, var(--gray1));
+    --forum-thumb-border: var(--border-strong);
+    --forum-danger: #e07070;
+    --forum-sticky: #c5a46a;
+    --forum-locked: var(--text-faint);
+
+    /* ===== B) Layout ================================================= */
+    --forum-max: 1100px;
+    --forum-gap: var(--space4);
+    --forum-pad: var(--space4);
+    --forum-post-gap: var(--space3);
+    --forum-post-pad: 10px 12px;
+    --forum-post-radius: 4px;
+    --forum-thumb-max: 250px;
+    --forum-thumb-reply: 125px;
+    --forum-catalog-min: 160px;
+    --forum-catalog-gap: 12px;
+    --forum-font: var(--font-body, inherit);
+    --forum-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --forum-size: 13px;
+    --forum-meta-size: 12px;
+    --forum-title-size: var(--text-title, 1.35rem);
+
+    /* ===== C) Effects ================================================ */
+    --forum-transition: color 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+}

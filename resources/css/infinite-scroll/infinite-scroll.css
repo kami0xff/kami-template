@@ -1,0 +1,144 @@
+/*
+    Infinite scroll — sentinel + status + optional Load more button.
+
+    States on .infinite-scroll:
+        is-loading
+        is-end
+        is-error
+        data-mode="auto|button"
+*/
+
+.infinite-scroll {
+    display: grid;
+    gap: var(--infinite-scroll-gap);
+}
+
+.infinite-scroll-items {
+    display: grid;
+    gap: var(--infinite-scroll-gap);
+}
+
+.infinite-scroll-footer {
+    display: grid;
+    justify-items: center;
+    gap: var(--space3);
+    padding: var(--infinite-scroll-footer-pad);
+    min-height: 1px;
+}
+
+.infinite-scroll-sentinel {
+    width: 100%;
+    height: 1px;
+    pointer-events: none;
+}
+
+.infinite-scroll-status,
+.infinite-scroll-end,
+.infinite-scroll-error {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space2);
+    margin: 0;
+    color: var(--infinite-scroll-fg);
+    font-size: var(--infinite-scroll-font-size);
+    text-align: center;
+}
+
+.infinite-scroll-status[hidden],
+.infinite-scroll-end[hidden],
+.infinite-scroll-error[hidden],
+.infinite-scroll-more[hidden] {
+    display: none !important;
+}
+
+.infinite-scroll-end {
+    color: var(--infinite-scroll-fg-faint);
+}
+
+.infinite-scroll-error {
+    flex-wrap: wrap;
+    color: var(--infinite-scroll-error-fg);
+}
+
+.infinite-scroll-retry {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--infinite-scroll-fg-strong);
+    font: inherit;
+    font-size: inherit;
+    font-weight: var(--font-bold4, 600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.infinite-scroll-retry:hover,
+.infinite-scroll-retry:focus-visible {
+    color: var(--color-primary);
+}
+
+.infinite-scroll-more {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--infinite-scroll-more-height);
+    padding: 0 var(--space4);
+    border: 1px solid var(--infinite-scroll-more-border);
+    border-radius: var(--infinite-scroll-more-radius);
+    background: var(--infinite-scroll-more-bg);
+    color: var(--infinite-scroll-fg-strong);
+    font: inherit;
+    font-size: var(--infinite-scroll-font-size);
+    font-weight: var(--font-bold4, 600);
+    cursor: pointer;
+    transition:
+        background var(--duration-fast, 0.15s) var(--ease-standard, ease),
+        border-color var(--duration-fast, 0.15s) var(--ease-standard, ease),
+        opacity var(--duration-fast, 0.15s) var(--ease-standard, ease);
+}
+
+.infinite-scroll-more:hover,
+.infinite-scroll-more:focus-visible {
+    background: var(--infinite-scroll-more-bg-hover);
+}
+
+.infinite-scroll-more:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.infinite-scroll.is-loading .infinite-scroll-more {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+/* Design-kit demo cards (optional) */
+.infinite-scroll-demo-card {
+    display: grid;
+    gap: 4px;
+    padding: var(--space3) var(--space4);
+    border: 1px solid var(--infinite-scroll-more-border);
+    border-radius: var(--radius-element, 10px);
+    background: var(--infinite-scroll-more-bg);
+    color: var(--infinite-scroll-fg);
+    font-size: var(--infinite-scroll-font-size);
+}
+
+.infinite-scroll-demo-card strong {
+    color: var(--infinite-scroll-fg-strong);
+    font-weight: var(--font-bold4, 600);
+}
+
+.infinite-scroll--demo .infinite-scroll-items {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .infinite-scroll[data-mode="auto"] .infinite-scroll-sentinel {
+        display: none;
+    }
+}

@@ -1,0 +1,11 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --toolbar-bg: var(--surface1);
+    --toolbar-border: var(--border-strong);
+    --toolbar-separator: var(--border-default);
+
+    /* ===== B) Layout ================================================= */
+    --toolbar-padding: var(--space1);
+    --toolbar-gap: var(--space1);
+    --toolbar-radius: var(--radius2);
+}

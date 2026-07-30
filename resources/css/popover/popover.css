@@ -1,0 +1,57 @@
+/* Popover — anchored panel positioned relative to its trigger.
+   (Astryx: Popover / HoverCard, adapted.)
+
+   Markup contract (see components/panels/popover.blade.php):
+
+       <div class="popover" data-popover [data-popover-hover]>
+           <button data-popover-trigger>…</button>
+           <div class="popover-panel popover-panel--bottom-start" data-popover-panel>…</div>
+       </div>
+
+   Behavior (open/close, outside click, Escape) is PopoverManager.ts. */
+.popover {
+    position: relative;
+    display: inline-flex;
+}
+
+.popover-panel {
+    position: absolute;
+    min-width: var(--popover-min-width);
+    padding: var(--popover-padding);
+    border: 1px solid var(--popover-border);
+    border-radius: var(--popover-radius);
+    background: var(--popover-bg);
+    color: var(--popover-fg);
+    box-shadow: var(--popover-elevation);
+    z-index: var(--popover-z);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px) scale(0.98);
+    transition: var(--popover-transition);
+}
+
+.popover--open > .popover-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Bare panel — no padding, content manages its own (e.g. menus) */
+.popover-panel--bare {
+    padding: 0;
+}
+
+/* ── Placements ─────────────────────────────────────────────────── */
+.popover-panel--bottom-start { top: calc(100% + var(--popover-gap)); left: 0; }
+.popover-panel--bottom-end   { top: calc(100% + var(--popover-gap)); right: 0; }
+.popover-panel--top-start    { bottom: calc(100% + var(--popover-gap)); left: 0; transform: translateY(-4px) scale(0.98); }
+.popover-panel--top-end      { bottom: calc(100% + var(--popover-gap)); right: 0; transform: translateY(-4px) scale(0.98); }
+.popover-panel--right-start  { left: calc(100% + var(--popover-gap)); top: 0; transform: translateX(4px) scale(0.98); }
+.popover-panel--left-start   { right: calc(100% + var(--popover-gap)); top: 0; transform: translateX(-4px) scale(0.98); }
+
+.popover--open > .popover-panel--top-start,
+.popover--open > .popover-panel--top-end,
+.popover--open > .popover-panel--right-start,
+.popover--open > .popover-panel--left-start {
+    transform: translate(0) scale(1);
+}

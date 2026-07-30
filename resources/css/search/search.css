@@ -1,0 +1,457 @@
+/*
+    Search bar + suggestion panel (stripchat Magic Search style).
+
+    Anatomy:
+        .search                       root (position anchor, data-search)
+            .search-bar               pill-shaped input row
+                .search-icon / .search-input / .search-tools
+                    .search-tool / .search-chip
+            .search-panel             dropdown (data-search-panel, [hidden])
+                .search-promo         collapsible Magic Search intro card
+                .search-examples      label + gradient-bordered example chips
+                .search-section       group with optional title row
+                    .search-item      icon + label + trailing count/hint
+
+    Behavior: SearchSuggestManager (focus/outside-click/Esc, ↑↓ + Enter).
+*/
+
+.search {
+    position: relative;
+    width: 100%;
+}
+
+/* === BAR === */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--search-gap);
+    height: var(--search-height);
+    padding-inline: var(--search-padding-inline);
+    background: var(--search-bg);
+    border: 1px solid var(--search-border);
+    border-radius: var(--search-radius);
+    transition: background var(--search-transition), border-color var(--search-transition);
+}
+
+.search:focus-within .search-bar {
+    background: var(--search-bg-focus);
+    border-color: var(--search-border-focus);
+}
+
+.search-icon {
+    flex-shrink: 0;
+    width: var(--search-icon-size);
+    height: var(--search-icon-size);
+    color: var(--search-icon-fg);
+    pointer-events: none;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--search-fg);
+    font-family: var(--font-body);
+    font-size: var(--search-font-size);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--search-placeholder);
+}
+
+/* === TOOLS (trailing cluster) === */
+.search-tools {
+    display: flex;
+    align-items: center;
+    gap: var(--space1);
+    flex-shrink: 0;
+}
+
+.search-tool {
+    display: grid;
+    place-items: center;
+    width: var(--search-tool-size);
+    height: var(--search-tool-size);
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--search-tool-fg);
+    cursor: pointer;
+    transition: background var(--search-transition), color var(--search-transition);
+}
+
+.search-tool:hover {
+    color: var(--search-tool-fg-hover);
+}
+
+.search-tool svg {
+    width: var(--search-icon-size);
+    height: var(--search-icon-size);
+}
+
+/* === ACTION CHIP ("Magic Search 3") — bar trailing === */
+.search-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space2);
+    height: var(--search-chip-height);
+    padding: var(--search-chip-padding);
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--search-chip-bg);
+    color: var(--search-chip-fg);
+    font-size: var(--search-chip-font-size);
+    font-weight: var(--font-bold5);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background var(--search-transition);
+}
+
+.search-chip:hover {
+    background: var(--search-chip-bg-hover);
+}
+
+.search-chip svg {
+    width: 12px;
+    height: 12px;
+}
+
+.search-chip-count {
+    display: grid;
+    place-items: center;
+    min-width: var(--search-chip-count-size);
+    height: var(--search-chip-count-size);
+    padding-inline: 4px;
+    border-radius: var(--radius-pill);
+    background: var(--search-chip-count-bg);
+    color: var(--search-chip-count-fg);
+    font-size: 10px;
+    font-weight: var(--font-bold5);
+}
+
+/* === SUGGESTION PANEL === */
+.search-panel {
+    position: absolute;
+    top: calc(100% + var(--search-panel-gap));
+    left: 0;
+    right: 0;
+    z-index: var(--search-panel-z);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space3);
+    max-height: var(--search-panel-max-height);
+    overflow-y: auto;
+    padding: var(--search-panel-padding);
+    background: var(--search-panel-bg);
+    border: 1px solid var(--search-panel-border);
+    border-radius: var(--search-panel-radius);
+    box-shadow: var(--search-panel-elevation);
+    scrollbar-width: thin;
+}
+
+.search-panel[hidden] {
+    display: none;
+}
+
+/* === PROMO CARD ====================================================== */
+.search-promo {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--search-promo-gap);
+    align-items: start;
+    padding: var(--search-promo-padding);
+    padding-right: calc(var(--search-promo-padding) + 28px);
+    background: var(--search-promo-bg);
+    border-radius: var(--search-promo-radius);
+}
+
+.search-promo[hidden] {
+    display: none;
+}
+
+.search-promo-thumb {
+    position: relative;
+    width: var(--search-promo-thumb-size);
+    height: var(--search-promo-thumb-size);
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--gray8);
+    flex-shrink: 0;
+}
+
+.search-promo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.search-promo-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
+    pointer-events: none;
+}
+
+.search-promo-play svg {
+    width: 18px;
+    height: 18px;
+}
+
+.search-promo-body {
+    min-width: 0;
+    color: var(--search-promo-fg);
+    font-size: var(--text-small);
+    line-height: 1.45;
+}
+
+.search-promo-body strong,
+.search-promo-body .search-promo-accent {
+    color: var(--search-promo-accent);
+    font-weight: var(--font-bold4);
+}
+
+.search-promo-body a {
+    color: var(--search-promo-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.search-promo-body a:hover {
+    color: var(--search-promo-accent);
+}
+
+.search-promo-toggle {
+    position: absolute;
+    top: var(--space2);
+    right: var(--space2);
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background: transparent;
+    color: var(--text-faint);
+    cursor: pointer;
+    transition: color var(--search-transition), background var(--search-transition);
+}
+
+.search-promo-toggle:hover {
+    color: var(--text-primary);
+    background: var(--white6);
+}
+
+.search-promo-toggle svg {
+    width: 14px;
+    height: 14px;
+    transition: transform var(--search-transition);
+}
+
+.search-promo[data-collapsed] .search-promo-toggle svg {
+    transform: rotate(180deg);
+}
+
+.search-promo[data-collapsed] .search-promo-thumb,
+.search-promo[data-collapsed] .search-promo-body {
+    display: none;
+}
+
+.search-promo[data-collapsed] {
+    grid-template-columns: 1fr;
+    padding-block: var(--space2);
+    min-height: 0;
+}
+
+/* === MAGIC EXAMPLES ================================================== */
+.search-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space2);
+}
+
+.search-examples-label {
+    padding-inline: var(--space1);
+    color: var(--text-muted);
+    font-size: var(--text-small);
+}
+
+.search-examples-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space2);
+}
+
+/* Gradient-border pill via nested background trick */
+.search-example {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--search-example-gap);
+    width: fit-content;
+    max-width: 100%;
+    min-height: var(--search-example-height);
+    padding: var(--search-example-padding);
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-pill);
+    color: var(--search-example-fg);
+    font-family: inherit;
+    font-size: var(--search-example-font-size);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    background:
+        linear-gradient(var(--search-example-bg), var(--search-example-bg)) padding-box,
+        linear-gradient(135deg, var(--search-example-border-from), var(--search-example-border-to)) border-box;
+    box-shadow: 0 0 12px var(--search-example-glow);
+    transition: box-shadow var(--search-transition), transform var(--search-transition);
+}
+
+.search-example:hover {
+    box-shadow: 0 0 18px color-mix(in srgb, var(--neon-pink) 55%, transparent);
+}
+
+.search-example:active {
+    transform: scale(0.98);
+}
+
+.search-example-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 14px;
+    height: 14px;
+    color: var(--neon-pink);
+}
+
+.search-example-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.search-example-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* === SECTIONS === */
+.search-section + .search-section {
+    margin-top: var(--space1);
+}
+
+.search-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: var(--space2) var(--space2) var(--space1);
+}
+
+.search-section-title {
+    font-size: var(--search-section-title-size);
+    font-weight: var(--font-bold5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--search-section-title-fg);
+}
+
+.search-section-action {
+    font-size: var(--search-section-title-size);
+    color: var(--text-muted);
+    text-decoration: none;
+    cursor: pointer;
+    border: 0;
+    background: none;
+    transition: color var(--search-transition);
+}
+
+.search-section-action:hover {
+    color: var(--text-primary);
+}
+
+/* === ITEMS === */
+.search-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space3);
+    width: 100%;
+    min-height: var(--search-item-height);
+    padding: var(--search-item-padding);
+    border: 0;
+    border-radius: var(--search-item-radius);
+    background: transparent;
+    color: var(--search-item-fg);
+    font-family: inherit;
+    font-size: var(--search-font-size);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--search-transition);
+}
+
+.search-item-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: var(--search-item-icon-size);
+    height: var(--search-item-icon-size);
+    color: var(--search-item-icon-fg);
+}
+
+.search-item-icon svg,
+.search-item-icon .fi {
+    width: 100%;
+    height: 100%;
+}
+
+.search-item-avatar {
+    flex-shrink: 0;
+    width: var(--search-item-avatar-size);
+    height: var(--search-item-avatar-size);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.search-item-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-item-label mark {
+    background: none;
+    color: var(--search-mark-fg);
+    font-weight: var(--font-bold5);
+}
+
+.search-item-sub {
+    display: block;
+    font-size: var(--text-micro);
+    color: var(--search-item-sub-fg);
+}
+
+.search-item-trailing {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    font-size: var(--text-small);
+    color: var(--search-item-count-fg);
+}
+
+/* === EMPTY STATE === */
+.search-panel-empty {
+    padding: var(--space5) var(--space3);
+    text-align: center;
+    font-size: var(--search-font-size);
+    color: var(--text-muted);
+}

@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PASSWORD STRENGTH — segmented bar + checklist
+   Strength level via [data-level="1..4"] on .form-pwd-strength.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-pwd-strength {
+    margin-top: var(--space2);
+}
+
+/* Segmented bar */
+.form-pwd-bar {
+    display: flex;
+    gap: 4px;
+}
+
+.form-pwd-seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--white-alpha-120);
+    transition: background 0.3s ease;
+}
+
+/* Levels: 1 = weak (red), 2 = fair (amber), 3 = good (green-light), 4 = excellent (green) */
+.form-pwd-strength[data-level="1"] .form-pwd-seg:nth-child(1) { background: var(--color-danger); }
+.form-pwd-strength[data-level="2"] .form-pwd-seg:nth-child(-n+2) { background: var(--color-warning); }
+.form-pwd-strength[data-level="3"] .form-pwd-seg:nth-child(-n+3) { background: var(--color-success); }
+.form-pwd-strength[data-level="4"] .form-pwd-seg { background: var(--color-success); }
+
+/* Label */
+.form-pwd-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--space2);
+    font-size: var(--text-small);
+    color: var(--text-muted);
+}
+
+.form-pwd-label strong {
+    color: var(--text-primary);
+}
+
+/* Checklist */
+.form-pwd-checklist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space2);
+    margin-top: var(--space2);
+}
+
+.form-pwd-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.form-pwd-check .ic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--white-alpha-120);
+    background: transparent;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease;
+}
+
+.form-pwd-check.done {
+    color: var(--color-success);
+}
+
+.form-pwd-check.done .ic {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: var(--gray1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-pwd-seg,
+    .form-pwd-check .ic {
+        transition: none;
+    }
+}

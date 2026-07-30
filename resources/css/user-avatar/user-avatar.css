@@ -1,0 +1,142 @@
+/*
+    User avatar (Astryx: Avatar / AvatarGroup).
+
+    .user-avatar-wrap            root — <span>, or <button> when interactive
+        .user-avatar             the circle (ring + clipped content)
+            .avatar-img          image
+            .avatar-initials     initials fallback
+            .avatar-fallback     person-glyph fallback
+        .avatar-notification     top-right alert dot
+        .avatar-status--*        bottom-right presence dot
+
+    Interactive states: hover brightens the ring; focus-visible,
+    [aria-expanded="true"] and [data-open] show the accent ring.
+*/
+
+.user-avatar-wrap {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    border-radius: var(--avatar-radius);
+}
+
+/* size variants */
+.user-avatar-wrap--xs { width: var(--avatar-size-xs); height: var(--avatar-size-xs); --avatar-font: 10px; }
+.user-avatar-wrap--sm { width: var(--avatar-size-sm); height: var(--avatar-size-sm); --avatar-font: var(--text-small); }
+.user-avatar-wrap--md { width: var(--avatar-size-md); height: var(--avatar-size-md); --avatar-font: var(--text-body); }
+.user-avatar-wrap--lg { width: var(--avatar-size-lg); height: var(--avatar-size-lg); --avatar-font: var(--text-subheading); }
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--avatar-radius);
+    background: var(--avatar-bg);
+    color: var(--avatar-fg);
+    box-shadow: 0 0 0 1px var(--avatar-ring);
+    transition: box-shadow var(--avatar-transition);
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-initials {
+    font-size: var(--avatar-font, var(--text-body));
+    font-weight: var(--font-bold4);
+    color: var(--avatar-initials-fg);
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+.avatar-fallback {
+    width: 45%;
+    height: 55%;
+    opacity: 0.45;
+}
+
+/* interactive states */
+.user-avatar-wrap--interactive {
+    cursor: pointer;
+}
+
+.user-avatar-wrap--interactive:hover .user-avatar {
+    box-shadow: 0 0 0 1.5px var(--avatar-ring-hover);
+}
+
+.user-avatar-wrap--interactive:focus-visible {
+    outline: none;
+}
+
+.user-avatar-wrap--interactive:focus-visible .user-avatar,
+.user-avatar-wrap--interactive[aria-expanded="true"] .user-avatar,
+.user-avatar-wrap--interactive[data-open] .user-avatar {
+    box-shadow: 0 0 0 2px var(--avatar-ring-active);
+}
+
+/* === Dots ============================================================ */
+.avatar-notification {
+    position: absolute;
+    top: var(--avatar-notification-offset);
+    right: var(--avatar-notification-offset);
+    width: var(--avatar-notification-size);
+    height: var(--avatar-notification-size);
+    border-radius: 50%;
+    background: var(--avatar-notification-bg);
+    box-shadow: 0 0 0 2px var(--avatar-dot-ring);
+}
+
+.avatar-status {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: var(--avatar-status-size);
+    height: var(--avatar-status-size);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--avatar-dot-ring);
+}
+
+.avatar-status--online { background: var(--avatar-status-online); }
+.avatar-status--live { background: var(--avatar-status-live); }
+.avatar-status--busy { background: var(--avatar-status-busy); }
+.avatar-status--away { background: var(--avatar-status-away); }
+
+/* === Avatar group — overlapping stack with +N overflow =============== */
+.avatar-group {
+    display: inline-flex;
+    align-items: center;
+}
+
+.avatar-group > .user-avatar-wrap .user-avatar,
+.avatar-group > .avatar-group-more {
+    box-shadow: 0 0 0 2px var(--surface-black);
+}
+
+.avatar-group > * + * {
+    margin-left: calc(var(--avatar-group-overlap) * -1);
+}
+
+.avatar-group-more {
+    display: grid;
+    place-items: center;
+    width: var(--avatar-size-md);
+    height: var(--avatar-size-md);
+    border-radius: 50%;
+    background: var(--white7);
+    color: var(--text-muted);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+}
+
+.avatar-group--sm > .avatar-group-more {
+    width: var(--avatar-size-sm);
+    height: var(--avatar-size-sm);
+}

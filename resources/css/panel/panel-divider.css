@@ -1,0 +1,6 @@
+.panel-divider{
+    height: var(--panel-divider-height);
+    background: var(--panel-divider-fill);
+    margin: var(--panel-divider-margin);
+
+}

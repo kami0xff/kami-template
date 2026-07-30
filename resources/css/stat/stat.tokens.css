@@ -1,0 +1,11 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --stat-value-fg: var(--text-primary);
+    --stat-label-fg: var(--text-muted);
+    --stat-delta-up: var(--color-success);
+    --stat-delta-down: var(--color-danger);
+
+    /* ===== B) Layout ================================================= */
+    --stat-value-size: 28px;
+    --stat-gap: 2px;
+}

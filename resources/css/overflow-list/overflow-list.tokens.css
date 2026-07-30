@@ -1,0 +1,10 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --overflow-list-fade-width: 48px;
+    --overflow-list-arrow-bg: var(--gray5);
+    --overflow-list-arrow-fg: var(--text-primary);
+
+    /* ===== B) Layout ================================================= */
+    --overflow-list-gap: var(--space2);
+    --overflow-list-arrow-size: 30px;
+}

@@ -1,0 +1,327 @@
+/*
+    Reactions bar + picker
+
+    Anatomy:
+        .reactions                    [data-reactions]
+            .reactions-bar
+                .reaction-chip        [data-reaction]
+                .reaction-add         [data-reaction-picker-trigger]
+            .reaction-picker          [data-reaction-picker]
+                .reaction-picker-btn  [data-reaction-pick]
+*/
+
+.reactions {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--reaction-gap);
+}
+
+.reactions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--reaction-gap);
+}
+
+.reaction-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 30px;
+    padding: var(--reaction-chip-pad);
+    border: 1px solid var(--reaction-chip-border);
+    border-radius: var(--reaction-chip-radius);
+    background: var(--reaction-chip-bg);
+    color: var(--reaction-chip-fg);
+    font: inherit;
+    font-size: var(--reaction-chip-font);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: var(--reaction-transition);
+}
+
+.reaction-chip:hover,
+.reaction-chip:focus-visible {
+    background: var(--reaction-chip-bg-hover);
+    outline: none;
+}
+
+.reaction-chip[aria-pressed="true"] {
+    background: var(--reaction-chip-bg-active);
+    border-color: var(--reaction-chip-border-active);
+}
+
+.reaction-chip-emote {
+    display: inline-grid;
+    place-items: center;
+    line-height: 0;
+}
+
+.reaction-chip-emoji {
+    font-size: var(--reaction-emoji-size);
+    line-height: 1;
+}
+
+.reaction-emote-img {
+    display: block;
+    width: var(--reaction-emote-size);
+    height: var(--reaction-emote-size);
+    object-fit: contain;
+    image-rendering: auto;
+    pointer-events: none;
+}
+
+.reaction-picker-btn .reaction-emote-img {
+    width: var(--reaction-picker-emote-size);
+    height: var(--reaction-picker-emote-size);
+}
+
+.reaction-chip-count {
+    color: var(--reaction-chip-count);
+    font-weight: var(--font-bold4);
+}
+
+.reaction-chip[aria-pressed="true"] .reaction-chip-count {
+    color: var(--reaction-chip-fg);
+}
+
+.reaction-add {
+    display: inline-grid;
+    place-items: center;
+    width: var(--reaction-add-size);
+    height: var(--reaction-add-size);
+    border: 1px dashed var(--reaction-chip-border);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-faint);
+    cursor: pointer;
+    transition: var(--reaction-transition);
+}
+
+.reaction-add:hover,
+.reaction-add:focus-visible,
+.reaction-add[aria-expanded="true"] {
+    color: var(--text-primary);
+    background: var(--reaction-chip-bg-hover);
+    border-style: solid;
+    outline: none;
+}
+
+.reaction-add svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Picker — Twitch-style pack tabs + search */
+.reaction-picker {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    z-index: var(--z-dropdown, 50);
+    display: none;
+    width: var(--reaction-picker-width);
+    padding: var(--reaction-picker-pad);
+    border: 1px solid var(--reaction-picker-border);
+    border-radius: var(--reaction-picker-radius);
+    background: var(--reaction-picker-bg);
+    box-shadow: var(--reaction-shadow);
+}
+
+.reactions--picker-open > .reaction-picker {
+    display: grid;
+    gap: 8px;
+    animation: reaction-picker-in 0.16s var(--ease-out, ease);
+}
+
+.reaction-picker-search {
+    min-width: 0;
+}
+
+.reaction-picker-input {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--reaction-picker-border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--reaction-chip-fg);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+}
+
+.reaction-picker-input::placeholder {
+    color: var(--text-faint);
+}
+
+.reaction-picker-input:focus {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.reaction-picker-tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.reaction-picker-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.reaction-picker-tab {
+    flex: 0 0 auto;
+    min-height: 28px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-faint);
+    font: inherit;
+    font-size: 12px;
+    font-weight: var(--font-bold4);
+    cursor: pointer;
+    transition: var(--reaction-transition);
+}
+
+.reaction-picker-tab:hover,
+.reaction-picker-tab:focus-visible {
+    color: var(--text-primary);
+    background: var(--reaction-picker-hover);
+    outline: none;
+}
+
+.reaction-picker-tab.is-active {
+    color: var(--text-primary);
+    background: var(--reaction-chip-bg-active);
+}
+
+.reaction-picker-panels {
+    min-height: 148px;
+    max-height: 220px;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.reaction-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px;
+}
+
+.reaction-picker-btn {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: var(--reaction-transition);
+}
+
+.reaction-picker-btn:hover,
+.reaction-picker-btn:focus-visible {
+    background: var(--reaction-picker-hover);
+    transform: scale(1.08);
+    outline: none;
+}
+
+.reaction-picker-btn[aria-pressed="true"] {
+    background: var(--reaction-chip-bg-active);
+}
+
+.reaction-picker-btn[hidden],
+.reaction-picker-btn.is-filtered {
+    display: none;
+}
+
+.reaction-picker-empty {
+    margin: 24px 0 0;
+    color: var(--text-faint);
+    font-size: 12px;
+    text-align: center;
+}
+
+@keyframes reaction-picker-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Compact gallery post shell for demos */
+.gallery-post {
+    display: grid;
+    gap: var(--space3);
+    max-width: 420px;
+    padding: var(--space3);
+    border: 1px solid var(--reaction-chip-border);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.gallery-post-media {
+    overflow: hidden;
+    border-radius: 10px;
+    aspect-ratio: 4 / 5;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.gallery-post-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-post-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    padding: 0 2px;
+}
+
+.gallery-post-meta strong {
+    font-size: 14px;
+    font-weight: var(--font-bold4);
+}
+
+.gallery-post-meta span {
+    color: var(--text-faint);
+    font-size: 12px;
+}
+
+.gallery-post-caption {
+    margin: 0;
+    padding: 0 2px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.gallery-post-reactions {
+    padding: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reactions--picker-open > .reaction-picker,
+    .reaction-picker-btn {
+        animation: none;
+        transition: none;
+    }
+
+    .reaction-emote-img--animated {
+        /* Still show first frame; browser may freeze gif under reduced motion prefs */
+    }
+}

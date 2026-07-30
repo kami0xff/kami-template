@@ -1,0 +1,14 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --lightbox-bg: rgba(0, 0, 0, 0.92);
+    --lightbox-fg: var(--white1);
+    --lightbox-control-bg: var(--white7);
+
+    /* ===== B) Layout ================================================= */
+    --lightbox-z: var(--z-max);
+    --lightbox-control-size: 44px;
+    --lightbox-media-max: 90;
+
+    /* ===== C) Effects ================================================ */
+    --lightbox-transition: opacity var(--duration2) var(--ease-out);
+}

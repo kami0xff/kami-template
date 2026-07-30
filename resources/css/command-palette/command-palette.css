@@ -1,0 +1,87 @@
+/* Command palette — ⌘K action search.
+   (Astryx: CommandPalette / PowerSearch, adapted.)
+   Behavior is CommandPaletteManager.ts. */
+.command-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--command-z);
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: var(--command-top);
+    background: var(--modal-overlay-bg);
+    backdrop-filter: blur(var(--modal-overlay-blur));
+}
+
+.command-overlay.command-open {
+    display: flex;
+}
+
+.command-panel {
+    width: min(var(--command-width), calc(100vw - var(--space5) * 2));
+    border: 1px solid var(--command-border);
+    border-radius: var(--command-radius);
+    background: var(--command-bg);
+    overflow: hidden;
+}
+
+.command-input {
+    width: 100%;
+    padding: var(--space4);
+    border: 0;
+    border-bottom: 1px solid var(--border-default);
+    background: transparent;
+    color: var(--text-primary);
+    font-size: var(--text-body);
+}
+
+.command-input:focus {
+    outline: none;
+}
+
+.command-list {
+    max-height: var(--command-max-height);
+    overflow-y: auto;
+    padding: var(--space2);
+    display: grid;
+    gap: 2px;
+}
+
+.command-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    padding: var(--space2) var(--space3);
+    border-radius: var(--radius1);
+    color: var(--command-item-fg);
+    font-size: var(--text-lead);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.command-item:hover,
+.command-item--active {
+    background: var(--command-item-bg-active);
+    color: var(--command-item-fg-active);
+}
+
+.command-item[hidden] {
+    display: none;
+}
+
+.command-item-hint {
+    margin-left: auto;
+    color: var(--text-faint);
+    font-size: var(--text-small);
+}
+
+.command-empty {
+    padding: var(--space5);
+    color: var(--text-faint);
+    font-size: var(--text-lead);
+    text-align: center;
+}
+
+.command-empty[hidden] {
+    display: none;
+}

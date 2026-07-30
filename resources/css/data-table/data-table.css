@@ -1,0 +1,525 @@
+/*========================================
+DATA TABLE COMPONENT (<x-data-table>)
+======================================== */
+
+.dt {
+    background: var(--dt-surface);
+    border: 1px solid var(--dt-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--dt-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Toolbar */
+.dt__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--dt-border);
+    flex-wrap: wrap;
+}
+
+.dt__toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+/* Bulk selection bar */
+.dt__bulk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--dt-border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--dt-primary) 12%, var(--dt-surface));
+}
+
+.dt__bulk[hidden] {
+    display: none !important;
+}
+
+.dt__bulk-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--dt-text);
+    font-variant-numeric: tabular-nums;
+    padding-inline: 0.25rem;
+}
+
+.dt__bulk-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.dt__bulk-clear {
+    border: 0;
+    background: transparent;
+    color: var(--dt-text-muted);
+    font: inherit;
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 0.2rem 0.35rem;
+}
+
+.dt__bulk-clear:hover {
+    color: var(--dt-text);
+}
+
+/* Compact checkboxes */
+.dt__th--check,
+.dt__td--check {
+    width: 2.25rem;
+    min-width: 2.25rem;
+    padding-inline: 0.45rem !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.dt__check {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    cursor: pointer;
+}
+
+.dt__check input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.dt__check-box {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--dt-border);
+    border-radius: 0.25rem;
+    background: var(--dt-background);
+    box-shadow: inset 0 0 0 0 var(--dt-primary);
+    transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.dt__check input:hover + .dt__check-box {
+    border-color: color-mix(in srgb, var(--dt-primary) 55%, var(--dt-border));
+}
+
+.dt__check input:checked + .dt__check-box {
+    background: var(--dt-primary);
+    border-color: var(--dt-primary);
+    box-shadow: inset 0 0 0 2px var(--dt-surface);
+}
+
+.dt__check input:indeterminate + .dt__check-box {
+    background: var(--dt-primary);
+    border-color: var(--dt-primary);
+    box-shadow: inset 0 0 0 2px var(--dt-surface), inset 0 0 0 3.5px var(--dt-primary);
+}
+
+.dt__check input:focus-visible + .dt__check-box {
+    outline: 2px solid color-mix(in srgb, var(--dt-primary) 55%, transparent);
+    outline-offset: 2px;
+}
+
+.dt__row--selected td {
+    background: color-mix(in srgb, var(--dt-primary) 10%, transparent);
+}
+
+/* Quick actions */
+.dt__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.dt__actions--right {
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.dt__actions--center {
+    justify-content: center;
+    width: 100%;
+}
+
+.dt__actions--left {
+    justify-content: flex-start;
+}
+
+.dt__actions .btn {
+    white-space: nowrap;
+}
+
+.dt__actions .pill {
+    max-width: 100%;
+}
+
+.dt__search {
+    position: relative;
+    flex: 1;
+    max-width: 280px;
+}
+
+.dt__search-icon {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    color: var(--dt-text-muted);
+    pointer-events: none;
+}
+
+.dt__search-input {
+    width: 100%;
+    padding: 0.35rem 0.5rem 0.35rem 1.75rem;
+    border: 1px solid var(--dt-border);
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    background: var(--dt-background);
+    color: var(--dt-text);
+    transition: border-color 0.15s;
+}
+
+.dt__search-input:focus {
+    outline: none;
+    border-color: var(--dt-primary);
+    box-shadow: var(--dt-focus-ring);
+}
+
+.dt__search-input::placeholder {
+    color: var(--dt-text-muted);
+}
+
+/* Table wrapper — scroll container */
+.dt__wrap {
+    overflow-x: auto;
+    flex: 1;
+}
+
+/* The actual table */
+.dt__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    table-layout: auto;
+}
+
+.dt__table:focus {
+    outline: none;
+}
+
+/* Header */
+.dt__th {
+    position: relative;
+    padding: 0.5rem 0.6rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.675rem;
+    color: var(--dt-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid var(--dt-border);
+    background: var(--dt-surface);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.dt__th[data-align="right"] { text-align: right; }
+.dt__th[data-align="center"] { text-align: center; }
+
+/* Sticky header */
+[data-dt-sticky] .dt__th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.dt--scrolled .dt__th {
+    box-shadow: var(--dt-shadow-scrolled);
+}
+
+/* Sortable headers */
+.dt__th--sortable {
+    cursor: pointer;
+}
+
+.dt__sort-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.dt__sort-link:hover {
+    color: var(--dt-primary);
+}
+
+.dt__th--active .dt__sort-link {
+    color: var(--dt-primary);
+}
+
+.dt__sort-arrows {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 1px;
+    line-height: 0;
+}
+
+.dt__arrow {
+    width: 7px;
+    height: 4px;
+    fill: var(--dt-border);
+    transition: fill 0.1s;
+}
+
+.dt__arrow--active {
+    fill: var(--dt-primary);
+}
+
+/* Resize handle */
+.dt__resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    cursor: col-resize;
+    background: transparent;
+    transition: background 0.1s;
+}
+
+.dt__resize-handle:hover,
+.dt__resize-handle:active {
+    background: var(--dt-primary);
+    opacity: 0.4;
+}
+
+/* Body cells */
+.dt__table td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--dt-row-border);
+    color: var(--dt-text);
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.dt__table td[data-align="right"] { text-align: right; }
+.dt__table td[data-align="center"] { text-align: center; }
+
+/* Row hover */
+.dt__table tbody tr:hover td {
+    background: var(--dt-hover-bg);
+}
+
+/* Focused row (keyboard nav) */
+.dt__row--focused td {
+    background: var(--dt-focus-bg) !important;
+    box-shadow: inset 2px 0 0 var(--dt-primary);
+}
+
+/* Dense mode — thinner rows */
+.dt--dense .dt__th {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.65rem;
+}
+
+.dt--dense .dt__table td {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.dt--dense .dt__table {
+    font-size: 0.75rem;
+}
+
+/* Striped rows */
+.dt--striped .dt__table tbody tr:nth-child(even) td {
+    background: var(--dt-striped-bg);
+}
+
+/* Empty state */
+.dt__empty {
+    text-align: center;
+    padding: 2.5rem 1rem !important;
+    color: var(--dt-text-muted);
+    font-size: 0.85rem;
+}
+
+/* Footer / Pagination */
+.dt__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--dt-border);
+    font-size: 0.75rem;
+    color: var(--dt-text-muted);
+}
+
+.dt__info {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Table footer uses <x-pagination.bar>; keep legacy page-btn styles for custom slots */
+.dt__footer .pagination-bar {
+    width: 100%;
+}
+
+.dt__pagination {
+    display: flex;
+    gap: 2px;
+}
+
+.dt__page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 26px;
+    padding: 0 0.35rem;
+    border: 1px solid var(--dt-border);
+    background: var(--dt-surface);
+    color: var(--dt-text);
+    font-size: 0.75rem;
+    text-decoration: none;
+    border-radius: 0.2rem;
+    transition: all 0.1s;
+    font-variant-numeric: tabular-nums;
+}
+
+.dt__page-btn:hover:not(.dt__page-btn--disabled):not(.dt__page-btn--active) {
+    border-color: var(--dt-primary);
+    color: var(--dt-primary);
+    background: var(--dt-page-hover-bg);
+}
+
+.dt__page-btn--active {
+    background: var(--dt-primary);
+    color: #fff;
+    border-color: var(--dt-primary);
+}
+
+.dt__page-btn--disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+/* ── Utility classes for use inside dt cells ── */
+.dt-cell--truncate {
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dt-cell--mono {
+    font-variant-numeric: tabular-nums;
+    font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 0.7rem;
+}
+
+.dt-cell--bold {
+    font-weight: 600;
+}
+
+.dt-cell--right {
+    text-align: right;
+}
+
+.dt-cell--center {
+    text-align: center;
+}
+
+/* Tier/status badges (reusable) */
+.dt-badge {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.2rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+}
+
+.dt-badge--gold     { background: #fef3c7; color: #92400e; }
+.dt-badge--silver   { background: #e5e7eb; color: #4b5563; }
+.dt-badge--bronze   { background: #fed7aa; color: #9a3412; }
+.dt-badge--skip     { background: #f3f4f6; color: #9ca3af; }
+.dt-badge--easy     { background: #d1fae5; color: #065f46; }
+.dt-badge--medium   { background: #fef3c7; color: #92400e; }
+.dt-badge--hard     { background: #fee2e2; color: #991b1b; }
+.dt-badge--extreme  { background: #fce7f3; color: #be185d; }
+.dt-badge--success  { background: rgba(34, 197, 94, 0.15); color: #15803d; }
+.dt-badge--warning  { background: rgba(245, 158, 11, 0.15); color: #b45309; }
+.dt-badge--danger   { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+.dt-badge--info     { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
+
+/* Mini bar (e.g. for KD visualization) */
+.dt-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.dt-bar__track {
+    width: 40px;
+    height: 4px;
+    background: var(--dt-border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.dt-bar__fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.2s;
+}
+
+.dt-bar__fill--green   { background: #10b981; }
+.dt-bar__fill--yellow  { background: #f59e0b; }
+.dt-bar__fill--red     { background: #ef4444; }
+.dt-bar__fill--pink    { background: #ec4899; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dt__toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dt__search {
+        max-width: none;
+    }
+
+    .dt__toolbar-actions {
+        margin-left: 0;
+    }
+
+    .dt__bulk {
+        width: 100%;
+        border-radius: 12px;
+        justify-content: space-between;
+    }
+
+    .dt__footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+}

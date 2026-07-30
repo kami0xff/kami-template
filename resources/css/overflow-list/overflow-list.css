@@ -1,0 +1,74 @@
+/* OverflowList — horizontally scrolling rail of pills/chips with edge fades
+   and arrow paddles. The Stripchat category-bar pattern.
+   (Astryx: OverflowList, adapted.) Arrows are OverflowListManager.ts. */
+.overflow-list {
+    position: relative;
+    min-width: 0;
+}
+
+.overflow-list-track {
+    display: flex;
+    gap: var(--overflow-list-gap);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* fade both edges; the manager toggles data attrs at the extremes */
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 var(--overflow-list-fade-width),
+        #000 calc(100% - var(--overflow-list-fade-width)),
+        transparent 100%
+    );
+}
+
+.overflow-list-track::-webkit-scrollbar {
+    display: none;
+}
+
+.overflow-list[data-at-start] .overflow-list-track {
+    mask-image: linear-gradient(to right, #000 calc(100% - var(--overflow-list-fade-width)), transparent 100%);
+}
+
+.overflow-list[data-at-end] .overflow-list-track {
+    mask-image: linear-gradient(to right, transparent 0, #000 var(--overflow-list-fade-width));
+}
+
+.overflow-list[data-at-start][data-at-end] .overflow-list-track {
+    mask-image: none;
+}
+
+.overflow-list-track > * {
+    flex-shrink: 0;
+}
+
+.overflow-list-arrow {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--overflow-list-arrow-size);
+    height: var(--overflow-list-arrow-size);
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    background: var(--overflow-list-arrow-bg);
+    color: var(--overflow-list-arrow-fg);
+    cursor: pointer;
+    transition: opacity var(--duration1);
+}
+
+.overflow-list-arrow--prev { left: 0; }
+.overflow-list-arrow--next { right: 0; }
+
+.overflow-list[data-at-start] .overflow-list-arrow--prev,
+.overflow-list[data-at-end] .overflow-list-arrow--next {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overflow-list-arrow svg {
+    width: 12px;
+    height: 12px;
+}

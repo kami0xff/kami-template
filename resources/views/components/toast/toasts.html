@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOYCAM — Toast Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-page:   #111;
+  --toast-bg:  #0e0e0e;
+  --toast-bg-2:#131313;
+  --border:    #1e1e1e;
+  --border-2:  #2a2a2a;
+
+  --white:  #f0f0f0;
+  --dim:    #bbb;
+  --dimmer: #888;
+  --label:  #555;
+  --faint:  #3a3a3a;
+
+  /* TOAST ACCENTS */
+  --c-success:    #4ade80;
+  --c-success-dim:#1f9d4d;
+  --c-error:      #ff5b5b;
+  --c-error-dim:  #c43131;
+  --c-warning:    #f5b73d;
+  --c-warning-dim:#b8841a;
+  --c-info:       #6ea8ff;
+  --c-info-dim:   #2e6bd6;
+
+  --display: 'Bebas Neue', sans-serif;
+  --body:    'DM Sans', sans-serif;
+
+  /* ─── tweakable knobs ─── */
+  --tw-radius:       8px;
+  --tw-icon-radius:  6px;
+  --tw-rail-width:   3px;
+  --tw-rail-glow:    6px;
+  --tw-icon-glow:    4px;
+  --tw-glint:        none;     /* block to enable */
+  --tw-progress:     block;    /* none to disable */
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background: var(--bg-page);
+  font-family: var(--body);
+  color: var(--white);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 30%, rgba(120,120,120,.04), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(80,80,80,.04), transparent 70%);
+}
+
+/* ───── ANIMATIONS ───── */
+@keyframes glint{
+  0%,85%,100%{opacity:0;transform:translateX(-100%) skewX(-12deg)}
+  88%{opacity:1}
+  93%{opacity:0;transform:translateX(300%) skewX(-12deg)}
+}
+@keyframes pulse-dot{
+  0%,100%{opacity:.5;transform:scale(.9)}
+  50%{opacity:1;transform:scale(1.1)}
+}
+@keyframes pulse-ring{
+  0%{box-shadow:0 0 0 0 currentColor;opacity:.6}
+  100%{box-shadow:0 0 0 12px transparent;opacity:0}
+}
+@keyframes toast-in{
+  0%{transform:translateX(120%) scale(.98);opacity:0;filter:blur(4px)}
+  60%{transform:translateX(-2%) scale(1.005);opacity:1;filter:blur(0)}
+  100%{transform:translateX(0) scale(1);opacity:1;filter:blur(0)}
+}
+@keyframes toast-out{
+  0%{transform:translateX(0);opacity:1;max-height:200px;margin-bottom:10px}
+  60%{transform:translateX(20%);opacity:0;max-height:200px}
+  100%{transform:translateX(120%);opacity:0;max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}
+}
+@keyframes progress{
+  from{transform:scaleX(1)}
+  to{transform:scaleX(0)}
+}
+
+/* ───── DEMO NAVBAR ───── */
+.demo-navbar{
+  height: 48px;
+  background-color: #0e0e0e;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.012) 1px,rgba(255,255,255,.012) 2px),
+    repeating-linear-gradient(90deg,transparent,transparent 6px,rgba(255,255,255,.008) 6px,rgba(255,255,255,.008) 7px),
+    linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.01) 40%,rgba(0,0,0,.15) 100%);
+  border-bottom: 1px solid #1c1c1c;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 1px 0 rgba(0,0,0,.6);
+  display: flex; align-items: center; padding: 0 14px; gap: 12px;
+}
+.demo-navbar .logo{
+  font-family: var(--display); font-size:20px; letter-spacing:4px;
+  background: linear-gradient(135deg,#777,#fff 45%,#888 75%,#ccc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+/* ───── DEMO BODY ───── */
+.demo-body{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 64px 32px 120px;
+}
+
+.demo-eyebrow{
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.demo-title{
+  font-family: var(--display);
+  font-size: 56px; letter-spacing: 3px;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.demo-sub{
+  font-size: 15px;
+  color: var(--dim);
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* trigger buttons */
+.trigger-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 56px;
+}
+@media (max-width: 720px){
+  .trigger-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
+.trig{
+  position: relative;
+  padding: 14px 16px;
+  background-color: var(--toast-bg);
+  background-image: linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.01) 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--white);
+  font-family: var(--body);
+  font-size: 13px; font-weight: 600;
+  letter-spacing: .3px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex; align-items: center; gap: 12px;
+  text-align: left;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 2px 6px rgba(0,0,0,.3);
+}
+.trig::before{
+  content:'';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--trig-color, #fff);
+  border-radius: 12px 0 0 12px;
+  box-shadow: 0 0 12px var(--trig-color, #fff);
+}
+.trig:hover{
+  border-color: var(--border-2);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 6px 16px rgba(0,0,0,.5);
+}
+.trig-icon{
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--trig-color, #fff);
+}
+.trig-label{
+  display: flex; flex-direction: column;
+  line-height: 1.2;
+}
+.trig-label small{
+  font-size: 10px; letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.trig-success{ --trig-color: var(--c-success); }
+.trig-error  { --trig-color: var(--c-error); }
+.trig-warning{ --trig-color: var(--c-warning); }
+.trig-info   { --trig-color: var(--c-info); }
+
+/* ───── SAMPLES (static showcase) ───── */
+.sample-eyebrow{
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.sample-stack{
+  display: flex; flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+}
+
+/* ───── TOAST ───── */
+.toast{
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  background-color: var(--toast-bg);
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.012) 1px,rgba(255,255,255,.012) 2px),
+    repeating-linear-gradient(90deg,transparent,transparent 6px,rgba(255,255,255,.007) 6px,rgba(255,255,255,.007) 7px),
+    linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.01) 40%,rgba(0,0,0,.15) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--tw-radius);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  padding: 14px 14px 14px 16px;
+  align-items: flex-start;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 32px rgba(0,0,0,.55),
+    0 2px 8px rgba(0,0,0,.4);
+  overflow: hidden;
+  animation: toast-in .45s cubic-bezier(.34,1.4,.5,1);
+}
+.toast::before{
+  content:'';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--tw-rail-width);
+  background: linear-gradient(180deg, var(--toast-c-bright), var(--toast-c-dim));
+  box-shadow:
+    0 0 var(--tw-rail-glow) var(--toast-c-bright),
+    inset 0 0 4px rgba(255,255,255,.3);
+}
+.toast::after{
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+  animation: glint 6s ease-in-out infinite;
+  pointer-events: none;
+  display: var(--tw-glint);
+}
+.toast.dismissing{
+  animation: toast-out .35s cubic-bezier(.4,0,1,.5) forwards;
+  pointer-events: none;
+}
+
+/* color tokens per type */
+.toast.success{ --toast-c-bright: var(--c-success); --toast-c-dim: var(--c-success-dim); }
+.toast.error  { --toast-c-bright: var(--c-error);   --toast-c-dim: var(--c-error-dim);   }
+.toast.warning{ --toast-c-bright: var(--c-warning); --toast-c-dim: var(--c-warning-dim); }
+.toast.info   { --toast-c-bright: var(--c-info);    --toast-c-dim: var(--c-info-dim);    }
+
+/* ICON BUBBLE */
+.toast-icon{
+  width: 36px; height: 36px;
+  border-radius: var(--tw-icon-radius);
+  background: linear-gradient(135deg, var(--toast-c-bright), var(--toast-c-dim));
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #0a0a0a;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -1px 0 rgba(0,0,0,.25),
+    0 0 var(--tw-icon-glow) color-mix(in srgb, var(--toast-c-bright) 35%, transparent),
+    0 2px 6px rgba(0,0,0,.4);
+  position: relative;
+}
+.toast-icon::before{
+  content:'';
+  position: absolute; inset: 0;
+  border-radius: var(--tw-icon-radius);
+  background: linear-gradient(180deg, rgba(255,255,255,.25), transparent 50%);
+  pointer-events: none;
+}
+.toast-icon svg{ position: relative; z-index: 1; }
+
+/* content */
+.toast-body{
+  display: flex; flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding-top: 1px;
+}
+.toast-title{
+  font-size: 14px; font-weight: 600;
+  color: var(--white);
+  letter-spacing: .1px;
+  line-height: 1.3;
+}
+.toast-msg{
+  font-size: 12.5px;
+  color: var(--dim);
+  line-height: 1.45;
+}
+.toast-msg strong{ color: var(--white); font-weight: 600; }
+
+.toast-actions{
+  display: flex; gap: 8px;
+  margin-top: 8px;
+}
+.toast-action{
+  padding: 5px 10px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border-2);
+  border-radius: 7px;
+  color: var(--dim);
+  font-family: var(--body);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .3px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.toast-action:hover{
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border-color: #3a3a3a;
+}
+.toast-action.primary{
+  background: var(--toast-c-bright);
+  border-color: var(--toast-c-bright);
+  color: #0a0a0a;
+}
+.toast-action.primary:hover{
+  filter: brightness(1.1);
+}
+
+/* close */
+.toast-close{
+  width: 24px; height: 24px;
+  border-radius: 7px;
+  background: transparent;
+  border: none;
+  color: var(--dimmer);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.toast-close:hover{
+  background: rgba(255,255,255,.06);
+  color: #fff;
+}
+
+/* progress bar (auto-dismiss) */
+.toast-progress{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--toast-c-bright), var(--toast-c-dim));
+  transform-origin: left;
+  animation: progress var(--toast-life, 5s) linear forwards;
+  opacity: .6;
+  display: var(--tw-progress);
+}
+
+/* ───── TOAST CONTAINER (live) ───── */
+.toast-region{
+  position: fixed;
+  top: 64px;
+  right: 20px;
+  z-index: 999;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: calc(100vw - 40px);
+}
+.toast-region .toast{
+  pointer-events: auto;
+}
+
+/* ───── ANATOMY DIAGRAM ───── */
+.anatomy{
+  margin-top: 64px;
+  padding: 32px;
+  background: var(--toast-bg-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.anatomy-eyebrow{
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--dimmer);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.anatomy-title{
+  font-size: 18px; font-weight: 600; color: #fff;
+  margin-bottom: 24px;
+}
+.anatomy-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 36px;
+}
+.anatomy-item{
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12px;
+  color: var(--dim);
+}
+.anatomy-swatch{
+  width: 14px; height: 14px; border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+/* type ref grid */
+.type-ref{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 32px 0 16px;
+}
+.type-card{
+  background: var(--toast-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.type-card::before{
+  content:'';
+  position: absolute; left:0; top:0; right:0; height: 2px;
+  background: var(--tc);
+  box-shadow: 0 0 10px var(--tc);
+}
+.type-card.success{ --tc: var(--c-success); }
+.type-card.error  { --tc: var(--c-error); }
+.type-card.warning{ --tc: var(--c-warning); }
+.type-card.info   { --tc: var(--c-info); }
+
+.type-card-swatch{
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--tc), color-mix(in srgb, var(--tc) 50%, #000));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 0 12px color-mix(in srgb, var(--tc) 35%, transparent);
+}
+.type-card-name{
+  font-size: 13px; font-weight: 600; color: #fff;
+}
+.type-card-hex{
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  color: var(--dimmer);
+  letter-spacing: .5px;
+}
+
+@media (max-width: 720px){
+  .type-ref{ grid-template-columns: repeat(2, 1fr); }
+  .anatomy-grid{ grid-template-columns: 1fr; }
+  .toast-region{ left: 16px; right: 16px; top: 60px; }
+  .toast{ width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-navbar">
+  <span class="logo">BOYCAM</span>
+  <span style="font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;">Toast Notification System</span>
+</div>
+
+<div class="demo-body">
+  <div class="demo-eyebrow">Component · Feedback</div>
+  <div class="demo-title">TOAST NOTIFICATIONS</div>
+  <div class="demo-sub">
+    Brushed-metal toasts with a glowing accent rail per type. Auto-dismiss with a progress bar, optional actions, manual close.
+    Trigger live toasts below or scan the static samples.
+  </div>
+
+  <!-- TRIGGER BUTTONS -->
+  <div class="trigger-grid">
+    <button class="trig trig-success" onclick="showToast('success')">
+      <span class="trig-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+      <span class="trig-label">Success<small>Payment, confirmation</small></span>
+    </button>
+    <button class="trig trig-error" onclick="showToast('error')">
+      <span class="trig-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </span>
+      <span class="trig-label">Error<small>Failure, blocked</small></span>
+    </button>
+    <button class="trig trig-warning" onclick="showToast('warning')">
+      <span class="trig-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
+      <span class="trig-label">Warning<small>Caution, attention</small></span>
+    </button>
+    <button class="trig trig-info" onclick="showToast('info')">
+      <span class="trig-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </span>
+      <span class="trig-label">Info<small>Tip, update</small></span>
+    </button>
+  </div>
+
+  <!-- TYPE COLOR REFERENCE -->
+  <div class="sample-eyebrow">Accent Palette</div>
+  <div class="type-ref">
+    <div class="type-card success">
+      <div class="type-card-swatch"></div>
+      <div>
+        <div class="type-card-name">success</div>
+        <div class="type-card-hex">#4ade80</div>
+      </div>
+    </div>
+    <div class="type-card error">
+      <div class="type-card-swatch"></div>
+      <div>
+        <div class="type-card-name">error</div>
+        <div class="type-card-hex">#ff5b5b</div>
+      </div>
+    </div>
+    <div class="type-card warning">
+      <div class="type-card-swatch"></div>
+      <div>
+        <div class="type-card-name">warning</div>
+        <div class="type-card-hex">#f5b73d</div>
+      </div>
+    </div>
+    <div class="type-card info">
+      <div class="type-card-swatch"></div>
+      <div>
+        <div class="type-card-name">info</div>
+        <div class="type-card-hex">#6ea8ff</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATIC SAMPLE STACK -->
+  <div class="sample-eyebrow" style="margin-top:48px;">Static Samples</div>
+  <div class="sample-stack">
+
+    <!-- SUCCESS -->
+    <div class="toast success" style="animation:none;">
+      <div class="toast-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="toast-body">
+        <div class="toast-title">Tip envoyé !</div>
+        <div class="toast-msg">Vous avez envoyé <strong>50 jetons</strong> à <strong>MarcusLive</strong>.</div>
+      </div>
+      <button class="toast-close" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- ERROR -->
+    <div class="toast error" style="animation:none;">
+      <div class="toast-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </div>
+      <div class="toast-body">
+        <div class="toast-title">Paiement refusé</div>
+        <div class="toast-msg">Votre carte se terminant par <strong>4242</strong> a été déclinée. Vérifiez les détails et réessayez.</div>
+        <div class="toast-actions">
+          <button class="toast-action primary">Réessayer</button>
+          <button class="toast-action">Changer la carte</button>
+        </div>
+      </div>
+      <button class="toast-close" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- WARNING -->
+    <div class="toast warning" style="animation:none;">
+      <div class="toast-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="toast-body">
+        <div class="toast-title">Solde de jetons bas</div>
+        <div class="toast-msg">Il vous reste <strong>12 jetons</strong>. Rechargez pour ne pas être déconnecté du show.</div>
+        <div class="toast-actions">
+          <button class="toast-action primary">Acheter des jetons</button>
+        </div>
+      </div>
+      <button class="toast-close" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- INFO -->
+    <div class="toast info" style="animation:none;">
+      <div class="toast-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      </div>
+      <div class="toast-body">
+        <div class="toast-title">Nouvelle fonctionnalité</div>
+        <div class="toast-msg">Le mode <strong>360° VR</strong> est disponible sur tous les shows compatibles. Activez-le depuis le player.</div>
+        <div class="toast-actions">
+          <button class="toast-action">En savoir plus</button>
+        </div>
+      </div>
+      <button class="toast-close" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ANATOMY -->
+  <div class="anatomy">
+    <div class="anatomy-eyebrow">Anatomy</div>
+    <div class="anatomy-title">What makes a BOYCAM toast</div>
+    <div class="anatomy-grid">
+      <div class="anatomy-item"><div class="anatomy-swatch" style="background:linear-gradient(180deg,#4ade80,#1f9d4d);box-shadow:0 0 8px #4ade80;"></div> Glowing 3px accent rail (type color)</div>
+      <div class="anatomy-item"><div class="anatomy-swatch" style="background:linear-gradient(135deg,#4ade80,#1f9d4d);"></div> Tinted icon bubble with inset highlight</div>
+      <div class="anatomy-item"><div class="anatomy-swatch" style="background:linear-gradient(180deg,#1a1a1a,#0a0a0a);"></div> Brushed-metal background w/ micro-texture</div>
+      <div class="anatomy-item"><div class="anatomy-swatch" style="background:linear-gradient(90deg,transparent,#fff,transparent);"></div> Periodic glint sweep</div>
+      <div class="anatomy-item"><div class="anatomy-swatch" style="background:#1e1e1e;border:1px solid #2a2a2a;"></div> Title + message + optional actions</div>
+      <div class="anatomy-item"><div class="anatomy-swatch" style="background:linear-gradient(90deg,#4ade80 70%,transparent);"></div> Auto-dismiss progress bar</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- LIVE TOAST REGION -->
+<div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ───── TWEAKS PANEL ───── -->
+<style>
+  .tweaks-panel{
+    position: fixed; right: 20px; bottom: 20px;
+    z-index: 9999;
+    width: 280px;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.06);
+    font-family: 'DM Sans', sans-serif;
+    color: #f0f0f0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .tweaks-panel.open{ display: flex; }
+  .tweaks-panel::before{
+    content:''; position:absolute; left:0; right:0; top:0; height:2px;
+    background-image: linear-gradient(90deg,#111,#555 35%,#999 55%,#555 75%,#111);
+  }
+  .tw-head{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid #1c1c1c;
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #aaa;
+    font-weight: 600;
+  }
+  .tw-head .tw-x{
+    width: 24px; height: 24px; border-radius: 7px;
+    background: transparent; border: 1px solid #1e1e1e;
+    color: #888; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tw-head .tw-x:hover{ background: rgba(255,255,255,.05); color: #fff; }
+  .tw-body{
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+    max-height: 60vh; overflow-y: auto;
+  }
+  .tw-section{
+    font-size: 9px; letter-spacing: 2.5px;
+    color: #555; text-transform: uppercase;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .tw-section:first-child{ margin-top: 0; }
+  .tw-row{
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .tw-row label{
+    font-size: 12px; color: #bbb; flex-shrink: 0;
+  }
+  .tw-row input[type="range"]{
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px; border-radius: 100px;
+    background: #1a1a1a;
+    outline: none;
+  }
+  .tw-row input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: linear-gradient(135deg,#ccc,#fff);
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,.5);
+  }
+  .tw-row .tw-val{
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 10px; color: #888;
+    min-width: 32px; text-align: right;
+  }
+  .tw-toggle-row{
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+  }
+  .tw-toggle{
+    width: 32px; height: 18px; border-radius: 100px;
+    background: #181818; border: 1px solid #2a2a2a;
+    position: relative; transition: all .2s; flex-shrink: 0;
+  }
+  .tw-toggle.on{
+    background: linear-gradient(90deg,#444,#888);
+    border-color: #666;
+  }
+  .tw-toggle-knob{
+    position: absolute; top: 2px; left: 2px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: linear-gradient(135deg,#666,#999);
+    transition: transform .2s;
+  }
+  .tw-toggle.on .tw-toggle-knob{
+    transform: translateX(14px);
+    background: linear-gradient(135deg,#ddd,#fff);
+  }
+  .tw-foot{
+    padding: 10px 14px;
+    border-top: 1px solid #1c1c1c;
+    display: flex; gap: 8px;
+  }
+  .tw-foot button{
+    flex: 1;
+    padding: 7px;
+    border-radius: 8px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid #1e1e1e;
+    color: #aaa;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .tw-foot button:hover{ background: rgba(255,255,255,.08); color: #fff; }
+  .tw-foot button.demo{
+    background: linear-gradient(180deg,#2a2a2a,#1a1a1a);
+    border-color: #444;
+    color: #fff;
+  }
+</style>
+
+<div class="tweaks-panel" id="tweaks-panel">
+  <div class="tw-head">
+    <span>Tweaks</span>
+    <button class="tw-x" id="tw-close" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="tw-body">
+    <div class="tw-section">Shape</div>
+    <div class="tw-row">
+      <label>Card radius</label>
+      <input type="range" min="0" max="20" step="1" data-key="radius">
+      <span class="tw-val" data-val="radius">8</span>
+    </div>
+    <div class="tw-row">
+      <label>Icon radius</label>
+      <input type="range" min="0" max="18" step="1" data-key="iconRadius">
+      <span class="tw-val" data-val="iconRadius">6</span>
+    </div>
+    <div class="tw-row">
+      <label>Rail width</label>
+      <input type="range" min="0" max="6" step="1" data-key="railWidth">
+      <span class="tw-val" data-val="railWidth">3</span>
+    </div>
+
+    <div class="tw-section">Glow</div>
+    <div class="tw-row">
+      <label>Rail glow</label>
+      <input type="range" min="0" max="30" step="1" data-key="railGlow">
+      <span class="tw-val" data-val="railGlow">6</span>
+    </div>
+    <div class="tw-row">
+      <label>Icon glow</label>
+      <input type="range" min="0" max="24" step="1" data-key="iconGlow">
+      <span class="tw-val" data-val="iconGlow">4</span>
+    </div>
+
+    <div class="tw-section">Effects</div>
+    <div class="tw-toggle-row" data-key="glint">
+      <label>Glint sweep</label>
+      <div class="tw-toggle"><div class="tw-toggle-knob"></div></div>
+    </div>
+    <div class="tw-toggle-row" data-key="progress">
+      <label>Progress bar</label>
+      <div class="tw-toggle"><div class="tw-toggle-knob"></div></div>
+    </div>
+  </div>
+  <div class="tw-foot">
+    <button onclick="['success','error','warning','info'].forEach((t,i)=>setTimeout(()=>showToast(t),i*220))" class="demo">Demo all 4</button>
+    <button onclick="resetTweaks()">Reset</button>
+  </div>
+</div>
+
+<script>
+  // ───── Tweak defaults (editable on disk via __edit_mode_set_keys) ─────
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "radius": 4,
+    "iconRadius": 4,
+    "railWidth": 2,
+    "railGlow": 0,
+    "iconGlow": 0,
+    "glint": false,
+    "progress": true
+  }/*EDITMODE-END*/;
+
+  const tweaks = Object.assign({}, TWEAK_DEFAULTS);
+
+  function applyTweaks(){
+    const r = document.documentElement.style;
+    r.setProperty('--tw-radius',       tweaks.radius + 'px');
+    r.setProperty('--tw-icon-radius',  tweaks.iconRadius + 'px');
+    r.setProperty('--tw-rail-width',   tweaks.railWidth + 'px');
+    r.setProperty('--tw-rail-glow',    tweaks.railGlow + 'px');
+    r.setProperty('--tw-icon-glow',    tweaks.iconGlow + 'px');
+    r.setProperty('--tw-glint',        tweaks.glint ? 'block' : 'none');
+    r.setProperty('--tw-progress',     tweaks.progress ? 'block' : 'none');
+    // sync UI
+    document.querySelectorAll('[data-key]').forEach(el => {
+      const k = el.dataset.key;
+      if (el.tagName === 'INPUT') el.value = tweaks[k];
+      else if (el.classList.contains('tw-toggle-row')) {
+        el.querySelector('.tw-toggle').classList.toggle('on', !!tweaks[k]);
+      }
+    });
+    document.querySelectorAll('[data-val]').forEach(el => {
+      el.textContent = tweaks[el.dataset.val];
+    });
+  }
+
+  function persist(){
+    window.parent.postMessage({type:'__edit_mode_set_keys', edits:{...tweaks}}, '*');
+  }
+
+  function resetTweaks(){
+    Object.assign(tweaks, TWEAK_DEFAULTS);
+    applyTweaks();
+    persist();
+  }
+
+  // sliders
+  document.querySelectorAll('.tw-row input[type="range"]').forEach(inp => {
+    inp.addEventListener('input', () => {
+      tweaks[inp.dataset.key] = +inp.value;
+      applyTweaks();
+      persist();
+    });
+  });
+  // toggles
+  document.querySelectorAll('.tw-toggle-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const k = row.dataset.key;
+      tweaks[k] = !tweaks[k];
+      applyTweaks();
+      persist();
+    });
+  });
+
+  // tweaks toolbar protocol — listen FIRST, then announce availability
+  const tweaksPanel = document.getElementById('tweaks-panel');
+  window.addEventListener('message', (e) => {
+    const t = e.data?.type;
+    if (t === '__activate_edit_mode')   tweaksPanel.classList.add('open');
+    if (t === '__deactivate_edit_mode') tweaksPanel.classList.remove('open');
+  });
+  document.getElementById('tw-close').addEventListener('click', () => {
+    tweaksPanel.classList.remove('open');
+    window.parent.postMessage({type:'__edit_mode_dismissed'}, '*');
+  });
+  window.parent.postMessage({type:'__edit_mode_available'}, '*');
+
+  applyTweaks();
+</script>
+
+<script>
+  const TOAST_DATA = {
+    success: {
+      title: 'Tip envoyé !',
+      msg: 'Vous avez envoyé <strong>50 jetons</strong> à <strong>MarcusLive</strong>.',
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>',
+      actions: []
+    },
+    error: {
+      title: 'Paiement refusé',
+      msg: 'Votre carte se terminant par <strong>4242</strong> a été déclinée.',
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      actions: [{label:'Réessayer',primary:true},{label:'Détails'}]
+    },
+    warning: {
+      title: 'Solde de jetons bas',
+      msg: 'Il vous reste <strong>12 jetons</strong>. Rechargez pour rester dans le show.',
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+      actions: [{label:'Acheter',primary:true}]
+    },
+    info: {
+      title: 'Nouvelle fonctionnalité',
+      msg: 'Le mode <strong>360° VR</strong> est disponible sur tous les shows compatibles.',
+      icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      actions: [{label:'Voir'}]
+    }
+  };
+
+  let toastSeq = 0;
+
+  function showToast(type, opts={}){
+    const data = Object.assign({}, TOAST_DATA[type], opts);
+    const life = opts.life ?? 5500;
+    const id = 'toast-' + (++toastSeq);
+    const region = document.getElementById('toast-region');
+
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.id = id;
+    el.style.setProperty('--toast-life', life + 'ms');
+
+    const actionsHTML = (data.actions || []).map(a =>
+      `<button class="toast-action ${a.primary ? 'primary' : ''}">${a.label}</button>`
+    ).join('');
+
+    el.innerHTML = `
+      <div class="toast-icon">${data.icon}</div>
+      <div class="toast-body">
+        <div class="toast-title">${data.title}</div>
+        <div class="toast-msg">${data.msg}</div>
+        ${actionsHTML ? `<div class="toast-actions">${actionsHTML}</div>` : ''}
+      </div>
+      <button class="toast-close" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="toast-progress"></div>
+    `;
+
+    // hover pauses progress
+    let timer = null;
+    let elapsed = 0;
+    let startedAt = Date.now();
+    let progressEl = el.querySelector('.toast-progress');
+
+    const dismiss = () => {
+      if (el.classList.contains('dismissing')) return;
+      el.classList.add('dismissing');
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    };
+
+    timer = setTimeout(dismiss, life);
+
+    el.addEventListener('mouseenter', () => {
+      if (timer){ clearTimeout(timer); timer = null; }
+      progressEl.style.animationPlayState = 'paused';
+    });
+    el.addEventListener('mouseleave', () => {
+      progressEl.style.animationPlayState = 'running';
+      const remaining = Math.max(1200, life - (Date.now() - startedAt));
+      timer = setTimeout(dismiss, remaining);
+    });
+
+    el.querySelector('.toast-close').addEventListener('click', dismiss);
+
+    region.prepend(el);
+    return id;
+  }
+
+  // demo: fire one of each on load so the page never looks empty
+  setTimeout(() => showToast('success'),    400);
+  setTimeout(() => showToast('info'),       900);
+</script>
+
+</body>
+</html>

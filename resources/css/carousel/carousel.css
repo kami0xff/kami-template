@@ -1,0 +1,75 @@
+/* Carousel — scroll-snap slide strip with arrows and dots.
+   (Astryx: Carousel, adapted.) Behavior is CarouselManager.ts. */
+.carousel {
+    position: relative;
+    min-width: 0;
+}
+
+.carousel-track {
+    display: flex;
+    gap: var(--carousel-gap);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-track > * {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+}
+
+/* One slide per view by default; use inline width on slides to override */
+.carousel--full .carousel-track > * {
+    width: 100%;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: var(--carousel-arrow-size);
+    height: var(--carousel-arrow-size);
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    background: var(--carousel-arrow-bg);
+    color: var(--carousel-arrow-fg);
+    cursor: pointer;
+}
+
+.carousel-arrow--prev { left: var(--space2); }
+.carousel-arrow--next { right: var(--space2); }
+
+.carousel-arrow svg {
+    width: 13px;
+    height: 13px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space2);
+    margin-top: var(--space3);
+}
+
+.carousel-dot {
+    width: var(--carousel-dot-size);
+    height: var(--carousel-dot-size);
+    border: 0;
+    border-radius: 50%;
+    background: var(--carousel-dot-bg);
+    cursor: pointer;
+    padding: 0;
+    transition: background var(--duration1);
+}
+
+.carousel-dot--active {
+    background: var(--carousel-dot-bg-active);
+}

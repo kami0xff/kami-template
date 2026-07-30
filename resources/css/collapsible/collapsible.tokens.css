@@ -1,0 +1,25 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --collapsible-bg: transparent;
+    --collapsible-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --collapsible-summary-fg: var(--text-primary);
+    --collapsible-summary-bg-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.06));
+    --collapsible-content-fg: var(--text-muted);
+    --collapsible-chevron-fg: var(--text-faint);
+
+    /* Panel variant (matches dropdown / chat settings surface) */
+    --collapsible-panel-bg: var(--panel-bg, #2a2a2a);
+    --collapsible-panel-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+
+    /* ===== B) Layout ================================================= */
+    --collapsible-radius: 10px;
+    --collapsible-padding: 12px 14px;
+    --collapsible-content-padding: 0 14px 14px;
+    --collapsible-font-size: 14px;
+    --collapsible-chevron-size: 16px;
+    --collapsible-gap: 2px;
+
+    /* ===== C) Effects ================================================ */
+    --collapsible-transition: 0.22s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+    --collapsible-chevron-transition: transform 0.22s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}

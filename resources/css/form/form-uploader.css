@@ -1,0 +1,373 @@
+/*
+    Media uploader — YouTube-style dropzone + upload job queue.
+
+    Anatomy:
+        .form-uploader                 root [data-uploader]
+            .form-uploader-drop        drag target [data-uploader-drop]
+                input[type=file]       [data-uploader-input]
+                .form-uploader-drop-inner
+            .form-uploader-jobs        queue [data-uploader-jobs]
+                .form-uploader-job     one file (status via [data-status])
+                    .form-uploader-thumb
+                    .form-uploader-body
+                        head (name · size · actions)
+                        .form-uploader-progress
+                        .form-uploader-status
+*/
+
+.form-uploader {
+    display: flex;
+    flex-direction: column;
+    gap: var(--uploader-jobs-gap);
+    width: 100%;
+}
+
+/* ── Dropzone ─────────────────────────────────────────────────────── */
+.form-uploader-drop {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--uploader-drop-min-height);
+    padding: var(--uploader-drop-padding);
+    border: 2px dashed var(--uploader-drop-border);
+    border-radius: var(--uploader-drop-radius);
+    background: var(--uploader-drop-bg);
+    cursor: pointer;
+    transition:
+        border-color var(--form-input-transition),
+        background var(--form-input-transition);
+}
+
+.form-uploader-drop:hover {
+    border-color: var(--uploader-drop-border-hover);
+    background: var(--uploader-drop-bg-hover);
+}
+
+.form-uploader-drop[data-dragover],
+.form-uploader-drop:focus-within {
+    border-color: var(--uploader-drop-border-active);
+    background: var(--uploader-drop-bg-active);
+}
+
+.form-uploader-drop[data-dragover] .form-uploader-drop-icon {
+    color: var(--uploader-icon-active);
+    transform: translateY(-2px);
+}
+
+.form-uploader-drop-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space3);
+    text-align: center;
+    pointer-events: none;
+}
+
+.form-uploader-drop-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--white-alpha-080);
+    color: var(--uploader-icon-fg);
+    transition:
+        color var(--form-input-transition),
+        transform var(--duration-fast) var(--ease-standard);
+}
+
+.form-uploader-drop-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.form-uploader-drop-title {
+    margin: 0;
+    font-size: var(--uploader-title-size);
+    font-weight: var(--font-bold4);
+    color: var(--uploader-title-fg);
+}
+
+.form-uploader-drop-hint {
+    margin: 0;
+    max-width: 36ch;
+    font-size: var(--uploader-hint-size);
+    color: var(--uploader-hint-fg);
+    line-height: 1.45;
+}
+
+.form-uploader-browse {
+    pointer-events: auto;
+    margin-top: var(--space1);
+}
+
+/* Compact dropzone once jobs exist */
+.form-uploader[data-has-jobs] .form-uploader-drop {
+    min-height: 0;
+    padding: var(--space4);
+}
+
+.form-uploader[data-has-jobs] .form-uploader-drop-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.form-uploader[data-has-jobs] .form-uploader-drop-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.form-uploader[data-has-jobs] .form-uploader-drop-hint {
+    display: none;
+}
+
+/* ── Job queue ────────────────────────────────────────────────────── */
+.form-uploader-jobs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--uploader-jobs-gap);
+}
+
+.form-uploader-jobs:empty {
+    display: none;
+}
+
+.form-uploader-job {
+    display: grid;
+    grid-template-columns: var(--uploader-thumb-size) 1fr;
+    gap: var(--space3);
+    align-items: center;
+    padding: var(--uploader-job-padding);
+    border: 1px solid var(--uploader-job-border);
+    border-radius: var(--uploader-job-radius);
+    background: var(--uploader-job-bg);
+    animation: form-uploader-in var(--duration-medium) var(--ease-standard);
+}
+
+@keyframes form-uploader-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.form-uploader-thumb {
+    position: relative;
+    width: var(--uploader-thumb-size);
+    height: var(--uploader-thumb-size);
+    border-radius: var(--uploader-thumb-radius);
+    background: var(--uploader-thumb-bg);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.form-uploader-thumb img,
+.form-uploader-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.form-uploader-thumb-icon {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--text-muted);
+}
+
+.form-uploader-thumb-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.form-uploader-thumb-badge {
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 9px;
+    font-weight: var(--font-bold5);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.form-uploader-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space2);
+}
+
+.form-uploader-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space2);
+    min-width: 0;
+}
+
+.form-uploader-name {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+    color: var(--uploader-name-fg);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-uploader-size {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--uploader-meta-fg);
+}
+
+.form-uploader-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.form-uploader-action {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+        color var(--form-input-transition),
+        background var(--form-input-transition);
+}
+
+.form-uploader-action:hover {
+    color: var(--text-primary);
+    background: var(--white6);
+}
+
+.form-uploader-action svg {
+    width: 14px;
+    height: 14px;
+}
+
+.form-uploader-action--danger:hover {
+    color: var(--color-danger);
+}
+
+.form-uploader-action[hidden] {
+    display: none !important;
+}
+
+.form-uploader-progress {
+    height: var(--uploader-progress-height);
+    border-radius: var(--radius-pill);
+    background: var(--uploader-progress-bg);
+    overflow: hidden;
+}
+
+.form-uploader-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: var(--uploader-progress-fill);
+    transition: width 120ms linear;
+}
+
+.form-uploader-job[data-status='done'] .form-uploader-progress-fill {
+    background: var(--uploader-status-done);
+}
+
+.form-uploader-job[data-status='error'] .form-uploader-progress-fill {
+    background: var(--uploader-status-error);
+}
+
+.form-uploader-job[data-status='done'] .form-uploader-progress,
+.form-uploader-job[data-status='error'] .form-uploader-progress {
+    opacity: 0.55;
+}
+
+.form-uploader-status {
+    font-size: 11px;
+    color: var(--uploader-status-fg);
+}
+
+.form-uploader-job[data-status='uploading'] .form-uploader-status,
+.form-uploader-job[data-status='processing'] .form-uploader-status {
+    color: var(--uploader-status-uploading);
+}
+
+.form-uploader-job[data-status='done'] .form-uploader-status {
+    color: var(--uploader-status-done);
+}
+
+.form-uploader-job[data-status='error'] .form-uploader-status {
+    color: var(--uploader-status-error);
+}
+
+.form-uploader-job[data-status='queued'] .form-uploader-progress-fill {
+    width: 0% !important;
+}
+
+/* Indeterminate shimmer while "processing" after bytes land */
+.form-uploader-job[data-status='processing'] .form-uploader-progress-fill {
+    width: 100% !important;
+    background: linear-gradient(
+        90deg,
+        var(--uploader-progress-fill) 0%,
+        color-mix(in srgb, var(--uploader-progress-fill) 40%, white) 50%,
+        var(--uploader-progress-fill) 100%
+    );
+    background-size: 200% 100%;
+    animation: form-uploader-shimmer 1.1s linear infinite;
+}
+
+@keyframes form-uploader-shimmer {
+    to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-uploader-job {
+        animation: none;
+    }
+
+    .form-uploader-job[data-status='processing'] .form-uploader-progress-fill {
+        animation: none;
+    }
+
+    .form-uploader-drop,
+    .form-uploader-drop-icon {
+        transition: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .form-uploader-job {
+        grid-template-columns: 56px 1fr;
+    }
+
+    .form-uploader-thumb {
+        width: 56px;
+        height: 56px;
+    }
+}

@@ -1,0 +1,453 @@
+/*so what is missing right now the highlight corner button with parameters to display the QR code*/
+/*i guess it should just be contnet int he slot then ?*/
+/*then i don't understand how the font size on stripchat in teh footer is 14 px but the text looks super small */
+/*i need to align the texxt and the link columns
+i need to make the hover state work on the column links */
+/*then we need to fix the RTA labels row probably we should also do something about the image optimization there*/
+/*then i need to make the top divider highlight and make it a parameter in the footer.blade.php component or should it be composable ?*/
+/*composition might give the most freedom but more complex and maybe overkill ??*/
+/*TODO also mobile layout */
+/**/
+
+.footer {
+    position: relative;
+    background: var(--footer-bg);
+    padding: var(--footer-padding-top) var(--footer-padding-right) var(--footer-padding-bottom) var(--footer-padding-left);
+    overflow: hidden;
+}
+
+.footer--left {
+    position: relative;
+    z-index: 1;
+    padding: var(--space5) var(--space2);
+    display: grid;
+    gap: var(--space5);
+    align-content: start;
+}
+
+.footer--left-text {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--footer-muted);
+    line-height: 1.5;
+}
+
+.footer--app-download {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space3);
+    align-items: center;
+}
+
+.footer--app-download-qr {
+    display: block;
+    width: 88px;
+    height: 88px;
+    padding: var(--space1);
+    background: var(--white1);
+    border-radius: var(--radius1);
+}
+
+.footer--app-download-title {
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+    color: var(--footer-link5);
+    margin-bottom: var(--space1);
+    letter-spacing: 0.02em;
+}
+
+.footer--app-download-text {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--footer-muted);
+    line-height: 1.4;
+}
+
+.footer--column-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.2fr repeat(4, minmax(0, 1fr));
+    grid-column-gap: var(--footer-gap-columns);
+    align-items: start;
+}
+
+.footer--column-list {
+    /*justify-self: start;*/
+    /*align-self: start;*/
+    padding: var(--space5) var(--space2);
+    position: relative;
+    list-style: none;
+    display: grid;
+    grid-row-gap: var(--footer-gap-rows);
+    align-content: start;
+    min-height: var(--footer-column-min-height);
+}
+
+
+.footer--column-list-header {
+    padding: var(--space1) var(--space2);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+    color: var(--footer-link5);
+    margin-bottom: var(--space1);
+    letter-spacing: 0.02em;
+}
+
+
+
+/* The upward glow — wide and flat, originating from the bottom edge */
+.footer--column-list::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    /* anchored AT the bottom edge, not below it */
+    left: var(--footer-column-glow-sides);
+    right: var(--footer-column-glow-sides);
+    height: var(--footer-column-glow-height);
+    background: var(--footer-column-glow);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* The bright strip itself — the lamp */
+.footer--column-list::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: var(--footer-column-line-inset);
+    right: var(--footer-column-line-inset);
+    height: 1px;
+    background: var(--footer-divider);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/*TODO should i keep LI in a list or should i just have A tags within a div*/
+.footer--column-list a {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space1) var(--space2);
+    border-radius: var(--radius2);
+    color: var(--footer-link1);
+    cursor: pointer;
+}
+
+.footer--column-list a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--interactive-transition);
+}
+
+.footer--column-list a:hover,
+.footer--column-list a:focus-visible {
+    color: var(--footer-link5);
+}
+
+.footer--column-list a:nth-last-child(4) {
+    color: var(--footer-link2);
+}
+
+.footer--column-list a:nth-last-child(3) {
+    color: var(--footer-link3);
+}
+
+.footer--column-list a:nth-last-child(2) {
+    color: var(--footer-link4);
+}
+
+.footer--column-list a:nth-last-child(1) {
+    color: var(--footer-link5);
+}
+
+/*TODO make all of these effects optional in the blade template no highlight top divider no list hightlits and shadows*/
+
+.footer-background-text-art {
+    display: block;
+    position: absolute;
+    bottom: var(--footer-text-art-bottom);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(120px, 18vw, 320px);
+    font-weight: var(--footer-text-art-weight);
+    letter-spacing: var(--footer-text-art-tracking);
+    line-height: var(--footer-text-art-leading);
+    white-space: nowrap;
+    background: var(--footer-text-art-fill);
+
+    /* clip the gradient to the text shape */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+
+    /* subtle blur for atmosphere */
+
+    /* sit behind everything */
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+
+.footer--divider-flat {
+    position: relative;
+    height: 1px;
+    background: var(--footer-divider-solid);
+    z-index: 1;
+}
+
+.footer--divider-top,
+.footer-divider-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--footer-divider);
+    z-index: 1;
+}
+
+.footer--divider-gradient {
+    position: relative;
+    height: 1px;
+    z-index: 1;
+    background: var(--footer-divider);
+}
+
+.footer--advocacy {
+    color: var(--footer-muted);
+    position: relative;
+    justify-content: center;
+    padding: 0;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: center;
+    gap: var(--space6);
+    z-index: 1;
+}
+
+.footer--advocacy-badge img {
+    height: 24px;
+    width: auto;
+    display: block;
+}
+
+.footer--advocacy-learn-more {
+    margin-left: auto;
+    font-size: var(--font-base);
+    white-space: nowrap;
+}
+
+.footer--bottom .footer--advocacy {
+    justify-self: start;
+}
+
+.footer--bottom {
+    color: var(--footer-muted);
+    padding-top: var(--space3);
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    row-gap: var(--space2);
+    z-index: 1;
+}
+
+.footer--bottom>.footer--divider-flat {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+.footer--legal-details {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-auto-columns: max-content;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+}
+
+
+.footer--bottom-socials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    justify-self: start;
+    gap: var(--footer-social-gap);
+}
+
+.footer--column-list .footer--bottom-socials {
+    padding: var(--space1) var(--space2);
+}
+
+.footer--social-link {
+    width: var(--footer-social-size);
+    height: var(--footer-social-size);
+    padding: 0;
+    border-radius: var(--footer-social-radius);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--footer-social-fg);
+    background: var(--footer-social-bg);
+    border: 1px solid var(--footer-social-border);
+    transition: var(--footer-social-transition);
+}
+
+.footer--social-link:hover,
+.footer--social-link:focus-visible {
+    color: var(--footer-social-fg-hover);
+    background: var(--footer-social-bg-hover);
+}
+
+.footer--social-icon {
+    width: var(--footer-social-icon-size);
+    height: var(--footer-social-icon-size);
+    fill: currentColor;
+    display: block;
+}
+
+.footer-chat-support-button {
+    background: var(--white3);
+    border-radius: var(--radius2);
+    padding: var(--space1) var(--space2);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+    color: var(--footer-link5);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: var(--interactive-transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+    .footer--column-layout {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1465px) {
+    .footer--column-layout {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        row-gap: var(--space3);
+    }
+
+    .footer--left {
+        order: 2;
+        grid-column: 1 / -1;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--space4);
+        padding-block: var(--space4);
+    }
+
+    .footer--column-list {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer--column-layout {
+        grid-template-columns: 1fr 1fr;
+        column-gap: var(--space3);
+        row-gap: var(--space2);
+    }
+
+    .footer--left {
+        order: 2;
+        grid-column: 1 / -1;
+        padding-block: var(--space4);
+    }
+
+    .footer--column-list {
+        order: 1;
+        padding: var(--space4) var(--space1);
+        grid-row-gap: 0.25rem;
+    }
+
+    .footer--column-list-header {
+        margin-bottom: 0;
+    }
+
+    .footer--app-download {
+        justify-content: center;
+    }
+
+    .footer--bottom {
+        grid-auto-flow: row;
+        grid-auto-columns: initial;
+        grid-template-columns: 1fr;
+        justify-content: initial;
+        justify-items: start;
+        text-align: left;
+        gap: var(--space3);
+    }
+
+    .footer--legal-details {
+        display: grid;
+        gap: var(--space2);
+        order: 4;
+    }
+
+    .footer--bottom .footer--advocacy {
+        order: 2;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        justify-items: start;
+        gap: var(--space2);
+    }
+
+    .footer--advocacy-learn-more {
+        margin-left: 0;
+    }
+
+    .footer--bottom>.footer--divider-flat {
+        order: 3;
+    }
+}
+
+@media (max-width: 1460px) {
+    .footer--bottom {
+        grid-auto-flow: row;
+        grid-auto-columns: initial;
+        grid-template-columns: 1fr;
+        justify-content: initial;
+        justify-items: start;
+        text-align: left;
+        gap: var(--space3);
+    }
+
+    .footer--bottom .footer--advocacy {
+        order: 1;
+        justify-self: start;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        justify-items: start;
+        gap: var(--space2);
+    }
+
+    .footer--advocacy-learn-more {
+        margin-left: 0;
+    }
+
+    .footer--bottom>.footer--divider-flat {
+        order: 2;
+    }
+
+    .footer--legal-details {
+        order: 3;
+        grid-auto-flow: row;
+        grid-auto-columns: initial;
+        grid-template-columns: 1fr;
+        justify-content: start;
+        justify-items: start;
+        gap: var(--space2);
+    }
+}

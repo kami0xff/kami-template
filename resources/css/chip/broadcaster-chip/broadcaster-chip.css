@@ -1,0 +1,35 @@
+
+.broadcaster-chip{
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--broadcaster-chip-gap);
+    border-radius: var(--broadcaster-chip-radius);
+    border: 1px solid var(--broadcaster-chip-border);
+    background: var(--broadcaster-chip-bg);
+    box-shadow:var(--broadcaster-chip-shadow);
+    padding:var(--broadcaster-chip-padding);
+    cursor: pointer;
+    transition:var(--broadcaster-chip-transition);white-space:nowrap
+}
+
+.broadcaster-chip:hover{
+    background: var(--broadcaster-chip-bg-hover);
+    border-color: var(--broadcaster-chip-border-hover);
+}
+
+.broadcaster-chip-name {
+    font-size: var(--broadcaster-chip-name-size);
+    font-weight: var(--font-bold5);
+    color: var(--broadcaster-chip-name-fg);
+}
+.broadcaster-chip-watching{
+    font-size:var(--broadcaster-chip-meta-size); color:var(--broadcaster-chip-meta-fg); padding-left:2px
+}
+
+.broadcaster-chip-avatar {
+    width: var(--broadcaster-chip-avatar-size); height: var(--broadcaster-chip-avatar-size);
+    display: flex; justify-content: center; align-items: center;
+    overflow:hidden;flex-shrink:0;
+    background:var(--broadcaster-chip-avatar-bg);
+    border: 1px solid var(--broadcaster-chip-border);
+    border-radius: var(--broadcaster-chip-radius);
+    padding: var(--broadcaster-chip-avatar-padding);
+}

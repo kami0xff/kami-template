@@ -1,0 +1,18 @@
+/*
+    Tip menu — tip action catalog card.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --tip-menu-bg: var(--gray1);
+    --tip-menu-fg: var(--text-primary);
+    --tip-menu-muted: var(--text-muted);
+    --tip-menu-border: var(--border-default);
+    --tip-menu-accent: var(--color-accent);
+
+    /* ===== B) Layout ================================================= */
+    --tip-menu-radius: 14px;
+    --tip-menu-gap: 12px;
+
+    /* ===== C) Effects ================================================ */
+    --tip-menu-shadow: var(--elevation2, 0 8px 24px rgba(0, 0, 0, 0.28));
+}

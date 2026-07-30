@@ -1,0 +1,30 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --pill-bg: var(--gray10);
+    --pill-fg: var(--text-primary);
+    --pill-border: var(--gray10);
+    --pill-bg-hover: var(--silver1);
+    --pill-bg-active: var(--silver1);
+    --pill-border-active: var(--silver3);
+    --pill-fg-outline: var(--text-muted);
+    --pill-border-outline: var(--border-inverse-muted);
+    --pill-bg-accent: var(--color-primary);
+    --pill-fg-accent: var(--white1);
+    --pill-bg-money: var(--color-money);
+    --pill-fg-money: var(--main2-deep);
+    --pill-count-fg: var(--text-muted);
+    --pill-dot-live: var(--color-live);
+
+    /* ===== B) Layout ================================================= */
+    --pill-height: 32px;
+    --pill-height-sm: 26px;
+    --pill-padding-inline: 14px;
+    --pill-gap: 6px;
+    --pill-font-size: 13px;
+    --pill-font-weight: var(--font-normal);
+    --pill-radius: var(--radius-pill);
+    --pill-dot-size: 7px;
+
+    /* ===== C) Effects ================================================ */
+    --pill-transition: background var(--duration2), border-color var(--duration2);
+}

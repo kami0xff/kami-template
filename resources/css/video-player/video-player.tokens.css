@@ -1,0 +1,35 @@
+/*
+    Video player — floating dark chrome shared with panels / docks.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --vp-bg: #0b0b0b;
+    --vp-surface: #222222;
+    --vp-border: rgba(255, 255, 255, 0.1);
+    --vp-fg: #ffffff;
+    --vp-fg-muted: rgba(255, 255, 255, 0.55);
+    --vp-accent: var(--color-accent, #e44545);
+    --vp-control-bg: rgba(255, 255, 255, 0.08);
+    --vp-control-bg-hover: rgba(255, 255, 255, 0.14);
+    --vp-track: rgba(255, 255, 255, 0.18);
+    --vp-track-fill: var(--vp-accent);
+    --vp-track-buffer: rgba(255, 255, 255, 0.28);
+
+    /* ===== B) Layout ================================================= */
+    --vp-radius: 18px;
+    --vp-controls-pad: 10px 12px 12px;
+    --vp-controls-gap: 8px;
+    --vp-btn-size: 34px;
+    --vp-btn-size-lg: 56px;
+    --vp-font-size: 12px;
+
+    /* ===== C) Effects ================================================ */
+    --vp-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+    --vp-scrim: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.78) 0%,
+        rgba(0, 0, 0, 0.35) 42%,
+        transparent 78%
+    );
+    --vp-transition: opacity 0.18s ease, transform 0.18s ease, background 0.14s ease;
+}

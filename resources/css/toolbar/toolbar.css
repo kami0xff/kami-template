@@ -1,0 +1,18 @@
+/* Toolbar — grouped action bar. (Astryx: Toolbar, adapted.)
+   Fill with .btn-icon buttons; separate groups with .toolbar-separator. */
+.toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--toolbar-gap);
+    padding: var(--toolbar-padding);
+    border: 1px solid var(--toolbar-border);
+    border-radius: var(--toolbar-radius);
+    background: var(--toolbar-bg);
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 20px;
+    margin: 0 var(--space1);
+    background: var(--toolbar-separator);
+}

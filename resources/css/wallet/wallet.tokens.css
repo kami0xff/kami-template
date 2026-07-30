@@ -1,0 +1,32 @@
+/*
+    Wallet — balance, packs, transaction history.
+    Surface language matches panels / buy-tokens.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --wallet-bg: var(--panel-bg, #2a2a2a);
+    --wallet-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --wallet-fg: #f2f2f2;
+    --wallet-muted: rgba(255, 255, 255, 0.55);
+    --wallet-faint: rgba(255, 255, 255, 0.4);
+    --wallet-hover: rgba(255, 255, 255, 0.06);
+    --wallet-credit: #6ee7a8;
+    --wallet-debit: #f87171;
+    --wallet-coin-fill: linear-gradient(135deg, #c8c8c8, #ffffff, #9a9a9a);
+
+    /* ===== B) Layout ================================================= */
+    --wallet-radius: 12px;
+    --wallet-pad: 18px;
+    --wallet-gap: 14px;
+    --wallet-coin-size: 28px;
+    --wallet-balance-size: clamp(1.75rem, 4vw, 2.4rem);
+    --wallet-pack-radius: 12px;
+    --wallet-tx-pad: 12px 4px;
+
+    /* ===== C) Effects ================================================ */
+    --wallet-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    --wallet-texture:
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.025) 1px, rgba(255, 255, 255, 0.025) 2px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0.12) 100%);
+    --wallet-transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}

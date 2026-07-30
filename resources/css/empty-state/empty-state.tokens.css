@@ -1,0 +1,12 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --empty-state-icon-fg: var(--text-faint);
+    --empty-state-title-fg: var(--text-primary);
+    --empty-state-text-fg: var(--text-muted);
+
+    /* ===== B) Layout ================================================= */
+    --empty-state-padding: var(--space8) var(--space5);
+    --empty-state-icon-size: 44px;
+    --empty-state-gap: var(--space2);
+    --empty-state-max-width: 360px;
+}

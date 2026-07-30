@@ -1,0 +1,20 @@
+/*
+    Gaycam app stylesheet manifest.
+
+    Keep this file hand-authored. It is the import map for the Gaycam app:
+    the shared base system, then the theme, then Gaycam-specific
+    composition skins and page styles — each assigned to its cascade layer.
+*/
+
+@import '../app.css';
+
+/* Theme — gaycam keeps the vivid chrome look */
+@import '../themes/glow.css' layer(themes);
+
+/* Gaycam composition skins */
+@import '../sidebar/compositions/gaycam/sidebar.tokens.css' layer(tokens);
+@import '../sidebar/compositions/gaycam/sidebar.css' layer(compositions);
+@import '../form/compositions/gaycam/auth.css' layer(compositions);
+
+/* Page styles */
+@import '../pages/about.css' layer(pages);

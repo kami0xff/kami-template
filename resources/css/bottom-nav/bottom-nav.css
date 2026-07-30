@@ -1,0 +1,123 @@
+/* Mobile bottom navigation — floating pill dock */
+
+.bottom-nav {
+    position: fixed;
+    left: var(--bottom-nav-inset-x);
+    right: var(--bottom-nav-inset-x);
+    bottom: calc(var(--bottom-nav-inset-bottom) + env(safe-area-inset-bottom));
+    z-index: var(--bottom-nav-z);
+    display: none;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 2px;
+    padding: var(--bottom-nav-pad-y) var(--bottom-nav-pad-x);
+    background: color-mix(in srgb, var(--bottom-nav-bg) 92%, transparent);
+    border: 0;
+    border-radius: var(--bottom-nav-radius);
+    box-shadow: var(--bottom-nav-shadow);
+    backdrop-filter: blur(var(--bottom-nav-blur));
+    -webkit-backdrop-filter: blur(var(--bottom-nav-blur));
+}
+
+@media (max-width: 1020px) {
+    .bottom-nav {
+        display: flex;
+    }
+
+    body:has(.bottom-nav) .main-content {
+        padding-bottom: calc(84px + env(safe-area-inset-bottom));
+    }
+
+    /* Keep chat dock clear of the floating pill */
+    body:has(.bottom-nav) .chat-dock {
+        bottom: calc(72px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Design-page / embedded preview */
+.bottom-nav[style*='position:relative'],
+.bottom-nav.is-preview {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    display: flex;
+    width: min(100%, 420px);
+    margin-inline: auto;
+}
+
+.bottom-nav-item {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bottom-nav-item-gap);
+    min-width: 0;
+    max-width: 88px;
+    margin-inline: auto;
+    padding: 6px 4px;
+    color: var(--bottom-nav-fg);
+    text-decoration: none;
+    font-size: var(--bottom-nav-label-size);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+    transition: var(--bottom-nav-transition);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item:hover {
+    color: color-mix(in srgb, var(--bottom-nav-fg-active) 78%, var(--bottom-nav-fg));
+}
+
+.bottom-nav-item.is-active {
+    color: var(--bottom-nav-fg-active);
+}
+
+.bottom-nav-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--bottom-nav-icon);
+    height: var(--bottom-nav-icon);
+}
+
+.bottom-nav-icon svg {
+    width: var(--bottom-nav-icon);
+    height: var(--bottom-nav-icon);
+}
+
+/* Filled feel on active (stroke icons get heavier weight) */
+.bottom-nav-item.is-active .bottom-nav-icon svg {
+    stroke-width: 2.15;
+}
+
+.bottom-nav-icon .count-badge {
+    position: absolute;
+    top: -5px;
+    right: -9px;
+    min-width: 8px;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    background: var(--bottom-nav-badge);
+    border: 1.5px solid var(--bottom-nav-bg);
+    box-shadow: none;
+}
+
+.bottom-nav-icon .count-badge:not(.count-badge--dot) {
+    width: auto;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 9px;
+}
+
+.bottom-nav-label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

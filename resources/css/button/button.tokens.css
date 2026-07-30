@@ -1,0 +1,43 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --btn-fg: var(--white1);
+    --btn-bg-primary: var(--color-primary);
+    --btn-bg-danger: rgba(239, 68, 68, 0.1);
+    --btn-fg-danger: var(--color-danger);
+    --btn-bg-success: rgba(34, 197, 94, 0.1);
+    --btn-fg-success: var(--color-success);
+    --btn-bg-warning: rgba(245, 158, 11, 0.1);
+    --btn-fg-warning: var(--color-warning);
+    --btn-bg-muted: transparent;
+    --btn-fg-muted: var(--text-muted);
+    --btn-bg-back: var(--border-subtle);
+    --btn-fg-back: var(--text-primary);
+    --btn-bg-money: var(--color-money);
+    --btn-fg-money: var(--main2-deep);
+    /* Icon button (square, icon-only) */
+    --btn-icon-size: 36px;
+    --btn-icon-size-sm: 28px;
+    --btn-icon-size-lg: 44px;
+
+    --btn-bg-light: var(--silver11);
+    --btn-fg-light: var(--gray10);
+
+    /* ===== B) Layout ================================================= */
+    --btn-gap: 0.3rem;
+    --btn-radius: var(--radius-pill);
+    --btn-font-size: 0.8rem;
+    --btn-font-weight: var(--font-bold5);
+    --btn-padding: 0.45rem 0.85rem;
+    --btn-padding-xs: 0.2rem 0.45rem;
+    --btn-padding-sm: 0.3rem 0.6rem;
+    --btn-padding-lg: 0.55rem 1.1rem;
+    --btn-padding-xl: 0.7rem 1.4rem;
+    --btn-font-size-xs: 0.7rem;
+    --btn-font-size-sm: 0.75rem;
+    --btn-font-size-lg: 0.9rem;
+    --btn-font-size-xl: 1rem;
+
+    /* ===== C) Effects ================================================ */
+    --btn-disabled-opacity: 0.5;
+    --btn-spinner-duration: 0.6s;
+}

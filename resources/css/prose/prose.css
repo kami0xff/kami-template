@@ -1,0 +1,100 @@
+/* Prose — typography bundle for long-form content (blog, help, terms).
+   (Astryx: Markdown / Blockquote / CodeBlock, adapted.)
+   Wrap rendered article HTML in <div class="prose">. */
+.prose {
+    max-width: var(--prose-max-width);
+    color: var(--prose-fg);
+    font-size: var(--prose-font-size);
+    line-height: var(--prose-line-height);
+}
+
+.prose > * + * {
+    margin-top: var(--prose-block-gap);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+    color: var(--prose-heading-fg);
+    line-height: 1.25;
+    margin-top: 1.6em;
+}
+
+.prose h1 { font-size: var(--text-heading); }
+.prose h2 { font-size: var(--text-subheading); }
+.prose h3 { font-size: var(--text-body); font-weight: var(--font-bold4); }
+.prose h4 { font-size: var(--text-lead); font-weight: var(--font-bold4); }
+
+.prose a {
+    color: var(--prose-link-fg);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.prose strong {
+    color: var(--prose-heading-fg);
+}
+
+.prose ul,
+.prose ol {
+    padding-left: 1.4em;
+    display: grid;
+    gap: 0.4em;
+}
+
+.prose blockquote {
+    padding-left: var(--space4);
+    border-left: 3px solid var(--prose-quote-border);
+    color: var(--text-primary);
+    font-style: italic;
+}
+
+.prose code {
+    padding: 2px 5px;
+    border-radius: var(--radius1);
+    background: var(--prose-code-bg);
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.88em;
+}
+
+.prose pre {
+    padding: var(--space4);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius2);
+    background: var(--surface2);
+    overflow-x: auto;
+}
+
+.prose pre code {
+    padding: 0;
+    background: none;
+}
+
+.prose hr {
+    border: 0;
+    height: 1px;
+    background: var(--border-default);
+}
+
+.prose img {
+    border-radius: var(--radius2);
+    max-width: 100%;
+}
+
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-lead);
+}
+
+.prose th,
+.prose td {
+    padding: var(--space2) var(--space3);
+    border-bottom: 1px solid var(--border-default);
+    text-align: left;
+}
+
+.prose th {
+    color: var(--prose-heading-fg);
+}

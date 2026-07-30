@@ -1,0 +1,56 @@
+:root {
+    /* Layout */
+    --banner-z-index: var(--z-banner, 1100);
+    --banner-padding-y: 10px;
+    --banner-padding-x: var(--space4);
+    --banner-gap: var(--space3);
+    --banner-root-gap: 0px;
+
+    /* Surface */
+    --banner-bg: var(--gray2);
+    --banner-border: var(--gray7);
+
+    /* Typography */
+    --banner-font-size: 13px;
+    --banner-font-weight: var(--font-bold4);
+    --banner-color: var(--white3);
+
+    /* Icon */
+    --banner-icon-size: 18px;
+
+    /* Badge */
+    --banner-badge-bg: rgba(255, 255, 255, 0.12);
+    --banner-badge-radius: 2px;
+    --banner-badge-size: 10px;
+    --banner-badge-weight: var(--font-bold5, 700);
+
+    /* Actions */
+    --banner-action-radius: 2px;
+    --banner-action-size: 11px;
+    --banner-action-weight: var(--font-bold4);
+    --banner-action-bg: rgba(255, 255, 255, 0.08);
+    --banner-action-border: var(--gray8);
+
+    /* Close */
+    --banner-close-size: 28px;
+    --banner-close-radius: 2px;
+    --banner-close-color: var(--silver5);
+
+    /* Progress bar */
+    --banner-progress-height: 2px;
+
+    /* Type accents */
+    --banner-success-bright: var(--color-success);
+    --banner-success-dim: color-mix(in srgb, var(--color-success) 55%, black);
+    --banner-danger-bright: var(--color-danger);
+    --banner-danger-dim: var(--red1);
+    --banner-warning-bright: var(--color-warning);
+    --banner-warning-dim: color-mix(in srgb, var(--color-warning) 70%, black);
+    --banner-info-bright: var(--blue3);
+    --banner-info-dim: var(--blue1);
+    --banner-default-bright: var(--silver5);
+    --banner-default-dim: var(--silver3);
+
+    /* Motion */
+    --banner-transition: var(--duration1, 0.15s);
+}

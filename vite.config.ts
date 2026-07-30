@@ -12,6 +12,12 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 app: 'resources/ts/app.ts',
+                // Per-site theme stylesheets (token overrides loaded after app.css)
+                'hhentai-theme': 'resources/css/themes/hhentai.css',
+                'pornguru-theme': 'resources/css/themes/pornguru.css',
+                // Caumont (luxury real-estate agency pack)
+                'caumont-home': 'resources/ts/caumont/home.ts',
+                'caumont-property': 'resources/ts/caumont/property-page.ts',
             },
             output: {
                 entryFileNames: 'assets/[name].js',

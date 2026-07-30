@@ -1,0 +1,17 @@
+/* Follow / subscribe button */
+
+.follow-btn {
+    min-width: 7.5rem;
+    justify-content: center;
+    text-align: center;
+}
+
+.follow-btn [data-follow-label] {
+    display: inline-block;
+    line-height: 1;
+}
+
+.follow-btn--following,
+.follow-btn--pending {
+    opacity: 0.92;
+}

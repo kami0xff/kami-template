@@ -1,0 +1,93 @@
+/* Calendar — month grid with single or range selection.
+   (Astryx: Calendar / DateRangeInput, adapted.)
+   Grid rendering and selection are CalendarManager.ts. */
+.calendar {
+    width: var(--calendar-width);
+    padding: var(--space3);
+    border: 1px solid var(--calendar-border);
+    border-radius: var(--calendar-radius);
+    background: var(--calendar-bg);
+    user-select: none;
+}
+
+.calendar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space3);
+}
+
+.calendar-title {
+    color: var(--text-primary);
+    font-size: var(--text-lead);
+    font-weight: var(--font-bold5);
+}
+
+.calendar-nav {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: var(--radius1);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.calendar-nav:hover {
+    background: var(--white7);
+    color: var(--text-primary);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.calendar-weekday {
+    display: grid;
+    place-items: center;
+    height: 28px;
+    color: var(--text-faint);
+    font-size: var(--text-small);
+}
+
+.calendar-day {
+    display: grid;
+    place-items: center;
+    height: var(--calendar-day-size);
+    border: 0;
+    border-radius: var(--radius1);
+    background: transparent;
+    color: var(--calendar-day-fg);
+    font-size: var(--text-lead);
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background: var(--calendar-day-bg-hover);
+}
+
+.calendar-day--muted {
+    color: var(--calendar-day-fg-muted);
+}
+
+.calendar-day--today {
+    box-shadow: inset 0 0 0 1px var(--calendar-today-ring);
+}
+
+.calendar-day--in-range {
+    background: var(--calendar-day-bg-range);
+    border-radius: 0;
+}
+
+.calendar-day--selected,
+.calendar-day--selected:hover {
+    background: var(--calendar-day-bg-selected);
+    color: var(--calendar-day-fg-selected);
+}
+
+.calendar-day--range-start { border-radius: var(--radius1) 0 0 var(--radius1); }
+.calendar-day--range-end { border-radius: 0 var(--radius1) var(--radius1) 0; }

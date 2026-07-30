@@ -1,0 +1,26 @@
+/*
+    Creator custom sections — editable profile modules (socials, ads, links, text).
+    Surface language matches panels / chat settings.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --creator-section-bg: var(--panel-bg, #2a2a2a);
+    --creator-section-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --creator-section-fg: #f2f2f2;
+    --creator-section-muted: rgba(255, 255, 255, 0.55);
+    --creator-section-faint: rgba(255, 255, 255, 0.4);
+    --creator-section-hover: rgba(255, 255, 255, 0.06);
+    --creator-section-accent: var(--color-accent, #e11d48);
+
+    /* ===== B) Layout ================================================= */
+    --creator-section-radius: 12px;
+    --creator-section-pad: 14px;
+    --creator-section-gap: 12px;
+    --creator-sections-gap: 14px;
+    --creator-social-size: 40px;
+    --creator-link-radius: 10px;
+
+    /* ===== C) Effects ================================================ */
+    --creator-section-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    --creator-section-transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}

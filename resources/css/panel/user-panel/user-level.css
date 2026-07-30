@@ -1,0 +1,35 @@
+/* Account menu head — sits inside charcoal panel chrome */
+
+.user-panel-head {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    gap: var(--panel-head-gap);
+    padding: var(--panel-head-padding);
+}
+
+.user-panel-head-copy {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.user-panel-head-name {
+    color: var(--panel-head-title-fg);
+    font-size: var(--panel-head-title-size);
+    font-weight: var(--panel-head-title-weight);
+    letter-spacing: var(--panel-head-title-tracking);
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-panel-head-handle {
+    color: var(--panel-head-subtitle-fg);
+    font-size: var(--panel-head-subtitle-size);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

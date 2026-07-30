@@ -1,0 +1,35 @@
+/*
+    Reactions — emoji chips + picker for posts / gallery items.
+    Surface matches panels / chat settings.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --reaction-chip-bg: rgba(255, 255, 255, 0.04);
+    --reaction-chip-bg-hover: rgba(255, 255, 255, 0.08);
+    --reaction-chip-bg-active: rgba(255, 255, 255, 0.1);
+    --reaction-chip-border: rgba(255, 255, 255, 0.08);
+    --reaction-chip-border-active: rgba(255, 255, 255, 0.18);
+    --reaction-chip-fg: #f2f2f2;
+    --reaction-chip-count: rgba(255, 255, 255, 0.55);
+    --reaction-picker-bg: var(--panel-bg, #2a2a2a);
+    --reaction-picker-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --reaction-picker-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.06));
+
+    /* ===== B) Layout ================================================= */
+    --reaction-gap: 6px;
+    --reaction-chip-pad: 5px 10px;
+    --reaction-chip-radius: 999px;
+    --reaction-chip-font: 13px;
+    --reaction-emoji-size: 16px;
+    --reaction-emote-size: 20px;
+    --reaction-picker-emote-size: 28px;
+    --reaction-picker-radius: 10px;
+    --reaction-picker-pad: 8px;
+    --reaction-picker-cell: 40px;
+    --reaction-picker-width: 280px;
+    --reaction-add-size: 32px;
+
+    /* ===== C) Effects ================================================ */
+    --reaction-shadow: var(--panel-shadow, 0 12px 40px rgba(0, 0, 0, 0.55));
+    --reaction-transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+}

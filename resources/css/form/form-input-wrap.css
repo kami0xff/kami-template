@@ -1,0 +1,211 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   INPUT WRAP — icon · trail · prefix · suffix · caret indicator
+   Wraps any <input>, <select>, or <textarea> to add adornments.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--form-input-bg);
+    border: 1px solid var(--form-input-border);
+    border-radius: var(--form-input-radius);
+    transition:
+        border-color var(--form-input-transition),
+        box-shadow var(--form-input-transition),
+        background var(--form-input-transition);
+}
+
+.form-input-wrap:hover {
+    border-color: var(--form-input-hover-border);
+}
+
+.form-input-wrap:focus-within {
+    border-color: var(--form-input-focus-border);
+    box-shadow: 0 0 0 3px var(--form-input-focus-ring);
+    background: var(--form-wrap-focus-bg);
+}
+
+/* Reset the inner input when wrapped — the wrap owns bg/border/radius */
+.form-input-wrap .form-input {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    flex: 1;
+    min-width: 0;
+}
+
+.form-input-wrap .form-input:focus {
+    box-shadow: none;
+}
+
+/* ───── LEADING ICON ───── */
+.form-input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--form-icon-size);
+    height: var(--form-icon-size);
+    margin-left: var(--space3);
+    color: var(--form-icon-color);
+    pointer-events: none;
+    transition: color var(--form-input-transition);
+}
+
+.form-input-wrap:focus-within .form-input-icon {
+    color: var(--form-icon-focus-color);
+}
+
+/* ───── TRAILING ELEMENT (button, status, caret) ───── */
+.form-input-trail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: var(--form-trail-size);
+    height: var(--form-trail-size);
+    margin-right: var(--space2);
+    padding: 0;
+    border: none;
+    border-radius: var(--form-input-radius);
+    background: transparent;
+    color: var(--form-icon-color);
+    cursor: pointer;
+    transition: color var(--form-input-transition);
+}
+
+.form-input-trail:hover {
+    color: var(--text-primary);
+}
+
+/* Non-interactive trailing status icon */
+.form-input-trail.form-status {
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Caret (for native selects inside a wrap) */
+.form-input-trail.form-caret {
+    pointer-events: none;
+}
+
+/* ───── PREFIX / SUFFIX (text adornments) ───── */
+.form-input-prefix,
+.form-input-suffix {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: var(--form-addon-size);
+    color: var(--form-addon-color);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.form-input-prefix {
+    padding-left: var(--space3);
+    gap: var(--space2);
+}
+
+.form-input-suffix {
+    padding-right: var(--space3);
+    gap: var(--space2);
+}
+
+/* Flag/emoji prefix variant */
+.form-input-prefix-flag {
+    gap: var(--space2);
+    font-size: var(--text-lead);
+}
+
+/* ───── COIN (token icon used in prefix) ───── */
+.form-coin {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--silver7), #fff, var(--silver6));
+    flex-shrink: 0;
+}
+
+/* ───── MONO INPUT (card numbers, OTP) ───── */
+.form-input-mono {
+    font-family: 'SF Mono', Menlo, monospace;
+    letter-spacing: 1px;
+}
+
+/* ───── CARD BRAND BADGE (inside trail) ───── */
+.form-card-brand {
+    display: flex;
+    align-items: center;
+    margin-right: var(--space3);
+}
+
+.form-card-brand-logo {
+    height: 18px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: var(--font-bold2);
+    font-style: italic;
+    display: inline-flex;
+    align-items: center;
+}
+
+.form-card-brand-logo.visa {
+    color: #1a1f71;
+}
+
+/* ───── CARET INDICATOR (focus demo) ───── */
+.form-input-caret {
+    width: 1.5px;
+    height: 18px;
+    margin-right: var(--space3);
+    background: var(--silver7);
+    border-radius: 1px;
+    animation: form-caret-blink 1s step-end infinite;
+    flex-shrink: 0;
+}
+
+@keyframes form-caret-blink {
+    50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-input-caret {
+        animation: none;
+    }
+}
+
+/* ───── DISABLED WRAP ───── */
+.form-input-wrap:has(.form-input:disabled) {
+    opacity: var(--form-input-disabled-opacity);
+    cursor: not-allowed;
+}
+
+/* ───── TEXTAREA IN WRAP ───── */
+.form-input-wrap .form-textarea {
+    padding: var(--form-textarea-padding);
+}
+
+/* ───── SPINNER (loading state) ───── */
+@keyframes form-spin {
+    to { transform: rotate(360deg); }
+}
+
+.form-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--white6);
+    border-top-color: var(--silver7);
+    border-radius: 50%;
+    animation: form-spin 0.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-spinner {
+        animation: none;
+    }
+}

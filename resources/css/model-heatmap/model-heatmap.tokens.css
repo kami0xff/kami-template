@@ -1,0 +1,19 @@
+/*
+    Model heatmap — weekly online schedule grid.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --heatmap-bg: var(--gray1);
+    --heatmap-fg: var(--text-primary);
+    --heatmap-muted: var(--text-muted);
+    --heatmap-border: var(--border-default);
+    --heatmap-slot-bg: var(--gray3);
+
+    /* ===== B) Layout ================================================= */
+    --heatmap-radius: 14px;
+    --heatmap-gap: 2px;
+    --heatmap-slot-size: 14px;
+
+    /* ===== C) Effects ================================================ */
+    --heatmap-transition: background 0.14s ease;
+}

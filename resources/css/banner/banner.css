@@ -1,0 +1,265 @@
+/* ───── Animations ───── */
+@keyframes banner-in {
+    0% { opacity: 0; transform: translateY(-100%); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes banner-out {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-100%); }
+}
+
+@keyframes banner-progress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+/* ───── ROOT (stacking region, sits in the grid between subnavbar and content) ───── */
+.banner-top-root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--banner-root-gap);
+}
+
+.banner-top-root:empty {
+    display: none;
+}
+
+/* ───── BANNER ───── */
+.banner-top {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--banner-gap);
+    padding: var(--banner-padding-y) var(--banner-padding-x);
+    background-color: var(--banner-bg, var(--gray2));
+    background-image: var(--banner-bg, none);
+    border-bottom: 1px solid var(--banner-border);
+    animation: banner-in 0.25s ease-out;
+    overflow: hidden;
+}
+
+.banner-top--dismissing {
+    animation: banner-out 0.2s ease-in forwards;
+    pointer-events: none;
+}
+
+/* ───── TYPE COLORS ───── */
+.banner-top--success { --banner-c-bright: var(--banner-success-bright); --banner-c-dim: var(--banner-success-dim); }
+.banner-top--danger  { --banner-c-bright: var(--banner-danger-bright);  --banner-c-dim: var(--banner-danger-dim); }
+.banner-top--warning { --banner-c-bright: var(--banner-warning-bright); --banner-c-dim: var(--banner-warning-dim); }
+.banner-top--info    { --banner-c-bright: var(--banner-info-bright);    --banner-c-dim: var(--banner-info-dim); }
+.banner-top--default { --banner-c-bright: var(--banner-default-bright); --banner-c-dim: var(--banner-default-dim); }
+
+/* Accent rail (left edge) */
+.banner-top::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--banner-c-bright), var(--banner-c-dim));
+}
+
+/* ───── BODY (flex row: icon + content + actions) ───── */
+.banner-top-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--banner-gap);
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+}
+
+a.banner-top-body:hover {
+    text-decoration: none;
+}
+
+/* ───── ICON ───── */
+.banner-top-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--banner-icon-size);
+    line-height: 1;
+    color: var(--banner-c-bright, var(--banner-color));
+}
+
+.banner-top-icon--svg svg {
+    display: block;
+}
+
+/* ───── CONTENT ───── */
+.banner-top-content {
+    font-size: var(--banner-font-size);
+    font-weight: var(--banner-font-weight);
+    color: var(--banner-color);
+    line-height: 1.4;
+}
+
+.banner-top-content strong {
+    color: var(--text-primary);
+    font-weight: var(--font-bold5, 700);
+}
+
+/* ───── BADGE (promo template) ───── */
+.banner-top-badge {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    background: var(--banner-badge-bg);
+    border-radius: var(--banner-badge-radius);
+    font-size: var(--banner-badge-size);
+    font-weight: var(--banner-badge-weight);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+/* ───── ACTIONS ───── */
+.banner-top-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+}
+
+.banner-top-action {
+    padding: 5px 12px;
+    background: var(--banner-action-bg);
+    border: 1px solid var(--banner-action-border);
+    border-radius: var(--banner-action-radius);
+    color: var(--banner-color);
+    font-family: var(--font-body);
+    font-size: var(--banner-action-size);
+    font-weight: var(--banner-action-weight);
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--banner-transition);
+}
+
+.banner-top-action:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--text-primary);
+    border-color: var(--gray8);
+}
+
+.banner-top-action--primary {
+    background: var(--banner-c-bright, rgba(255, 255, 255, 0.15));
+    border-color: var(--banner-c-bright, transparent);
+    color: var(--gray1, #000);
+}
+
+.banner-top-action--primary:hover {
+    filter: brightness(1.15);
+    color: var(--gray1, #000);
+}
+
+/* ───── CLOSE ───── */
+.banner-top-close {
+    flex-shrink: 0;
+    width: var(--banner-close-size);
+    height: var(--banner-close-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--banner-close-radius);
+    background: transparent;
+    color: var(--banner-close-color);
+    cursor: pointer;
+    transition: all var(--banner-transition);
+}
+
+.banner-top-close:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+/* ───── PROGRESS BAR ───── */
+.banner-top-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--banner-progress-height);
+    background: linear-gradient(90deg, var(--banner-c-bright), var(--banner-c-dim));
+    transform-origin: left;
+    animation: banner-progress var(--banner-life, 5s) linear forwards;
+    opacity: 0.7;
+}
+
+/* ───── TEMPLATE OVERRIDES ───── */
+
+/* Promo: gradient background, no left rail */
+.banner-top--promo {
+    background-image: var(--banner-bg);
+    border-bottom-color: transparent;
+}
+
+.banner-top--promo::before {
+    display: none;
+}
+
+/* ───── QUEUE INDICATOR ───── */
+.banner-queue-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 6px var(--banner-padding-x);
+    border-bottom: 1px dashed var(--banner-border);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--silver5);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all var(--banner-transition);
+}
+
+.banner-queue-indicator--visible {
+    display: flex;
+}
+
+.banner-queue-indicator:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--silver8);
+}
+
+/* ───── RESPONSIVE ───── */
+@media (max-width: 720px) {
+    .banner-top {
+        padding: var(--banner-padding-y) var(--space3);
+        gap: var(--space2);
+    }
+
+    .banner-top-body {
+        flex-wrap: wrap;
+    }
+
+    .banner-top-badge {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .banner-top {
+        animation: none;
+    }
+
+    .banner-top--dismissing {
+        animation: none;
+        display: none;
+    }
+
+    .banner-top-progress {
+        animation: none;
+    }
+}

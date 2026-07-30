@@ -1,0 +1,65 @@
+/* Number input with +/- steppers (Astryx: NumberInput, adapted).
+   Reads the shared form control tokens so it matches every other input.
+   Buttons call native stepUp()/stepDown() via the delegated listener
+   in app.ts ([data-number-inc] / [data-number-dec]). */
+.form-number {
+    display: inline-flex;
+    align-items: stretch;
+    height: var(--form-input-height);
+    border: 1px solid var(--form-input-border);
+    border-radius: var(--form-input-radius);
+    background: var(--form-input-bg);
+    overflow: hidden;
+    transition: border-color var(--form-input-transition), box-shadow var(--form-input-transition);
+}
+
+.form-number:hover {
+    border-color: var(--form-input-hover-border);
+}
+
+.form-number:focus-within {
+    border-color: var(--form-input-focus-border);
+    box-shadow: 0 0 0 3px var(--form-input-focus-ring);
+}
+
+.form-number input {
+    width: 64px;
+    border: 0;
+    background: transparent;
+    color: var(--form-input-color);
+    font-size: var(--form-input-font-size);
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.form-number input::-webkit-outer-spin-button,
+.form-number input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-number input:focus {
+    outline: none;
+}
+
+.form-number-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    border: 0;
+    background: transparent;
+    color: var(--form-icon-color);
+    font-size: var(--text-body);
+    cursor: pointer;
+    transition: background var(--form-input-transition), color var(--form-input-transition);
+    user-select: none;
+}
+
+.form-number-btn:hover {
+    background: var(--white7);
+    color: var(--text-primary);
+}
+
+.form-number-btn:first-child { border-right: 1px solid var(--form-input-border); }
+.form-number-btn:last-child { border-left: 1px solid var(--form-input-border); }

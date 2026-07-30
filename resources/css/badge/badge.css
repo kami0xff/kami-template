@@ -1,0 +1,39 @@
+/* Badge + StatusDot — compact labels and presence dots.
+   (Astryx: Badge / StatusDot, adapted.)
+   Colored variants are tinted from semantic roles via color-mix, so a
+   re-skin of the system colors re-skins every badge. */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--badge-gap);
+    padding: var(--badge-padding);
+    border-radius: var(--badge-radius);
+    background: var(--badge-bg);
+    color: var(--badge-fg);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.badge--primary { background: color-mix(in srgb, var(--color-primary) var(--badge-tint-strength), transparent); color: var(--color-primary); }
+.badge--success { background: color-mix(in srgb, var(--color-success) var(--badge-tint-strength), transparent); color: var(--color-success); }
+.badge--danger  { background: color-mix(in srgb, var(--color-danger) var(--badge-tint-strength), transparent); color: var(--color-danger); }
+.badge--warning { background: color-mix(in srgb, var(--color-warning) var(--badge-tint-strength), transparent); color: var(--color-warning); }
+.badge--info    { background: color-mix(in srgb, var(--color-info) var(--badge-tint-strength), transparent); color: var(--color-info); }
+.badge--money   { background: var(--color-money); color: var(--main2-deep); }
+
+/* Solid presence/status dot, usable standalone or inside a badge */
+.status-dot {
+    display: inline-block;
+    width: var(--status-dot-size);
+    height: var(--status-dot-size);
+    border-radius: 50%;
+    background: var(--text-faint);
+    flex-shrink: 0;
+}
+
+.status-dot--live    { background: var(--color-live); }
+.status-dot--busy    { background: var(--color-danger); }
+.status-dot--away    { background: var(--color-warning); }
+.status-dot--offline { background: var(--text-faint); }

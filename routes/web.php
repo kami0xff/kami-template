@@ -22,6 +22,14 @@ Route::get('/up', fn() => response('OK', 200));
 Route::middleware('detect.locale')->group(function () {
     Route::get('/', fn() => view('pages.seo-showcase'))->name('home');
     Route::get('/seo-showcase', fn() => view('pages.seo-showcase'))->name('seo-showcase');
+    Route::get('/design', fn() => view('pages.design'))->name('design');
+    Route::get('/shader-hero', fn() => view('pages.shader-hero'))->name('shader-hero');
+    Route::get('/payment', fn() => view('pages.payment'))->name('payment');
+    Route::get('/ai', fn() => view('pages.ai'))->name('ai');
+    Route::get('/hhentai', fn() => view('pages.hhentai'))->name('hhentai');
+    Route::get('/pornguru-theme', fn() => view('pages.pornguru-theme'))->name('pornguru-theme');
+    Route::get('/caumont', fn() => view('caumont.pages.home'))->name('caumont');
+    Route::get('/caumont/villa-esterel', fn() => view('caumont.pages.villa-esterel'))->name('caumont.villa');
 
     // Add your English routes here:
     // Route::get('/about', [PageController::class, 'about'])->name('about');

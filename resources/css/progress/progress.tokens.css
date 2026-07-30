@@ -1,0 +1,12 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --progress-bg: var(--white7);
+    --progress-fill: var(--color-primary);
+
+    /* ===== B) Layout ================================================= */
+    --progress-height: 6px;
+    --progress-radius: var(--radius-pill);
+
+    /* ===== C) Effects ================================================ */
+    --progress-transition: width var(--duration3) var(--ease-out);
+}

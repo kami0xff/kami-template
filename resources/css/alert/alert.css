@@ -1,0 +1,78 @@
+/* Alert — persistent inline message (the static counterpart to toast/banner).
+   Tinted from semantic roles via color-mix, like badges. */
+.alert {
+    display: flex;
+    gap: var(--alert-gap);
+    padding: var(--alert-padding);
+    border: 1px solid var(--alert-border);
+    border-radius: var(--alert-radius);
+    background: var(--alert-bg);
+    color: var(--alert-fg);
+    font-size: var(--alert-font-size);
+}
+
+.alert--info {
+    background: color-mix(in srgb, var(--color-info) var(--alert-tint-strength), transparent);
+    border-color: color-mix(in srgb, var(--color-info) var(--alert-border-strength), transparent);
+}
+
+.alert--success {
+    background: color-mix(in srgb, var(--color-success) var(--alert-tint-strength), transparent);
+    border-color: color-mix(in srgb, var(--color-success) var(--alert-border-strength), transparent);
+}
+
+.alert--warning {
+    background: color-mix(in srgb, var(--color-warning) var(--alert-tint-strength), transparent);
+    border-color: color-mix(in srgb, var(--color-warning) var(--alert-border-strength), transparent);
+}
+
+.alert--danger {
+    background: color-mix(in srgb, var(--color-danger) var(--alert-tint-strength), transparent);
+    border-color: color-mix(in srgb, var(--color-danger) var(--alert-border-strength), transparent);
+}
+
+.alert-icon {
+    width: var(--alert-icon-size);
+    height: var(--alert-icon-size);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.alert--info .alert-icon { color: var(--color-info); }
+.alert--success .alert-icon { color: var(--color-success); }
+.alert--warning .alert-icon { color: var(--color-warning); }
+.alert--danger .alert-icon { color: var(--color-danger); }
+
+.alert-body {
+    flex: 1;
+    min-width: 0;
+    color: var(--alert-body-fg);
+}
+
+.alert-title {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--alert-fg);
+    font-weight: var(--font-bold5);
+}
+
+.alert-dismiss {
+    flex-shrink: 0;
+    align-self: flex-start;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: var(--radius1);
+    background: transparent;
+    color: var(--text-faint);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.alert-dismiss:hover {
+    color: var(--text-primary);
+    background: var(--white7);
+}

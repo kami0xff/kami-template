@@ -1,0 +1,53 @@
+/* Tree list — nested expandable list on native <details>.
+   (Astryx: TreeList, adapted.) Zero JS. */
+.tree {
+    display: grid;
+    gap: 1px;
+    font-size: var(--tree-font-size);
+}
+
+.tree .tree {
+    padding-left: var(--tree-indent);
+}
+
+.tree-branch summary {
+    list-style: none;
+}
+
+.tree-branch summary::-webkit-details-marker {
+    display: none;
+}
+
+.tree-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    min-height: var(--tree-item-height);
+    padding: 0 var(--space2);
+    border-radius: var(--tree-item-radius);
+    color: var(--tree-item-fg);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tree-row:hover {
+    background: var(--tree-item-bg-hover);
+    color: var(--tree-item-fg-hover);
+}
+
+.tree-chevron {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: var(--text-faint);
+    transition: rotate var(--duration1) var(--ease-out);
+}
+
+.tree-branch[open] > summary .tree-chevron {
+    rotate: 90deg;
+}
+
+/* Leaf rows align with branch labels (chevron-width spacer) */
+.tree-leaf {
+    padding-left: calc(12px + var(--space2) + var(--space2));
+}

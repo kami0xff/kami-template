@@ -1,0 +1,230 @@
+
+@keyframes opacity-fade-show {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+.panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + var(--panel-offset-from-anchor));
+    padding: var(--panel-padding);
+    right: 0;
+    z-index: var(--z-dropdown);
+    background: var(--panel-surface);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--panel-radius);
+    box-shadow: var(--panel-elevation-default);
+    max-height: calc(100vh - 100px);
+    max-width: var(--panel-max-width);
+    transition: all var(--duration-panel-enter);
+}
+
+.panel-active {
+    display: block;
+    animation: opacity-fade-show var(--duration-panel-enter) forwards;
+}
+
+/* ---- content sits above glow + noise ---- */
+.panel-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ---- highlight variants ---- */
+.panel-highlight {
+    height: 2px;
+    margin: calc(var(--panel-padding) * -1)
+        calc(var(--panel-padding) * -1)
+        var(--panel-padding)
+        calc(var(--panel-padding) * -1);
+    border-radius: var(--panel-radius) var(--panel-radius) 0 0;
+    position: relative;
+    z-index: 3;
+}
+
+.panel--highlight-shimmer .panel-highlight {
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 1px,
+            var(--panel-highlight-shimmer-stripe) 1px,
+            var(--panel-highlight-shimmer-stripe) 2px
+        ),
+        linear-gradient(
+            90deg,
+            var(--panel-highlight-shimmer-fade-from) 0%,
+            var(--panel-highlight-shimmer-fade-mid) 35%,
+            var(--panel-highlight-shimmer-fade-peak) 55%,
+            var(--panel-highlight-shimmer-fade-mid) 75%,
+            var(--panel-highlight-shimmer-fade-from) 100%
+        );
+}
+
+.panel--highlight-accent .panel-highlight {
+    background: var(--color-accent);
+}
+
+.panel--highlight-gradient .panel-highlight {
+    background: linear-gradient(90deg, var(--glow-1), var(--glow-3));
+}
+
+
+/* ---- glow layer (sits behind content) ---- */
+.panel-glow-layer {
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.panel-glow-blob {
+    position: absolute;
+    width: 10em;
+    height: 10em;
+    border-radius: 50%;
+    filter: blur(var(--glow-blur));
+    opacity: 0.6;
+    animation: panel-glow-pulse 6s ease-in-out infinite;
+}
+
+.panel-glow-blob--1 {
+    background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
+    top: -3em;
+    left: -3em;
+    animation-delay: 0s;
+}
+
+.panel-glow-blob--2 {
+    background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
+    top: -3em;
+    right: -3em;
+    animation-delay: 2s;
+}
+
+.panel-glow-blob--3 {
+    background: radial-gradient(circle, var(--glow-3) 0%, transparent 70%);
+    bottom: -2em;
+    left: 50%;
+    margin-left: -5em;
+    animation-delay: 4s;
+}
+
+@keyframes panel-glow-pulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.5; }
+    50% { transform: scale(1.15); opacity: 0.8; }
+}
+
+
+/* ---- noise overlay for any frosted glass effects ---- */
+.panel-noise {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: var(--noise-opacity);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 1;
+}
+
+
+/* ---- elevation variants ---- */
+.panel--elevation-high {
+    box-shadow: var(--panel-elevation-high);
+}
+
+.panel--elevation-low {
+    box-shadow: var(--panel-elevation-low);
+}
+
+.panel--elevation-flat {
+    box-shadow: var(--panel-elevation-flat);
+}
+
+/* ---- animation variants ---- */
+.panel--anim-fade {
+    animation: panel-fade var(--duration-panel-enter) forwards;
+}
+
+.panel--anim-scale {
+    animation: panel-scale var(--duration-panel-enter) var(--ease-panel-bounce) forwards;
+}
+
+.panel--anim-slide {
+    animation: panel-slide var(--duration-panel-slide) var(--ease-panel-out) forwards;
+}
+
+
+@keyframes panel-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes panel-scale {
+    from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes panel-slide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ---- border variants ---- */
+.panel--border-subtle {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--panel-elevation-default);
+}
+
+.panel--border-frost {
+    background: var(--panel-frost-bg);
+    backdrop-filter: blur(var(--panel-frost-blur));
+    -webkit-backdrop-filter: blur(var(--panel-frost-blur));
+    border: none;
+    box-shadow: var(--panel-elevation-frost);
+}
+
+.panel--border-glow {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border-glow);
+    box-shadow: var(--panel-elevation-glow-outline);
+}
+
+.panel--border-none {
+    background: var(--panel-bg);
+    border: none;
+    box-shadow: var(--panel-shadow);
+}
+
+/* ---- sidebar-anchored variant ---- */
+.panel--sidebar-anchored {
+    position: fixed;
+    top: auto;
+    bottom: var(--space4);
+    left: var(--sidebar-width);
+    right: auto;
+    margin-left: var(--space2);
+}
+
+@media (max-width: 768px) {
+    .panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100% !important;
+        border-radius: 0;
+    }
+}

@@ -1,0 +1,17 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --infinite-scroll-fg: var(--text-muted);
+    --infinite-scroll-fg-strong: var(--text-primary);
+    --infinite-scroll-fg-faint: var(--text-faint);
+    --infinite-scroll-more-bg: var(--white7);
+    --infinite-scroll-more-bg-hover: var(--white-alpha-120);
+    --infinite-scroll-more-border: var(--white-alpha-120);
+    --infinite-scroll-error-fg: var(--color-danger, #f87171);
+
+    /* ===== B) Layout ================================================= */
+    --infinite-scroll-gap: var(--space4);
+    --infinite-scroll-footer-pad: var(--space4) 0;
+    --infinite-scroll-more-radius: var(--radius-pill);
+    --infinite-scroll-more-height: 36px;
+    --infinite-scroll-font-size: var(--text-small);
+}

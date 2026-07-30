@@ -1,0 +1,263 @@
+/*
+    Design-page theme lab — preview brand colors without editing tokens.
+    Runtime overrides on :root only; never ships in product CSS.
+*/
+:root {
+    --theme-lab-bg: var(--panel-bg, #222);
+    --theme-lab-border: var(--panel-border, rgba(255, 255, 255, 0.1));
+    --theme-lab-fg: var(--panel-list-item-fg, rgba(255, 255, 255, 0.88));
+    --theme-lab-muted: var(--panel-list-item-fg-muted, rgba(255, 255, 255, 0.48));
+    --theme-lab-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.07));
+    --theme-lab-radius: var(--panel-radius, 18px);
+    --theme-lab-shadow: var(--panel-shadow, 0 14px 40px rgba(0, 0, 0, 0.55));
+}
+
+.theme-lab-section {
+    margin: 0 0 var(--space5, 1.5rem);
+    padding: 14px 16px;
+    border: 1px solid var(--theme-lab-border);
+    border-radius: var(--theme-lab-radius);
+    background: var(--theme-lab-bg);
+    box-shadow: var(--theme-lab-shadow);
+}
+
+.theme-lab-section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    margin-bottom: 12px;
+}
+
+.theme-lab-section-head h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.theme-lab-section-head p {
+    margin: 0;
+    max-width: 42rem;
+    color: var(--theme-lab-muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.theme-lab-dock {
+    position: fixed;
+    left: 16px;
+    bottom: 72px;
+    z-index: calc(var(--z-toast, 300) - 1);
+    width: min(340px, calc(100vw - 32px));
+    padding: 10px;
+    border: 1px solid var(--theme-lab-border);
+    border-radius: var(--theme-lab-radius);
+    background: var(--theme-lab-bg);
+    box-shadow: var(--theme-lab-shadow);
+    color: var(--theme-lab-fg);
+}
+
+.theme-lab-dock[data-collapsed='true'] {
+    width: auto;
+    padding: 6px;
+}
+
+.theme-lab-dock[data-collapsed='true'] .theme-lab-body {
+    display: none;
+}
+
+.theme-lab-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-lab-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--theme-lab-hover);
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.theme-lab-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-lab-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-primary, #fa5365);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+}
+
+.theme-lab-badge {
+    margin-left: auto;
+    color: var(--theme-lab-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.theme-lab-body {
+    display: grid;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--theme-lab-border);
+}
+
+.theme-lab-label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--theme-lab-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.theme-lab-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.theme-lab-preset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--theme-lab-fg);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.theme-lab-preset:hover {
+    background: var(--theme-lab-hover);
+}
+
+.theme-lab-preset.is-active {
+    border-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+    color: #fff;
+}
+
+.theme-lab-preset-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.theme-lab-colors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.theme-lab-color {
+    display: grid;
+    gap: 6px;
+}
+
+.theme-lab-color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-lab-color input[type='color'] {
+    width: 36px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--theme-lab-border);
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+}
+
+.theme-lab-color input[type='text'] {
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--theme-lab-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font: inherit;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.theme-lab-color input[type='text']:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--color-primary) 50%, var(--theme-lab-border));
+}
+
+.theme-lab-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.theme-lab-actions button {
+    min-height: 32px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--theme-lab-fg);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.theme-lab-actions button:hover {
+    background: var(--theme-lab-hover);
+    color: #fff;
+}
+
+.theme-lab-actions .theme-lab-reset {
+    margin-left: auto;
+}
+
+html[data-theme-lab='custom'] .theme-lab-badge::after,
+html[data-theme-lab]:not([data-theme-lab='default']) .theme-lab-badge {
+    color: var(--color-primary);
+}
+
+@media (max-width: 720px) {
+    .theme-lab-dock {
+        left: 12px;
+        right: 12px;
+        bottom: 88px;
+        width: auto;
+    }
+
+    .theme-lab-colors {
+        grid-template-columns: 1fr;
+    }
+}

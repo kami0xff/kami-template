@@ -1,0 +1,12 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --tree-item-fg: var(--text-muted);
+    --tree-item-fg-hover: var(--text-primary);
+    --tree-item-bg-hover: var(--white7);
+
+    /* ===== B) Layout ================================================= */
+    --tree-indent: var(--space5);
+    --tree-item-height: 32px;
+    --tree-item-radius: var(--radius1);
+    --tree-font-size: var(--text-lead);
+}

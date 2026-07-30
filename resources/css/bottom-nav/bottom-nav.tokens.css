@@ -1,0 +1,31 @@
+/*
+    Bottom nav — floating pill dock (mobile primary chrome).
+    Shares surface language with panels / chat menus.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --bottom-nav-bg: #222222;
+    --bottom-nav-border: rgba(255, 255, 255, 0.1);
+    --bottom-nav-fg: rgba(255, 255, 255, 0.48);
+    --bottom-nav-fg-active: #ffffff;
+    --bottom-nav-badge: var(--color-accent, #e44545);
+
+    /* ===== B) Layout ================================================= */
+    --bottom-nav-inset-x: 14px;
+    --bottom-nav-inset-bottom: 12px;
+    --bottom-nav-pad-x: 10px;
+    --bottom-nav-pad-y: 8px;
+    --bottom-nav-radius: 999px;
+    --bottom-nav-item-gap: 2px;
+    --bottom-nav-item-min: 56px;
+    --bottom-nav-icon: 22px;
+    --bottom-nav-label-size: 10px;
+    --bottom-nav-z: 80;
+
+    /* ===== C) Effects ================================================ */
+    --bottom-nav-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.55),
+        0 0 0 1px var(--bottom-nav-border);
+    --bottom-nav-blur: 18px;
+    --bottom-nav-transition: color 0.14s ease, opacity 0.14s ease, transform 0.14s ease;
+}

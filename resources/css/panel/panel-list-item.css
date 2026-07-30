@@ -1,0 +1,29 @@
+.panel-list-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: var(--panel-list-item-padding);
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--panel-list-item-fg);
+    font-size: var(--panel-list-font-size);
+    transition: var(--panel-list-transition);
+    align-items: center;
+    column-gap: var(--panel-list-item-gap);
+    text-decoration: none;
+}
+
+.panel-list-item svg {
+    color: var(--panel-list-item-icon);
+    flex-shrink: 0;
+    transition: color 0.12s ease;
+}
+
+.panel-list-item:hover svg {
+    color: var(--panel-list-item-icon-hover);
+}
+
+.panel-list-item:hover,
+.panel-list-item:focus-visible {
+    color: var(--panel-list-item-fg-hover);
+    background: var(--panel-list-item-hover-bg);
+}

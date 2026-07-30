@@ -1,0 +1,13 @@
+/* Kbd — keyboard shortcut hint. (Astryx: Kbd, adapted.) */
+.kbd {
+    display: inline-block;
+    padding: var(--kbd-padding);
+    border: 1px solid var(--kbd-border);
+    border-bottom-width: 2px;
+    border-radius: var(--kbd-radius);
+    background: var(--kbd-bg);
+    color: var(--kbd-fg);
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: var(--kbd-font-size);
+    line-height: 1.4;
+}

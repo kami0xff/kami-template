@@ -1,0 +1,479 @@
+/* Tipping panel — live tip menu / creator support / shop dock */
+
+.tipping {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+    max-width: 420px;
+    background: var(--tip-bg);
+    border: 1px solid var(--tip-border);
+    border-radius: var(--tip-radius);
+    box-shadow: var(--tip-shadow);
+    color: var(--tip-fg);
+    overflow: hidden;
+}
+
+.tipping--wide {
+    max-width: 560px;
+}
+
+/* ── Tabs ─────────────────────────────────────────────────────────── */
+
+.tipping-tabs {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-height: 48px;
+    padding: 0 6px 0 8px;
+    border-bottom: 1px solid var(--tip-border);
+    background: var(--tip-bg);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tipping-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tipping-tab {
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 48px;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    color: var(--tip-muted);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--tip-transition);
+}
+
+.tipping-tab:hover {
+    color: var(--tip-fg-strong);
+}
+
+.tipping-tab.is-active {
+    color: var(--tip-fg-strong);
+}
+
+.tipping-tab.is-active::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--tip-accent);
+}
+
+.tipping-tab-close {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--tip-muted);
+    cursor: pointer;
+}
+
+.tipping-tab-close:hover {
+    background: var(--tip-hover);
+    color: var(--tip-fg-strong);
+}
+
+/* ── Promo / headers ──────────────────────────────────────────────── */
+
+.tipping-promo {
+    display: grid;
+    gap: 10px;
+    padding: var(--tip-pad-y) var(--tip-pad-x);
+    border-bottom: 1px solid var(--tip-border);
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--tip-fg);
+}
+
+.tipping-promo-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 7px 12px;
+    border-radius: var(--tip-radius-pill);
+    border: 1px solid var(--tip-border);
+    background: var(--tip-input-bg);
+    color: var(--tip-fg-strong);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tipping-promo-cta:hover {
+    background: var(--tip-hover);
+}
+
+.tipping-cols {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px var(--tip-pad-x) 8px;
+    color: var(--tip-muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.tipping-translate {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 var(--tip-pad-x) 10px;
+    color: var(--tip-muted);
+    font-size: 12px;
+    line-height: 1.3;
+}
+
+.tipping-translate a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* ── Activity list ────────────────────────────────────────────────── */
+
+.tipping-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: var(--tip-max-h);
+    overflow: auto;
+    padding: 0 var(--tip-pad-x) 12px;
+    scrollbar-width: thin;
+}
+
+.tipping-list[hidden] {
+    display: none !important;
+}
+
+.tipping-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: var(--tip-row-pad);
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: var(--tip-transition);
+}
+
+.tipping-item + .tipping-item {
+    margin-top: 2px;
+}
+
+.tipping-item:hover,
+.tipping-item.is-active {
+    background: var(--tip-hover);
+}
+
+.tipping-item-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    color: var(--tip-fg-strong);
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.tipping-item-emoji {
+    flex-shrink: 0;
+    font-size: 15px;
+    line-height: 1;
+}
+
+.tipping-item-price {
+    flex-shrink: 0;
+    color: var(--tip-fg-strong);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Sticky amount / purchase dock ────────────────────────────────── */
+
+.tipping-dock {
+    display: grid;
+    gap: var(--tip-dock-gap);
+    padding: 14px var(--tip-pad-x) 16px;
+    border-top: 1px solid var(--tip-border);
+    background: var(--tip-bg-deep);
+}
+
+/* Critical: wrap holds presets + custom + CTA — needs its own gap */
+.tipping-amounts-wrap {
+    display: grid;
+    gap: var(--tip-dock-gap);
+    min-width: 0;
+}
+
+.tipping-amounts {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.tipping-amount {
+    display: inline-grid;
+    place-items: center;
+    min-height: var(--tip-amount-size);
+    padding: 0 6px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: var(--tip-input-bg);
+    color: var(--tip-fg-strong);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: var(--tip-transition);
+}
+
+.tipping-amount:hover {
+    background: var(--tip-hover);
+}
+
+.tipping-amount.is-active {
+    border-color: var(--tip-money);
+    background: color-mix(in srgb, var(--tip-money) 12%, var(--tip-bg));
+    color: #fff;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tip-money) 35%, transparent);
+}
+
+.tipping-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 40px;
+}
+
+.tipping-custom-label {
+    color: var(--tip-muted);
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.tipping-custom-input {
+    width: 96px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--tip-border);
+    border-radius: var(--tip-radius-pill);
+    background: #0b0b0b;
+    color: var(--tip-fg-strong);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+.tipping-custom-input:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--tip-money) 55%, var(--tip-border));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--tip-money) 18%, transparent);
+}
+
+/* Hide number spinners — they steal horizontal space */
+.tipping-custom-input::-webkit-outer-spin-button,
+.tipping-custom-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tipping-custom-input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.tipping-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+}
+
+.tipping-buy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--tip-money);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.tipping-buy:hover {
+    filter: brightness(1.05);
+}
+
+.tipping-buy:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: none;
+}
+
+.tipping-status {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--tip-muted);
+}
+
+.tipping-status strong {
+    color: var(--tip-money);
+    font-weight: 700;
+}
+
+.tipping-status-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--tip-muted);
+    font-size: 11px;
+}
+
+/* ── Creator support ──────────────────────────────────────────────── */
+
+.tipping-support-head {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    padding: var(--tip-pad-y) var(--tip-pad-x);
+    border-bottom: 1px solid var(--tip-border);
+}
+
+.tipping-support-copy {
+    min-width: 0;
+}
+
+.tipping-support-copy h3 {
+    margin: 0;
+    color: var(--tip-fg-strong);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.tipping-support-copy p {
+    margin: 6px 0 0;
+    color: var(--tip-muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.tipping-note {
+    display: grid;
+    gap: 8px;
+    padding: var(--tip-pad-y) var(--tip-pad-x) 0;
+    margin-bottom: 8px;
+}
+
+.tipping-note label {
+    color: var(--tip-muted);
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.tipping-note textarea {
+    width: 100%;
+    min-height: 72px;
+    padding: 10px 12px;
+    border: 1px solid var(--tip-border);
+    border-radius: var(--tip-radius-sm);
+    background: var(--tip-input-bg);
+    color: var(--tip-fg);
+    font: inherit;
+    line-height: 1.4;
+    resize: vertical;
+}
+
+.tipping-note textarea:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--tip-money) 45%, var(--tip-border));
+}
+
+/* Soft presets under the note — not a huge scroll list */
+.tipping--support .tipping-list,
+.tipping-list--compact {
+    max-height: none;
+    padding-top: 8px;
+    padding-bottom: 12px;
+}
+
+/* ── Shop packs inside tipping shell ──────────────────────────────── */
+
+.tipping-shop {
+    display: grid;
+    gap: 12px;
+    padding: var(--tip-pad-y) var(--tip-pad-x);
+}
+
+.tipping-shop .wallet-packs-wrap {
+    margin: 0;
+}
+
+.tipping-shop .wallet-packs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.tipping-shop .wallet-pack {
+    margin: 0;
+}
+
+@media (max-width: 520px) {
+    .tipping-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .tipping-amounts {
+        gap: 6px;
+    }
+
+    .tipping-amount {
+        font-size: 13px;
+        min-height: 36px;
+    }
+}

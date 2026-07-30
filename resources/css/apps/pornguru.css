@@ -1,0 +1,16 @@
+/*
+    Pornguru app stylesheet manifest.
+
+    Keep this file hand-authored. It is the import map for the Pornguru app:
+    the shared base system first, then Pornguru-specific composition skins —
+    each assigned to its cascade layer.
+*/
+
+@import '../app.css';
+
+/* Theme — warm charcoal + coral brand */
+@import '../themes/pornguru.css' layer(themes);
+
+/* Pornguru composition skins */
+@import '../sidebar/compositions/pornguru/sidebar.tokens.css' layer(tokens);
+@import '../sidebar/compositions/pornguru/sidebar.css' layer(compositions);

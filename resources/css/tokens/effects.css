@@ -1,0 +1,47 @@
+/*
+   Layer 3 — SHARED EFFECTS
+
+   Reusable gradients, glow defaults, and ambient values that show up in more than one
+   region (footer, panels, hero, cards). Components can use these directly OR wrap them
+   in their own component token, e.g.
+
+       --footer-divider: var(--gradient-line1);
+
+   Disable an effect per project by overriding the token to none / transparent
+   instead of editing component CSS.
+*/
+:root {
+    /* === Divider / line fades ========================================== */
+    --gradient-line1: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.85) 50%,
+            transparent);
+    --gradient-line2: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.5) 50%,
+            transparent);
+    --gradient-line-solid1: rgba(255, 255, 255, 0.85);
+
+    /* === Surface / atmosphere ========================================== */
+    --gradient-radial1: radial-gradient(ellipse 60% 100% at 50% 100%,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.13) 20%,
+            rgba(255, 255, 255, 0.05) 55%,
+            transparent 85%);
+    --gradient-text1: linear-gradient(to top,
+            #000000 0%,
+            #0a0a0a 30%,
+            #1c1c1c 100%);
+    --gradient-text2: linear-gradient(to top,
+            #000000 0%,
+            #131313 30%,
+            #1c1c1c 100%);
+
+
+    /* === Glow blobs + noise (frost panels, glow-y regions) ============= */
+    --glow-1: #6b3bd3d1;
+    --glow-2: #ff8800d3;
+    --glow-3: #0fb4c6ca;
+    --glow-blur: 60px;
+    --noise-opacity: 0.07;
+}

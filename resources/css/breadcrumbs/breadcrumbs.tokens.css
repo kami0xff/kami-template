@@ -1,0 +1,11 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --breadcrumbs-fg: var(--text-muted);
+    --breadcrumbs-fg-hover: var(--text-primary);
+    --breadcrumbs-fg-current: var(--text-primary);
+    --breadcrumbs-separator-fg: var(--text-faint);
+
+    /* ===== B) Layout ================================================= */
+    --breadcrumbs-font-size: var(--text-small);
+    --breadcrumbs-gap: var(--space2);
+}

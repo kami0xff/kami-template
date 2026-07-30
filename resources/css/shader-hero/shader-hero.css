@@ -1,0 +1,408 @@
+/*
+    Shader hero — SEO-first marketing section.
+
+    Structure:
+      .shader-hero
+        .shader-hero-stage (canvas + CSS fallback, aria-hidden)
+        .shader-hero-scrim
+        .shader-hero-inner (real H1 / copy / CTAs — indexable)
+*/
+.shader-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: var(--shader-hero-min-h);
+    display: flex;
+    align-items: flex-end;
+    color: var(--shader-hero-fg);
+    background: var(--shader-hero-base);
+    overflow: clip;
+}
+
+.shader-hero-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--shader-hero-fallback);
+}
+
+.shader-hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.shader-hero.is-ready .shader-hero-canvas {
+    opacity: 1;
+}
+
+.shader-hero.is-static .shader-hero-canvas,
+.shader-hero.is-fallback .shader-hero-canvas {
+    display: none;
+}
+
+.shader-hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: var(--shader-hero-scrim);
+}
+
+.shader-hero-inner {
+    position: relative;
+    z-index: 2;
+    width: min(100%, var(--shader-hero-max));
+    padding: var(--shader-hero-pad-y) var(--shader-hero-pad-x);
+    font-family: var(--shader-hero-font-body);
+}
+
+.shader-hero--center .shader-hero-inner {
+    margin-inline: auto;
+    text-align: center;
+    width: min(100%, 820px);
+}
+
+.shader-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65em;
+    margin: 0 0 20px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--shader-hero-fg-muted);
+}
+
+.shader-hero-eyebrow::before {
+    content: none;
+}
+
+.shader-hero--center .shader-hero-eyebrow {
+    justify-content: center;
+}
+
+.shader-hero-title {
+    margin: 0 0 18px;
+    font-family: var(--shader-hero-font-display);
+    font-weight: 500;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+    color: var(--shader-hero-fg);
+}
+
+.shader-hero-title em {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--shader-hero-accent);
+}
+
+.shader-hero-lede {
+    margin: 0 0 28px;
+    max-width: 42ch;
+    font-size: clamp(0.95rem, 1.35vw, 1.125rem);
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--shader-hero-fg-muted);
+    text-wrap: pretty;
+}
+
+.shader-hero--center .shader-hero-lede {
+    margin-inline: auto;
+}
+
+.shader-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.shader-hero--center .shader-hero-actions {
+    justify-content: center;
+}
+
+.shader-hero-cta {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid transparent;
+    border-radius: var(--shader-hero-radius);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.shader-hero-cta--primary {
+    background: #fff;
+    color: #0f0f10;
+}
+
+.shader-hero-cta--primary:hover,
+.shader-hero-cta--primary:focus-visible {
+    background: #f3f3f3;
+}
+
+.shader-hero-cta--ghost {
+    background: transparent;
+    color: var(--shader-hero-fg);
+    border-color: rgba(245, 245, 245, 0.16);
+}
+
+.shader-hero-cta--ghost:hover,
+.shader-hero-cta--ghost:focus-visible {
+    border-color: rgba(245, 245, 245, 0.35);
+    background: rgba(245, 245, 245, 0.04);
+}
+
+.shader-hero-note {
+    margin: 18px 0 0;
+    font-size: 13px;
+    letter-spacing: -0.01em;
+    color: rgba(245, 245, 245, 0.38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shader-hero-canvas {
+        display: none !important;
+    }
+}
+
+/* —— Variants (CSS fallbacks + accents when WebGL is off) —— */
+.shader-hero--variant-studio,
+.shader-hero--variant-aurora {
+    --shader-hero-accent: #c4b5fd;
+    --shader-hero-fallback:
+        radial-gradient(90% 70% at 12% 0%, rgba(88, 28, 135, 0.45), transparent 55%),
+        radial-gradient(70% 50% at 88% 18%, rgba(14, 165, 233, 0.18), transparent 50%),
+        var(--shader-hero-base);
+}
+
+.shader-hero--variant-aurora {
+    --shader-hero-accent: #7dd3fc;
+    --shader-hero-fallback:
+        radial-gradient(100% 80% at 20% 10%, rgba(99, 102, 241, 0.35), transparent 55%),
+        radial-gradient(80% 60% at 80% 70%, rgba(34, 211, 238, 0.2), transparent 50%),
+        var(--shader-hero-base);
+}
+
+.shader-hero--variant-plasma {
+    --shader-hero-accent: #e9d5ff;
+    --shader-hero-fallback:
+        radial-gradient(100% 80% at 30% 40%, rgba(126, 34, 206, 0.35), transparent 55%),
+        radial-gradient(90% 70% at 75% 65%, rgba(14, 165, 233, 0.22), transparent 50%),
+        var(--shader-hero-base);
+}
+
+.shader-hero--variant-mesh {
+    --shader-hero-accent: #a7f3d0;
+    --shader-hero-fallback:
+        radial-gradient(90% 70% at 20% 30%, rgba(59, 130, 246, 0.25), transparent 55%),
+        radial-gradient(80% 60% at 80% 70%, rgba(52, 211, 153, 0.2), transparent 50%),
+        var(--shader-hero-base);
+}
+
+.shader-hero--variant-silk {
+    --shader-hero-accent: #f5d0fe;
+    --shader-hero-fallback:
+        radial-gradient(100% 80% at 40% 35%, rgba(147, 51, 234, 0.28), transparent 55%),
+        radial-gradient(80% 60% at 70% 75%, rgba(251, 207, 232, 0.16), transparent 50%),
+        var(--shader-hero-base);
+}
+
+.shader-hero--variant-glow {
+    --shader-hero-accent: #e9a8ff;
+    --shader-hero-fallback:
+        radial-gradient(70% 60% at 28% 32%, rgba(255, 160, 60, 0.55), transparent 55%),
+        radial-gradient(65% 55% at 78% 42%, rgba(200, 80, 255, 0.5), transparent 52%),
+        radial-gradient(55% 50% at 40% 78%, rgba(255, 120, 90, 0.35), transparent 50%),
+        radial-gradient(80% 70% at 50% 50%, rgba(80, 40, 160, 0.25), transparent 60%),
+        #0a0a0b;
+    --shader-hero-scrim: linear-gradient(
+        180deg,
+        rgba(10, 10, 11, 0.05) 0%,
+        rgba(10, 10, 11, 0.0) 40%,
+        rgba(10, 10, 11, 0.35) 100%
+    );
+}
+
+.shader-hero--variant-chrome {
+    --shader-hero-accent: #f0c9a0;
+    --shader-hero-fallback:
+        radial-gradient(ellipse 48% 52% at 28% 48%, rgba(170, 200, 255, 0.35), transparent 62%),
+        radial-gradient(ellipse 36% 40% at 22% 40%, rgba(255, 255, 255, 0.18), transparent 55%),
+        radial-gradient(ellipse 40% 45% at 34% 58%, rgba(255, 140, 70, 0.22), transparent 60%),
+        #05060a;
+    --shader-hero-scrim: linear-gradient(
+        90deg,
+        rgba(5, 6, 10, 0.05) 0%,
+        rgba(5, 6, 10, 0.12) 42%,
+        rgba(5, 6, 10, 0.55) 100%
+    );
+}
+
+.shader-hero--variant-ember {
+    --shader-hero-accent: #fdba74;
+    --shader-hero-fallback:
+        radial-gradient(100% 80% at 50% 70%, rgba(220, 38, 38, 0.28), transparent 55%),
+        radial-gradient(70% 50% at 30% 40%, rgba(249, 115, 22, 0.18), transparent 50%),
+        var(--shader-hero-base);
+}
+
+/* —— Design showcase chrome —— */
+.shader-hero-lab {
+    display: grid;
+    gap: 16px;
+}
+
+.shader-hero-lab-picks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.shader-hero-lab-pick {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.shader-hero-lab-pick.is-active,
+.shader-hero-lab-pick[aria-pressed="true"] {
+    border-color: var(--color-primary, #fa5365);
+    color: var(--color-primary, #fa5365);
+    background: color-mix(in srgb, var(--color-primary, #fa5365) 12%, transparent);
+}
+
+.shader-hero-lab-frame {
+    border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.08));
+    overflow: hidden;
+}
+
+.shader-hero-lab-seo {
+    display: grid;
+    gap: 12px;
+    padding: 16px 18px;
+    border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.08));
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+}
+
+.shader-hero-lab-seo h3 {
+    margin: 0;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-primary, #fff);
+}
+
+.shader-hero-lab-seo ol {
+    margin: 0;
+    padding-left: 1.2em;
+}
+
+.shader-hero-lab-seo code {
+    font-size: 12px;
+    padding: 1px 5px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.shader-hero-lab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.shader-hero-lab-swatch {
+    position: relative;
+    min-height: 96px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    padding: 14px;
+    display: flex;
+    align-items: flex-end;
+    color: #f5f4f1;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--shader-hero-base, #05060a);
+}
+
+.shader-hero-lab-swatch[data-variant="glow"] {
+    background:
+        radial-gradient(70% 60% at 28% 32%, rgba(255, 160, 60, 0.55), transparent 55%),
+        radial-gradient(65% 55% at 78% 42%, rgba(200, 80, 255, 0.5), transparent 52%),
+        radial-gradient(55% 50% at 40% 78%, rgba(255, 120, 90, 0.35), transparent 50%),
+        #0a0a0b;
+}
+.shader-hero-lab-swatch[data-variant="chrome"] {
+    background:
+        radial-gradient(ellipse 48% 52% at 28% 48%, rgba(170, 200, 255, 0.4), transparent 62%),
+        radial-gradient(ellipse 36% 40% at 22% 40%, rgba(255, 255, 255, 0.2), transparent 55%),
+        radial-gradient(ellipse 40% 45% at 34% 58%, rgba(255, 140, 70, 0.25), transparent 60%),
+        #05060a;
+}
+.shader-hero-lab-swatch[data-variant="studio"] {
+    background:
+        radial-gradient(90% 70% at 12% 0%, rgba(88, 28, 135, 0.45), transparent 55%),
+        radial-gradient(70% 50% at 88% 18%, rgba(14, 165, 233, 0.18), transparent 50%),
+        #0f0f10;
+}
+.shader-hero-lab-swatch[data-variant="aurora"] {
+    background:
+        radial-gradient(100% 80% at 20% 10%, rgba(99, 102, 241, 0.35), transparent 55%),
+        radial-gradient(80% 60% at 80% 70%, rgba(34, 211, 238, 0.2), transparent 50%),
+        #0f0f10;
+}
+.shader-hero-lab-swatch[data-variant="plasma"] {
+    background:
+        radial-gradient(100% 80% at 30% 40%, rgba(126, 34, 206, 0.35), transparent 55%),
+        radial-gradient(90% 70% at 75% 65%, rgba(14, 165, 233, 0.22), transparent 50%),
+        #0f0f10;
+}
+.shader-hero-lab-swatch[data-variant="mesh"] {
+    background:
+        radial-gradient(90% 70% at 20% 30%, rgba(59, 130, 246, 0.25), transparent 55%),
+        radial-gradient(80% 60% at 80% 70%, rgba(52, 211, 153, 0.2), transparent 50%),
+        #0f0f10;
+}
+.shader-hero-lab-swatch[data-variant="silk"] {
+    background:
+        radial-gradient(100% 80% at 40% 35%, rgba(147, 51, 234, 0.28), transparent 55%),
+        radial-gradient(80% 60% at 70% 75%, rgba(251, 207, 232, 0.16), transparent 50%),
+        #0f0f10;
+}
+.shader-hero-lab-swatch[data-variant="ember"] {
+    background:
+        radial-gradient(100% 80% at 50% 70%, rgba(220, 38, 38, 0.28), transparent 55%),
+        radial-gradient(70% 50% at 30% 40%, rgba(249, 115, 22, 0.18), transparent 50%),
+        #0f0f10;
+}
+

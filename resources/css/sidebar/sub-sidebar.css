@@ -1,0 +1,153 @@
+/*
+    Sub-sidebar — a contextual second-level panel that slides out next to
+    the main sidebar when a drill-in trigger is selected (Stripchat-style).
+
+    Markup:
+        <button class="sidebar-link sidebar-link--sub"
+                data-action="sub-sidebar" data-target="categories">…</button>
+
+        <section class="sub-sidebar" data-sub-sidebar="categories">
+            <div class="sub-sidebar-head">…back button + title…</div>
+            <div class="sub-sidebar-scroll"><div class="sidebar-content">…</div></div>
+        </section>
+
+    The panel must be a SIBLING of the <aside class="sidebar"> (the sidebar
+    is transformed + overflow:hidden, which would trap and clip it).
+    Behavior lives in SubSidebarManager.
+*/
+
+.sub-sidebar {
+    position: fixed;
+    /* Fallback geometry — SubSidebarManager syncs top/left/height to the
+       live .sidebar box so subnav / sticky / rail stay aligned. */
+    top: var(--navbar-height);
+    left: var(--sidebar-width);
+    bottom: auto;
+    height: calc(100dvh - var(--navbar-height));
+    z-index: var(--sub-sidebar-z);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    width: var(--sub-sidebar-width);
+    padding: var(--sub-sidebar-padding);
+    background: var(--sub-sidebar-background);
+    border-right: var(--sub-sidebar-border);
+    box-shadow: var(--sub-sidebar-shadow);
+    box-sizing: border-box;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-16px);
+    pointer-events: none;
+    transition:
+        transform var(--sub-sidebar-transition),
+        opacity var(--sub-sidebar-transition),
+        visibility var(--sub-sidebar-transition);
+}
+
+.sub-sidebar--open {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+
+/* === HEAD ============================================================ */
+
+.sub-sidebar-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    padding: var(--space1) var(--space1) var(--space2);
+}
+
+.sub-sidebar-title {
+    color: var(--sub-sidebar-title-color);
+    font-size: var(--text-body);
+    font-weight: var(--font-bold2);
+}
+
+.sub-sidebar-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-element);
+    color: var(--sub-sidebar-back-color);
+    background: transparent;
+    cursor: pointer;
+    transition:
+        color var(--sub-sidebar-transition),
+        background var(--sub-sidebar-transition);
+}
+
+.sub-sidebar-back:hover {
+    color: var(--sub-sidebar-back-hover-color);
+    background: var(--sub-sidebar-back-hover-background);
+}
+
+.sub-sidebar-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* === SCROLL ========================================================== */
+
+.sub-sidebar-scroll {
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-color: var(--sidebar-scrollbar-color);
+    scrollbar-width: thin;
+}
+
+/* === DRILL-IN TRIGGER ================================================ */
+/* A .sidebar-link rendered as a <button>, with a trailing chevron. */
+
+.sidebar-link--sub {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-link-chevron {
+    width: 14px;
+    height: 14px;
+    justify-self: end;
+    opacity: 0.55;
+    transition: transform var(--sub-sidebar-transition), opacity var(--sub-sidebar-transition);
+}
+
+.sidebar-link--sub[aria-expanded='true'] {
+    color: var(--sidebar-link-active-color);
+    background: var(--sidebar-link-active-background);
+}
+
+.sidebar-link--sub[aria-expanded='true'] .sidebar-link-chevron {
+    opacity: 1;
+    transform: translateX(2px);
+}
+
+/* === MOBILE — the panel covers the sidebar drawer (drill-in) ========= */
+
+@media (max-width: 1020px) {
+    .sub-sidebar {
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        width: min(92vw, var(--sidebar-drawer-width));
+        z-index: calc(var(--z-overlay) + 21);
+        background: var(--surface-black);
+        border-right: 0;
+        box-shadow: none;
+        transform: translateX(-100%);
+        opacity: 1;
+    }
+
+    .sub-sidebar--open {
+        transform: translateX(0);
+    }
+}

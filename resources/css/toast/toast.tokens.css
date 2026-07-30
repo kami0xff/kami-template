@@ -1,0 +1,51 @@
+:root {
+    /* Layout — matched to Astryx Toast (400 / 16 / container-container) */
+    --toast-width: 400px;
+    --toast-radius: var(--radius-container);
+    --toast-padding: var(--space4);
+    --toast-gap: var(--space3);
+    --toast-z-index: var(--z-toast);
+
+    /* Inverted surface (Astryx info on dark themes) */
+    --toast-bg: #ffffff;
+    --toast-fg: #171717;
+    --toast-fg-muted: color-mix(in srgb, var(--toast-fg) 72%, white);
+    --toast-border: transparent;
+    --toast-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.35),
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+
+    /* Error surface (Astryx error-inverted) */
+    --toast-error-bg: #e3193b;
+    --toast-error-fg: #ffffff;
+    --toast-error-fg-muted: rgba(255, 255, 255, 0.88);
+
+    /* Icon (inline in body — no badge chrome) */
+    --toast-icon-size: 16px;
+    --toast-success: #1a7f37;
+    --toast-warning: #b54708;
+    --toast-info: #175cd3;
+    --toast-error-icon: var(--toast-error-fg);
+
+    /* Typography */
+    --toast-title-size: 14px;
+    --toast-title-weight: var(--font-bold5);
+    --toast-msg-size: 14px;
+    --toast-msg-weight: var(--font-bold3, 400);
+    --toast-line-height: 1.4;
+
+    /* Trailing actions + dismiss */
+    --toast-action-size: 14px;
+    --toast-action-weight: var(--font-bold4);
+    --toast-close-size: 28px;
+    --toast-close-radius: 10px;
+    --toast-close-hover: rgba(0, 0, 0, 0.06);
+    --toast-error-close-hover: rgba(255, 255, 255, 0.12);
+
+    /* Container */
+    --toast-container-gap: var(--space2);
+
+    /* Motion */
+    --toast-transition: var(--duration-fast) var(--ease-standard);
+}

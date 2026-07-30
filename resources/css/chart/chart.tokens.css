@@ -1,0 +1,26 @@
+/*
+    Chart cards — dark chrome aligned with panels / admin tables.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --chart-bg: #222222;
+    --chart-border: rgba(255, 255, 255, 0.1);
+    --chart-fg: rgba(255, 255, 255, 0.88);
+    --chart-fg-muted: rgba(255, 255, 255, 0.48);
+    --chart-grid: rgba(255, 255, 255, 0.06);
+    --chart-tooltip-bg: #1a1a1a;
+    --chart-series-1: var(--color-accent, #e44545);
+    --chart-series-2: #5ec8c0;
+    --chart-series-3: #e8b923;
+    --chart-series-4: #7aa2ff;
+
+    /* ===== B) Layout ================================================= */
+    --chart-radius: 18px;
+    --chart-padding: 14px 16px;
+    --chart-title-size: 14px;
+    --chart-meta-size: 12px;
+    --chart-min-height: 240px;
+
+    /* ===== C) Effects ================================================ */
+    --chart-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}

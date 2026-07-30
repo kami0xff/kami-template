@@ -1,0 +1,37 @@
+/* Static table — plain styled table, no JS. For sortable/selectable data,
+   use data-table instead. (Astryx: Table, adapted.) */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--table-font-size);
+}
+
+.table th {
+    padding: var(--table-cell-padding);
+    color: var(--table-head-fg);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-tight);
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.table td {
+    padding: var(--table-cell-padding);
+    color: var(--table-cell-fg);
+    border-bottom: 1px solid var(--table-divider);
+}
+
+.table--striped tbody tr:nth-child(even) {
+    background: var(--table-stripe-bg);
+}
+
+.table--hover tbody tr:hover {
+    background: var(--table-row-hover-bg);
+}
+
+.table--compact th,
+.table--compact td {
+    padding: var(--table-cell-padding-compact);
+}

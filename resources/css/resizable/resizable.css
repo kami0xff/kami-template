@@ -1,0 +1,36 @@
+/* Resizable split panes. (Astryx: Resizable, adapted.)
+   Drag behavior is ResizableManager.ts.
+
+       <div class="resizable" data-resizable>
+           <div class="resizable-pane" style="flex-basis: 60%">…</div>
+           <div class="resizable-handle" data-resizable-handle></div>
+           <div class="resizable-pane">…</div>
+       </div> */
+.resizable {
+    display: flex;
+    min-width: 0;
+}
+
+.resizable-pane {
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
+}
+
+.resizable-pane:first-child {
+    flex: 0 0 auto;
+}
+
+.resizable-handle {
+    flex-shrink: 0;
+    width: var(--resizable-handle-size);
+    background: var(--resizable-handle-bg);
+    cursor: col-resize;
+    transition: background var(--duration1);
+    touch-action: none;
+}
+
+.resizable-handle:hover,
+.resizable-handle--active {
+    background: var(--resizable-handle-bg-active);
+}

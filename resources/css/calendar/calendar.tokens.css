@@ -1,0 +1,17 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --calendar-bg: var(--surface1);
+    --calendar-border: var(--border-strong);
+    --calendar-day-fg: var(--text-primary);
+    --calendar-day-fg-muted: var(--text-faint);
+    --calendar-day-bg-hover: var(--white7);
+    --calendar-day-bg-selected: var(--color-primary);
+    --calendar-day-fg-selected: var(--white1);
+    --calendar-day-bg-range: color-mix(in srgb, var(--color-primary) 18%, transparent);
+    --calendar-today-ring: var(--color-primary);
+
+    /* ===== B) Layout ================================================= */
+    --calendar-width: 300px;
+    --calendar-day-size: 36px;
+    --calendar-radius: var(--radius2);
+}

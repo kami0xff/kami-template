@@ -1,0 +1,344 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUY TOKENS MODAL — composition-specific styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* CTA */
+    --modal-cta-padding: var(--space3) 56px;
+    --modal-cta-radius: var(--radius-pill);
+    --modal-cta-size: var(--text-body);
+    --modal-cta-weight: var(--font-bold4);
+
+    /* Trust row */
+    --modal-trust-icon-size: 30px;
+    --modal-trust-icon-radius: 7px;
+    --modal-trust-icon-bg: rgba(255, 255, 255, 0.04);
+    --modal-trust-icon-border: rgba(255, 255, 255, 0.08);
+    --modal-trust-icon-color: var(--silver6);
+}
+
+/* ───── HELP BADGE ───── */
+.modal-help {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--white6);
+    border: 1px solid var(--white-alpha-080);
+    font-size: 10px;
+    font-weight: var(--font-bold3);
+    color: var(--white3);
+}
+
+/* ───── PAYMENT METHOD LOGOS ───── */
+.modal-pm-logos {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 3px;
+    align-items: center;
+}
+
+.modal-pm-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 18px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: var(--font-bold3);
+    color: #111;
+    white-space: nowrap;
+}
+
+.modal-pm-logo--gw {
+    height: 22px;
+    padding: 3px 9px;
+    font-weight: var(--font-bold2);
+    font-size: 10px;
+    letter-spacing: 0.3px;
+}
+
+.modal-pm-logo--paypal {
+    font-style: italic;
+    font-weight: var(--font-bold2);
+    font-size: 11px;
+    padding: 3px 9px;
+}
+
+.modal-pm-logo--paypal .pp1 {
+    color: #003087;
+}
+
+.modal-pm-logo--paypal .pp2 {
+    color: #009cde;
+}
+
+.modal-pm-logo--skrill {
+    color: #862165;
+    font-weight: var(--font-bold2);
+    font-size: 11px;
+    font-style: italic;
+    padding: 3px 9px;
+}
+
+.modal-pm-logo--paysafe {
+    background: #e9eaef;
+    color: #e31e23;
+    font-weight: var(--font-bold2);
+    font-size: 8px;
+    padding: 3px 6px;
+    line-height: 1.05;
+    text-align: center;
+    border-radius: 4px;
+    height: auto;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-pm-logo--wero {
+    background: linear-gradient(135deg, #ff3366, #7a1fa2);
+    color: #fff;
+    font-weight: var(--font-bold2);
+    font-size: 9px;
+    padding: 3px 7px;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+}
+
+.modal-pm-logo--ideal {
+    color: #cc0066;
+    font-weight: var(--font-bold2);
+    font-size: 9px;
+    padding: 3px 6px;
+    font-style: italic;
+}
+
+.modal-pm-logo--paymentico {
+    background: linear-gradient(135deg, #4fa3ff, #1e6fd9);
+    color: #fff;
+    font-weight: var(--font-bold2);
+    font-size: 9px;
+    padding: 3px 9px;
+    letter-spacing: 0.5px;
+}
+
+.modal-pm-logo--epoch {
+    background: #21c95f;
+    color: #fff;
+}
+
+/* ───── CARD BRAND GRID ───── */
+.modal-cb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+}
+
+.modal-cb-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    background: #fff;
+}
+
+/* ───── CRYPTO ICONS ───── */
+.modal-crypto-icons {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.modal-crypto-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: var(--font-bold3);
+    color: #fff;
+    border: 1.5px solid var(--modal-bg);
+    margin-left: -4px;
+}
+
+.modal-crypto-icon:first-child {
+    margin-left: 0;
+}
+
+.modal-crypto-icon--btc {
+    background: #f7931a;
+}
+
+.modal-crypto-icon--eth {
+    background: #627eea;
+}
+
+.modal-crypto-icon--usdt {
+    background: #26a17b;
+}
+
+.modal-crypto-icon--usdc {
+    background: #2775ca;
+}
+
+/* ───── SECTION / GATEWAY ───── */
+.modal-section {
+    margin-top: var(--space6);
+}
+
+.modal-section-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    margin-bottom: var(--space3);
+    font-size: var(--select-label-size);
+    font-weight: var(--select-label-weight);
+    color: var(--text-primary);
+}
+
+/* ───── SHOW MORE LINK ───── */
+.modal-show-more {
+    display: block;
+    margin-top: var(--space3);
+    text-align: center;
+    font-size: 13px;
+    color: var(--white3);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--modal-transition);
+}
+
+.modal-show-more:hover {
+    color: var(--text-primary);
+}
+
+/* ───── CTA ───── */
+.modal-cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space7);
+}
+
+.modal-cta {
+    position: relative;
+    padding: var(--modal-cta-padding);
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: var(--modal-cta-size);
+    font-weight: var(--modal-cta-weight);
+    letter-spacing: 0.3px;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid var(--silver2);
+    border-radius: var(--modal-cta-radius);
+    background-color: var(--gray8);
+    background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255, 255, 255, 0.025) 1px, rgba(255, 255, 255, 0.025) 2px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(0, 0, 0, 0.15) 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+        0 6px 20px rgba(0, 0, 0, 0.6);
+    transition: all var(--modal-transition);
+}
+
+.modal-cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    animation: modal-glint 5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.modal-cta:hover {
+    border-color: var(--silver4);
+    transform: translateY(-1px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+        0 10px 28px rgba(0, 0, 0, 0.7);
+}
+
+/* ───── FINE PRINT ───── */
+.modal-fine-print {
+    margin-top: 18px;
+    text-align: center;
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.modal-fine-print .lock {
+    display: inline-flex;
+    vertical-align: -3px;
+    margin-right: var(--space1);
+    color: var(--text-muted);
+}
+
+/* ───── TRUST ROW ───── */
+.modal-trust-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space7);
+    margin: 22px 0 30px;
+}
+
+.modal-trust {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-faint);
+}
+
+.modal-trust-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--modal-trust-icon-size);
+    height: var(--modal-trust-icon-size);
+    border-radius: var(--modal-trust-icon-radius);
+    background: var(--modal-trust-icon-bg);
+    border: 1px solid var(--modal-trust-icon-border);
+    color: var(--modal-trust-icon-color);
+}
+
+.modal-trust-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.modal-trust-text strong {
+    font-family: var(--font-display);
+    font-size: var(--text-lead);
+    letter-spacing: 1.5px;
+    color: var(--text-primary);
+}
+
+.modal-trust-text span {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+
+/* ───── REDUCED MOTION ───── */
+@media (prefers-reduced-motion: reduce) {
+    .modal-cta::after {
+        animation: none;
+    }
+}

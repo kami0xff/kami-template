@@ -1,0 +1,12 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --carousel-dot-bg: var(--white6);
+    --carousel-dot-bg-active: var(--color-primary);
+    --carousel-arrow-bg: var(--gray5);
+    --carousel-arrow-fg: var(--text-primary);
+
+    /* ===== B) Layout ================================================= */
+    --carousel-gap: var(--space3);
+    --carousel-arrow-size: 34px;
+    --carousel-dot-size: 7px;
+}

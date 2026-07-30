@@ -1,0 +1,26 @@
+/*
+    Payment checkout page — pack pick + third-party gateway host.
+    Processing happens off-site; this is the chrome around it.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --payment-bg: var(--panel-bg, #2a2a2a);
+    --payment-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --payment-fg: #f2f2f2;
+    --payment-muted: rgba(255, 255, 255, 0.55);
+    --payment-faint: rgba(255, 255, 255, 0.4);
+    --payment-success: #6ee7a8;
+    --payment-danger: #f87171;
+    --payment-pending: #fbbf24;
+
+    /* ===== B) Layout ================================================= */
+    --payment-radius: 14px;
+    --payment-pad: 20px;
+    --payment-gap: 20px;
+    --payment-max: 1080px;
+    --payment-gateway-min-h: 320px;
+
+    /* ===== C) Effects ================================================ */
+    --payment-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+    --payment-transition: background 0.12s ease, border-color 0.12s ease, opacity 0.15s ease;
+}

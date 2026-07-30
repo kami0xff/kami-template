@@ -1,0 +1,40 @@
+/*
+    Mega menu — full-bleed desktop dropdown panel.
+
+    Surface aligned with panels / chat settings:
+    flat dark, hairline border, soft elevation.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --mega-menu-bg: var(--panel-bg, #2a2a2a);
+    --mega-menu-border: var(--panel-border, rgba(255, 255, 255, 0.08));
+    --mega-menu-fg: var(--text-primary);
+    --mega-menu-muted: var(--text-muted);
+    --mega-menu-faint: var(--text-faint);
+    --mega-menu-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.06));
+    --mega-menu-separator: var(--panel-divider-fill, rgba(255, 255, 255, 0.1));
+    --mega-menu-link-fg: #f2f2f2;
+    --mega-menu-link-hover: #ffffff;
+    --mega-menu-title-fg: rgba(255, 255, 255, 0.45);
+
+    /* ===== B) Layout ================================================= */
+    --mega-menu-padding-block: var(--space5);
+    --mega-menu-padding-inline: var(--space6);
+    --mega-menu-inner-max: 1200px;
+    --mega-menu-grid-gap: var(--space5);
+    --mega-menu-col-gap: 2px;
+    --mega-menu-radius: 0;
+    --mega-menu-link-pad: 8px 10px;
+    --mega-menu-link-radius: 8px;
+    --mega-menu-title-size: 11px;
+    --mega-menu-title-weight: var(--font-bold4);
+    --mega-menu-link-size: 14px;
+    --mega-menu-media-radius: 10px;
+    --mega-menu-z: calc(var(--navbar-z, var(--z-overlay)) + 5);
+
+    /* ===== C) Effects ================================================ */
+    --mega-menu-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+    --mega-menu-transition: opacity var(--duration2) var(--ease-out),
+        transform var(--duration2) var(--ease-out),
+        visibility var(--duration2);
+}

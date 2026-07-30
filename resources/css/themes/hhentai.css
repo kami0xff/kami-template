@@ -1,0 +1,48 @@
+/*
+    Theme: HHentai — darkish blue & black with an azure brand.
+    Token overrides only (the whole point of the system): neutrals shift
+    from pure black to deep navy, main1 becomes the HHentai blue, and every
+    component (forms included — they read --color-primary via --form-accent)
+    re-skins automatically.
+
+    Usage (site manifest):  @import '../themes/hhentai.css' layer(themes);
+    Usage (single page):    load after app.css — the layer order declared
+                            in app.css puts `themes` above `tokens`.
+*/
+@layer themes {
+    :root {
+        /* ── Neutrals → deep navy ─────────────────────────────────── */
+        --black: #070b14;
+
+        --gray1: #0a0f1a;
+        --gray2: #0d1320;
+        --gray3: #0f1626;
+        --gray4: #121a2c;
+        --gray5: #141d31;
+        --gray6: #182238;
+        --gray7: #1b263f;
+        --gray8: #24314e;
+        --gray9: #283655;
+        --gray10: #2f3f63;
+
+        /* Surfaces pick up a blue cast (panels, cards, navbar) */
+        --surface-black: #0a0f1a;
+        --surface1: #0f1626;
+        --surface2: #141d31;
+        --surface3: var(--gray1);
+
+        /* ── Main colors → HHentai blue ───────────────────────────── */
+        --main1: #3aa0ff;
+        --main1-strong: #1d7fe0;
+        --main1-deep: #0f4d8f;
+        /* main2 (money gold) and main3 (azure) stay */
+
+        /* Borders get a subtle blue tint instead of pure white-alpha */
+        --border-default: rgba(122, 162, 224, 0.14);
+        --border-strong: #1e2a45;
+
+        /* Sidebar / navbar chrome follows the navy surfaces */
+        --navbar-bg: #0b111e;
+        --sidebar-background: #0d1422;
+    }
+}

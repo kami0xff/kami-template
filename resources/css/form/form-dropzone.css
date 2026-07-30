@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILE UPLOAD — dropzone area + uploaded file item
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Dropzone */
+.form-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space3);
+    padding: 32px;
+    border: 2px dashed var(--white-alpha-120);
+    border-radius: 10px;
+    background: var(--white7);
+    cursor: pointer;
+    text-align: center;
+    transition:
+        border-color var(--form-input-transition),
+        background var(--form-input-transition);
+}
+
+.form-dropzone:hover {
+    border-color: var(--silver1);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.form-dropzone:focus-within,
+.form-dropzone[data-dragover] {
+    border-color: var(--form-accent);
+    background: color-mix(in srgb, var(--form-accent) 8%, transparent);
+}
+
+.form-dropzone-icon {
+    color: var(--silver3);
+}
+
+.form-dropzone-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-dropzone-text strong {
+    font-size: var(--text-lead);
+    color: var(--text-primary);
+}
+
+.form-dropzone-text span {
+    font-size: var(--text-small);
+    color: var(--text-muted);
+}
+
+/* Uploaded file item */
+.form-file-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space3);
+    padding: 10px var(--space3);
+    border: 1px solid var(--white-alpha-120);
+    border-radius: 8px;
+    background: var(--white7);
+}
+
+.form-file-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--white-alpha-080);
+    color: var(--silver5);
+    flex-shrink: 0;
+}
+
+.form-file-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.form-file-meta strong {
+    font-size: var(--text-lead);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-file-meta span {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-dropzone {
+        transition: none;
+    }
+}

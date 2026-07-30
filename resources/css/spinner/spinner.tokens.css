@@ -1,0 +1,10 @@
+:root {
+    /* ===== B) Layout ================================================= */
+    --spinner-size: 20px;
+    --spinner-size-sm: 14px;
+    --spinner-size-lg: 32px;
+    --spinner-stroke: 2px;
+
+    /* ===== C) Effects ================================================ */
+    --spinner-duration: 0.7s;
+}

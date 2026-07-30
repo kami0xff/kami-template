@@ -1,0 +1,274 @@
+/*
+   Layer 1 — PRIMITIVES (atoms)
+
+   Pure scales and raw values. No component knowledge, no role meaning.
+   These are the only tokens that contain literals (px, hex, rgba).
+   Everything above (semantic, effects, components) should be derived from these.
+
+   Convention: numbered scales (1, 2, 3 …) so variants stay easy to compare and override.
+*/
+:root {
+    /* === Color ramps =================================================== */
+    --black: rgb(0, 0, 0);
+    --black1: var(--black);
+    --black2: rgba(0, 0, 0, 0.9);
+    --black3: rgba(0, 0, 0, 0.7);
+    --black4: rgba(0, 0, 0, 0.5);
+    --black5: rgba(0, 0, 0, 0.3);
+    --black6: rgba(0, 0, 0, 0.1);
+    --black7: rgba(0, 0, 0, 0.05);
+    --black8: rgba(0, 0, 0, 0.01);
+
+    /* === Gray ramp (opaque dark surfaces) ================================ */
+    --gray1: #0a0a0a;
+    --gray2: #111111;
+    --gray3: #131313;
+    --gray4: #161616;
+    --gray5: #181818;
+    --gray6: #1c1c1c;
+    --gray7: #1e1e1e;
+    --gray8: #2a2a2a;
+    --gray9: #2c2c2c;
+    --gray10: #333333;
+
+    /* === Silver ramp (mid-tones / chrome) ================================ */
+    --silver1: #444444;
+    --silver2: #555555;
+    --silver3: #666666;
+    --silver4: #777777;
+    --silver5: #888888;
+    --silver6: #999999;
+    --silver7: #aaaaaa;
+    --silver8: #c8c8c8;
+    --silver9: #cccccc;
+    --silver10: #dddddd;
+    --silver11: #e8e8e8;
+
+    /* === MAIN COLORS (max 3 — the brand voice) ==========================
+       main1 = primary/brand    (CTAs, links, active states)
+       main2 = highlight/money  (paid actions, promos)
+       main3 = cool accent      (informational touches)
+       A re-skin usually only changes these three. */
+    --main1: #fa5365;
+    --main1-strong: #c22934;
+    --main1-deep: #a2252d;
+    --main2: #ffa900;
+    --main2-deep: #3c2800;
+    --main3: #38bdf8;
+    --main3-deep: #0c4a6e;
+
+    /* === SYSTEM COLORS (fixed vocabulary — statuses, badges, dots) ======
+       Deliberately electric — these must cut through dark UI at 8px dot
+       size. Tint with color-mix for surfaces; never use pastel variants. */
+    --lime: #8aff00;
+    --fuchsia: #f000ff;
+    --azure: #00a3ff;
+    --neon-pink: #ff0f7b;
+    --neon-purple: #9b30ff;
+    --red-bright: #ff2222;
+    --orange-bright: #ff8000;
+
+    /* === Legacy ramps (deprecated — prefer MAIN/SYSTEM colors) =========== */
+    --green-deep: #062a13;
+    --green1: #1f9d4d;
+    --green2: #22c55e;
+    --green3: #4ade80;
+    --green4: #5ee48a;
+    --green5: #6ee699;
+    --red1: #c43131;
+    --red2: #ef4444;
+    --red3: #ff5b5b;
+    --amber1: #b8841a;
+    --amber2: #f59e0b;
+    --amber3: #f5b73d;
+    --blue1: #2e6bd6;
+    --blue2: #3b82f6;
+    --blue3: #6ea8ff;
+
+    --white1: rgba(255, 255, 255, 1);
+    --white2: rgba(255, 255, 255, 0.9);
+    --white3: rgba(255, 255, 255, 0.7);
+    --white4: rgba(255, 255, 255, 0.5);
+    --white5: rgba(255, 255, 255, 0.3);
+    --white6: rgba(255, 255, 255, 0.1);
+    --white7: rgba(255, 255, 255, 0.05);
+    --white8: rgba(255, 255, 255, 0.01);
+    --white9: rgba(255, 255, 255, 0);
+    --white-alpha-045: rgba(255, 255, 255, 0.045);
+    --white-alpha-075: rgba(255, 255, 255, 0.075);
+    --white-alpha-080: rgba(255, 255, 255, 0.08);
+    --white-alpha-120: rgba(255, 255, 255, 0.12);
+
+    /* === Spacing scale ================================================= */
+    --space1: 4px;
+    --space2: 8px;
+    --space3: 12px;
+    --space4: 16px;
+    --space5: 20px;
+    --space6: 24px;
+    --space7: 32px;
+    --space8: 48px;
+    --space9: 72px;
+    --space10: 100px;
+
+    /* === Radii ========================================================= */
+    --radius1: 4px;
+    --radius2: 8px;
+    --radius3: 14px;
+    --radius4: 24px;
+    --radius-pill: 999px;
+
+    /* Semantic radius steps (adapted from Astryx): pick by surface role,
+       not by size. inner = nested bits, element = controls, container =
+       cards/popovers/modals, page = hero/page-level surfaces. */
+    --radius-inner: var(--radius1);
+    --radius-element: var(--radius2);
+    --radius-container: 12px;
+    --radius-page: 28px;
+
+    /* === Type sizes ==================================================== */
+    --text-display1: 96px;
+    --text-display2: 72px;
+    --text-display3: 48px;
+    --text-display4: 36px;
+    --text-heading: 24px;
+    --text-subheading: 20px;
+    --text-body: 16px;
+    --text-lead: 14px;
+    --text-small: 12px;
+    --text-caption: var(--text-small);
+    --text-micro: 11px;
+    --text-tiny: 8px;
+
+    /* letter spacing */
+    --letter-spacing-tight: 0.05em;
+    --letter-spacing-normal: 0.08em;
+    --letter-spacing-wide: 0.12em;
+
+    /* Text Color */
+    --text-primary: var(--white1);
+    --text-muted: var(--white4);
+    --text-faint: var(--white6);
+    --text-active-link: var(--main1);
+
+    /* font weights for text */
+    --font-bold1: 900;
+    --font-bold2: 800;
+    --font-bold3: 700;
+    --font-bold4: 600;
+    --font-bold5: 500;
+    --font-bold6: 400;
+    --font-bold7: 300;
+    --font-bold8: 200;
+    --font-bold9: 100;
+    --font-normal: 400;
+
+    /* Font stack — Inter for clean modern UI (stripchat-style) */
+    --font-body: 'Inter', 'DM Sans', system-ui, sans-serif;
+    --font-display: 'Bebas Neue', sans-serif;
+
+    /* === Shadow steps (1 = lightest … 5 = heaviest) ==================== */
+    /* Each step carries a 1px white inset rim (adapted from Astryx) —
+       on a dark canvas the rim mimics ambient light catching the surface
+       edge, lifting popovers/modals in a way drop shadows alone can't. */
+    --shadow1: 0 1px 3px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    --shadow2: 0 4px 16px rgba(0, 0, 0, 0.45),
+        0 1px 4px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    --shadow3: 0 8px 48px rgba(0, 0, 0, 0.5),
+        0 2px 12px rgba(0, 0, 0, 0.35),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    --shadow4: 0 8px 48px rgba(0, 0, 0, 0.75),
+        0 2px 12px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+    --shadow5: 0 8px 48px rgba(0, 0, 0, 0.95),
+        0 2px 12px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+
+    --shadow-inset1: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    --shadow-inset2: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+    /* === Surfaces ====================================================== */
+    --surface-black: var(--black);
+    --surface1: var(--black2);
+    --surface2: var(--black3);
+    --surface3: var(--gray1);
+    --surface-muted: var(--white-alpha-045);
+    --surface-muted-hover: var(--white-alpha-075);
+    --surface-muted-active: var(--white6);
+
+    /* === Borders ======================================================= */
+    --border-subtle: var(--black6);
+    --border-default: var(--white6);
+    --border-strong: var(--gray7);
+    --border-inverse-subtle: var(--white-alpha-080);
+    --border-inverse-muted: var(--white-alpha-120);
+
+    /* === Elevation aliases (1 = lightest, 5 = heaviest) ================ */
+    --elevation1: var(--shadow1);
+    --elevation2: var(--shadow2);
+    --elevation3: var(--shadow3);
+    --elevation4: var(--shadow4);
+    --elevation5: var(--shadow5);
+
+    /* === Interaction =================================================== */
+    --interactive-transition: var(--duration1);
+
+    /* Overlay hover/press (adapted from Astryx): a translucent layer
+       stacked on top of ANY base color via
+       background-image: linear-gradient(var(--overlay-hover), var(--overlay-hover));
+       One pair of tokens gives every variant a consistent hover/press. */
+    --overlay-hover: rgba(255, 255, 255, 0.06);
+    --overlay-pressed: rgba(255, 255, 255, 0.12);
+
+    /* Focus (adapted from Astryx): 2px accent outline, offset 3px.
+       Applied centrally in interaction.css. */
+    --focus-outline-color: var(--color-primary);
+    --focus-outline: 2px solid var(--focus-outline-color);
+    --focus-outline-offset: 3px;
+    --focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.6);
+    --focus-ring-offset: 2px;
+
+    /* === Status / accents (semantic roles → MAIN/SYSTEM colors) ======== */
+    --accent-primary: var(--main1);
+    --color-primary: var(--main1);
+    --color-accent: var(--main1);
+    --color-money: var(--main2);
+    --color-info: var(--azure);
+    --color-danger: var(--red-bright);
+    --color-success: var(--lime);
+    --color-warning: var(--orange-bright);
+    --color-live: var(--lime);
+    --color-notification: var(--neon-pink);
+
+    /* === Legacy single-shadow alias (same as heaviest step) ============ */
+    --shadow: var(--shadow5);
+
+    /* === Motion ======================================================== */
+    --duration1: 0.15s;
+    --duration2: 0.2s;
+    --duration3: 0.25s;
+
+    /* Motion (adapted from Astryx): fast = micro-interactions,
+       medium = entrance/exit. ease-standard is the house easing. */
+    --duration-fast: 175ms;
+    --duration-medium: 410ms;
+    --ease-standard: cubic-bezier(0.24, 1, 0.4, 1);
+    --duration4: 0.4s;
+
+    --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* === Stacking (z-index) ============================================ */
+    --z-base: 1;
+    --z-sticky: 10;
+    --z-dropdown: 50;
+    --z-overlay: 100;
+    --z-modal: 200;
+    --z-toast: 300;
+    --z-tooltip: 400;
+    --z-max: 500;
+}

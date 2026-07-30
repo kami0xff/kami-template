@@ -1,0 +1,45 @@
+/*
+    Caumont domain — brand tokens (from agency standalones).
+    Domain pages use these directly. Optional bridge to the shared kit
+    can map --gold → --main1 when embedding shared components.
+*/
+:root{
+    --onyx:#0E0E10;
+    --bone:#F5F4F1;
+    --bone-2:#EEEDE8;
+    --gold:#B79256;
+    --gold-soft:rgba(183,146,86,.55);
+    --navy:#1B2A4A;
+    --ink-60:rgba(14,14,16,.6);
+    --ink-40:rgba(14,14,16,.4);
+    --ink-20:rgba(14,14,16,.2);
+    --ink-10:rgba(14,14,16,.1);
+    --bone-60:rgba(245,244,241,.6);
+    --bone-40:rgba(245,244,241,.4);
+    --bone-20:rgba(245,244,241,.18);
+    --hair:0.5px;
+    --serif:"Cormorant Garamond", "Times New Roman", serif;
+    --sans:"Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --max:1320px;
+  }
+
+/* System bridge — only used if shared kit components appear on a Caumont page */
+:root {
+    --main1: var(--gold);
+    --main1-strong: #9a7a45;
+    --main1-deep: #6e5630;
+    --color-primary: var(--gold);
+    --color-accent: var(--gold);
+    --font-body: var(--sans);
+    --font-display: var(--serif);
+    --radius1: 0;
+    --radius2: 0;
+    --radius3: 0;
+    --radius4: 0;
+    --radius-pill: 0;
+    --panel-radius: 0;
+    --panel-bg: #141417;
+    --panel-border: var(--ink-10);
+    --surface-black: var(--onyx);
+    --text-primary: var(--onyx);
+}

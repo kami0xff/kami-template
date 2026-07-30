@@ -1,0 +1,15 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --badge-fg: var(--text-muted);
+    --badge-bg: var(--white7);
+    --badge-tint-strength: 16%;
+
+    /* ===== B) Layout ================================================= */
+    --badge-font-size: 11px;
+    --badge-font-weight: var(--font-bold4);
+    --badge-padding: 2px 8px;
+    --badge-radius: var(--radius-pill);
+    --badge-gap: 5px;
+
+    --status-dot-size: 8px;
+}

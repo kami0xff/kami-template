@@ -1,0 +1,220 @@
+/* Glowing thinking orb — AI girlfriend / generation wait states */
+
+.ai-orb {
+    --ai-orb-core: color-mix(in srgb, var(--ai-accent, #fa5365) 55%, #fff);
+    --ai-orb-mid: var(--ai-accent, #fa5365);
+    --ai-orb-deep: color-mix(in srgb, var(--ai-accent, #fa5365) 55%, #1a0a10);
+    --ai-orb-glow: color-mix(in srgb, var(--ai-accent, #fa5365) 55%, transparent);
+    --ai-orb-size: 44px;
+
+    display: inline-grid;
+    justify-items: center;
+    gap: 10px;
+    color: var(--ai-muted, rgba(255, 255, 255, 0.55));
+}
+
+.ai-orb--sm { --ai-orb-size: 32px; gap: 8px; }
+.ai-orb--md { --ai-orb-size: 44px; }
+.ai-orb--lg { --ai-orb-size: 72px; gap: 12px; }
+.ai-orb--xl { --ai-orb-size: 110px; gap: 14px; }
+
+.ai-orb--image {
+    --ai-orb-core: #ffe4c8;
+    --ai-orb-mid: #f0a36b;
+    --ai-orb-deep: #7a3a18;
+    --ai-orb-glow: rgba(240, 163, 107, 0.5);
+}
+
+.ai-orb--video {
+    --ai-orb-core: #ffd0e0;
+    --ai-orb-mid: #ff6b9d;
+    --ai-orb-deep: #6b1838;
+    --ai-orb-glow: rgba(255, 107, 157, 0.55);
+}
+
+.ai-orb-stage {
+    position: relative;
+    width: var(--ai-orb-size);
+    height: var(--ai-orb-size);
+    display: grid;
+    place-items: center;
+}
+
+.ai-orb-glow {
+    position: absolute;
+    inset: -35%;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--ai-orb-glow) 0%, transparent 68%);
+    animation: ai-orb-breathe 2.4s ease-in-out infinite;
+    filter: blur(2px);
+}
+
+.ai-orb-ring {
+    position: absolute;
+    inset: -12%;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--ai-orb-mid) 45%, transparent);
+    animation: ai-orb-spin 6s linear infinite;
+}
+
+.ai-orb-ring::before,
+.ai-orb-ring::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ai-orb-core);
+    box-shadow: 0 0 10px var(--ai-orb-mid);
+}
+
+.ai-orb-ring::before {
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ai-orb-ring::after {
+    bottom: 8%;
+    right: 4%;
+    width: 4px;
+    height: 4px;
+    opacity: 0.75;
+}
+
+.ai-orb-core {
+    position: relative;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 32% 28%, #fff 0%, var(--ai-orb-core) 18%, var(--ai-orb-mid) 52%, var(--ai-orb-deep) 100%);
+    box-shadow:
+        inset 0 -6px 14px rgba(0, 0, 0, 0.35),
+        inset 0 4px 10px rgba(255, 255, 255, 0.45),
+        0 0 18px var(--ai-orb-glow),
+        0 0 36px color-mix(in srgb, var(--ai-orb-glow) 60%, transparent);
+    animation: ai-orb-pulse 2.4s ease-in-out infinite;
+}
+
+.ai-orb-core::after {
+    content: "";
+    position: absolute;
+    inset: 18% 22% auto auto;
+    width: 28%;
+    height: 18%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    filter: blur(1px);
+    transform: rotate(-28deg);
+}
+
+.ai-orb-sparks {
+    position: absolute;
+    inset: -8%;
+    animation: ai-orb-spin 9s linear infinite reverse;
+    pointer-events: none;
+}
+
+.ai-orb-sparks i {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px var(--ai-orb-mid);
+    opacity: 0.85;
+}
+
+.ai-orb-sparks i:nth-child(1) { top: 8%; left: 42%; }
+.ai-orb-sparks i:nth-child(2) { top: 55%; right: 2%; width: 2px; height: 2px; }
+.ai-orb-sparks i:nth-child(3) { bottom: 6%; left: 30%; width: 2px; height: 2px; opacity: 0.6; }
+
+.ai-orb-label {
+    font-size: var(--text-small, 12px);
+    letter-spacing: 0.02em;
+    color: var(--ai-muted, rgba(255, 255, 255, 0.55));
+    text-align: center;
+    max-width: 12rem;
+    line-height: 1.35;
+}
+
+.ai-orb-label strong {
+    display: block;
+    color: var(--ai-fg, #f2f2f2);
+    font-weight: var(--font-bold5, 600);
+    margin-bottom: 2px;
+}
+
+/* Inline in AI thread / girlfriend chat */
+.ai-thinking {
+    display: grid;
+    gap: 6px;
+    max-width: min(280px, 92%);
+    margin-right: auto;
+    justify-items: start;
+}
+
+.ai-thinking--in-chat {
+    padding: 4px 0 2px;
+}
+
+.ai-thinking-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px 12px 14px;
+    border-radius: 18px;
+    border: 1px solid var(--ai-border, rgba(255, 255, 255, 0.08));
+    background:
+        radial-gradient(ellipse at 20% 30%, color-mix(in srgb, var(--ai-orb-glow, rgba(250, 83, 101, 0.25)) 40%, transparent), transparent 55%),
+        var(--ai-msg-assistant-bg, #333);
+}
+
+.ai-thinking--image .ai-thinking-card {
+    --ai-orb-glow: rgba(240, 163, 107, 0.45);
+}
+
+.ai-thinking--video .ai-thinking-card {
+    --ai-orb-glow: rgba(255, 107, 157, 0.45);
+}
+
+/* Chat-dock message row variant */
+.chat-msg--thinking .chat-msg-body {
+    display: flex;
+    align-items: flex-end;
+}
+
+.chat-msg--thinking .ai-thinking-card {
+    background:
+        radial-gradient(ellipse at 20% 30%, color-mix(in srgb, var(--ai-orb-glow, rgba(250, 83, 101, 0.25)) 35%, transparent), transparent 55%),
+        var(--chat-bubble-them-bg, var(--gray6));
+    border-color: var(--border-default, rgba(255, 255, 255, 0.08));
+}
+
+@keyframes ai-orb-breathe {
+    0%, 100% { opacity: 0.55; transform: scale(0.92); }
+    50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes ai-orb-pulse {
+    0%, 100% { transform: scale(0.96); }
+    50% { transform: scale(1.04); }
+}
+
+@keyframes ai-orb-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-orb-glow,
+    .ai-orb-ring,
+    .ai-orb-core,
+    .ai-orb-sparks {
+        animation: none;
+    }
+
+    .ai-orb-glow {
+        opacity: 0.75;
+    }
+}

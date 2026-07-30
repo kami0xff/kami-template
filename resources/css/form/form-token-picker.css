@@ -1,0 +1,135 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOKEN PICKER — quick-select chips + bonus badges + stepper
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-token-picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space3);
+}
+
+/* Chip grid */
+.form-token-chips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+/* Single chip */
+.form-token-chip {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 16px 12px;
+    border: 1.5px solid var(--white-alpha-120);
+    border-radius: 10px;
+    background: var(--white7);
+    cursor: pointer;
+    text-align: center;
+    transition:
+        border-color var(--form-input-transition),
+        background var(--form-input-transition),
+        box-shadow var(--form-input-transition);
+}
+
+.form-token-chip strong {
+    font-size: 18px;
+    font-weight: var(--font-bold3);
+    color: var(--text-primary);
+}
+
+.form-token-chip small {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.form-token-chip:hover {
+    border-color: var(--silver1);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.form-token-chip.selected {
+    border-color: var(--silver7);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 0 18px rgba(255, 255, 255, 0.12);
+}
+
+/* Bonus badge */
+.form-token-bonus {
+    position: absolute;
+    top: -8px;
+    right: -6px;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(135deg, var(--form-accent-strong), var(--form-accent));
+    color: var(--gray1);
+    font-size: 10px;
+    font-weight: var(--font-bold2);
+    letter-spacing: 0.3px;
+}
+
+/* ───── STEPPER ───── */
+.form-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--white-alpha-120);
+    border-radius: var(--form-input-radius);
+    overflow: hidden;
+}
+
+.form-stepper-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: none;
+    background: var(--white7);
+    color: var(--text-muted);
+    font-size: 16px;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        background var(--form-input-transition),
+        color var(--form-input-transition);
+}
+
+.form-stepper-btn:hover {
+    background: var(--white6);
+    color: var(--text-primary);
+}
+
+.form-stepper-input {
+    width: 52px;
+    height: 38px;
+    text-align: center;
+    font-size: var(--text-lead);
+    font-weight: var(--font-bold4);
+    font-family: inherit;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--white-alpha-120);
+    border-right: 1px solid var(--white-alpha-120);
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.form-stepper-input::-webkit-outer-spin-button,
+.form-stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-token-chip,
+    .form-stepper-btn {
+        transition: none;
+    }
+}

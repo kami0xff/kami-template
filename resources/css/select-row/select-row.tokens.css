@@ -1,0 +1,38 @@
+:root {
+    /* Row (selectable option) */
+    --select-row-bg: var(--gray3);
+    --select-row-bg-hover: var(--gray5);
+    --select-row-border: var(--border-strong);
+    --select-row-border-hover: var(--gray8);
+    --select-row-radius: var(--radius3);
+    --select-row-padding: var(--space3) 18px;
+    --select-row-gap: var(--space3);
+    --select-row-min-height: 56px;
+
+    /* Row selected state */
+    --select-row-sel-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.04));
+    --select-row-sel-border: var(--silver7);
+    --select-row-sel-glow: rgba(255, 255, 255, 0.15);
+    --select-row-sel-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.10),
+        0 0 24px rgba(255, 255, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    /* Radio mark */
+    --select-radio-size: 18px;
+    --select-radio-border: var(--silver1);
+    --select-radio-border-hover: var(--silver3);
+    --select-radio-sel-bg: linear-gradient(135deg, var(--silver9), #fff);
+    --select-radio-sel-border: #fff;
+    --select-radio-sel-glow: 0 0 6px rgba(255, 255, 255, 0.4);
+    --select-radio-dot-size: 7px;
+
+    /* Typography */
+    --select-row-title-size: var(--text-lead);
+    --select-row-title-weight: var(--font-bold5);
+    --select-row-sub-size: var(--text-small);
+    --select-row-sub-color: var(--text-muted);
+    --select-label-size: var(--text-lead);
+    --select-label-weight: var(--font-bold4);
+    --select-save-color: var(--color-success);
+}

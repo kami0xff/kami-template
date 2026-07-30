@@ -1,0 +1,32 @@
+/* EmptyState — zero-result / first-run placeholder.
+   (Astryx: EmptyState, adapted; promoted from the Pornguru site component.) */
+.empty-state {
+    display: grid;
+    justify-items: center;
+    gap: var(--empty-state-gap);
+    padding: var(--empty-state-padding);
+    text-align: center;
+}
+
+.empty-state-icon {
+    width: var(--empty-state-icon-size);
+    height: var(--empty-state-icon-size);
+    color: var(--empty-state-icon-fg);
+    margin-bottom: var(--space2);
+}
+
+.empty-state-title {
+    color: var(--empty-state-title-fg);
+    font-size: var(--text-subheading);
+    font-weight: var(--font-bold5);
+}
+
+.empty-state-text {
+    max-width: var(--empty-state-max-width);
+    color: var(--empty-state-text-fg);
+    font-size: var(--text-lead);
+}
+
+.empty-state-action {
+    margin-top: var(--space3);
+}

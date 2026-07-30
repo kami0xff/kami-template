@@ -1,0 +1,21 @@
+
+.panel-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--panel-head-gap);
+    padding: var(--panel-head-padding);
+}
+
+.panel-head-title {
+    font-size: var(--panel-head-title-size);
+    font-weight: var(--panel-head-title-weight);
+    color: var(--panel-head-title-fg);
+    letter-spacing: var(--panel-head-title-tracking);
+}
+
+.panel-head-subtitle {
+    font-size: var(--panel-head-subtitle-size);
+    color: var(--panel-head-subtitle-fg);
+    margin-top: var(--panel-head-subtitle-margin-top);
+}

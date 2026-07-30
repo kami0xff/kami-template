@@ -1,0 +1,45 @@
+/*
+    Theme: Pornguru — warm charcoal with a coral brand accent.
+
+    Second full palette re-skin (alongside hhentai). Proves the system claim
+    that a site = token overrides only: neutrals shift warm, main1 becomes
+    coral, forms/buttons/sidebar follow via --color-primary / --form-accent.
+
+    Usage (site manifest):  @import '../themes/pornguru.css' layer(themes);
+    Usage (single page):    load after app.css via vite_asset('assets/pornguru-theme.css')
+    Demo: /pornguru-theme
+*/
+@layer themes {
+    :root {
+        /* ── Neutrals → warm charcoal ─────────────────────────────── */
+        --black: #0c0a09;
+
+        --gray1: #120f0e;
+        --gray2: #161211;
+        --gray3: #1a1513;
+        --gray4: #1f1916;
+        --gray5: #241e1a;
+        --gray6: #2a221e;
+        --gray7: #302824;
+        --gray8: #3a312c;
+        --gray9: #443a34;
+        --gray10: #50453e;
+
+        --surface-black: #120f0e;
+        --surface1: #1a1513;
+        --surface2: #241e1a;
+        --surface3: var(--gray1);
+
+        /* ── Main colors → coral brand ────────────────────────────── */
+        --main1: #ff6b4a;
+        --main1-strong: #e84f2f;
+        --main1-deep: #9a2e18;
+        /* main2 (money gold) stays — fits a warm palette */
+
+        --border-default: rgba(255, 200, 170, 0.12);
+        --border-strong: #3a312c;
+
+        --navbar-bg: #100d0c;
+        --sidebar-background: #14110f;
+    }
+}

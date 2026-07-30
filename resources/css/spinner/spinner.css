@@ -1,0 +1,18 @@
+/* Spinner — standalone loading indicator, inherits currentColor.
+   (Astryx: Spinner, adapted.) */
+.spinner {
+    display: inline-block;
+    width: var(--spinner-size);
+    height: var(--spinner-size);
+    border: var(--spinner-stroke) solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-rotate var(--spinner-duration) linear infinite;
+}
+
+.spinner--sm { width: var(--spinner-size-sm); height: var(--spinner-size-sm); }
+.spinner--lg { width: var(--spinner-size-lg); height: var(--spinner-size-lg); border-width: 3px; }
+
+@keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+}

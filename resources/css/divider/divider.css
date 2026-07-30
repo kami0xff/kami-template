@@ -1,0 +1,23 @@
+/* Divider — horizontal rule with optional centered label.
+   (Astryx: Divider, adapted.) */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: var(--divider-gap);
+    margin-block: var(--divider-margin-block);
+    color: var(--divider-fg);
+    font-size: var(--divider-font-size);
+    white-space: nowrap;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--divider-line);
+}
+
+.divider:empty {
+    gap: 0;
+}

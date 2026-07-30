@@ -1,0 +1,26 @@
+/*
+    Pornguru sidebar composition tokens.
+
+    These are intentionally separate from the shared sidebar component so Pornguru
+    can use the same primitives with a different skin.
+*/
+
+:root {
+    --sidebar-width: 260px;
+    --sidebar-min-width: 220px;
+    --sidebar-drawer-width: 380px;
+    --sidebar-background: var(--surface-black);
+    --sidebar-border: var(--border-default);
+    --sidebar-link-hover-background: var(--surface-muted-hover);
+    --sidebar-link-active-background: var(--surface-muted-active);
+    --sidebar-card-background: var(--surface-muted);
+    --sidebar-card-hover-background: var(--surface-muted-hover);
+    --sidebar-scrollbar-thumb: rgba(255, 255, 255, 0.14);
+    --sidebar-scrollbar-thumb-hover: rgba(255, 255, 255, 0.22);
+    --sidebar-scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    --sidebar-banner-border: rgba(255, 184, 77, 0.25);
+    --sidebar-banner-background: linear-gradient(135deg, rgba(255, 184, 77, 0.14), rgba(255, 92, 92, 0.10));
+    --sidebar-banner-hover-background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.14), transparent 45%);
+    --sidebar-banner-icon-color: #ffb84d;
+    --sidebar-banner-pulse-background: rgba(255, 184, 77, 0.12);
+}

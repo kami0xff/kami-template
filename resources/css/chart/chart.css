@@ -1,0 +1,64 @@
+/* Chart card shell */
+
+.chart-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--chart-bg);
+    border: 1px solid var(--chart-border);
+    border-radius: var(--chart-radius);
+    box-shadow: var(--chart-shadow);
+    overflow: hidden;
+}
+
+.chart-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: var(--chart-padding);
+    padding-bottom: 0;
+}
+
+.chart-card-copy {
+    min-width: 0;
+}
+
+.chart-card-title {
+    margin: 0;
+    font-size: var(--chart-title-size);
+    font-weight: 700;
+    color: var(--chart-fg);
+}
+
+.chart-card-meta {
+    margin: 4px 0 0;
+    font-size: var(--chart-meta-size);
+    color: var(--chart-fg-muted);
+}
+
+.chart-card-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.chart-card-body {
+    position: relative;
+    width: 100%;
+    min-height: var(--chart-min-height);
+    padding: 8px 12px 14px;
+}
+
+.chart-card-body canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-grid {
+    display: grid;
+    gap: var(--space4, 1rem);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}

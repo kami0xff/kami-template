@@ -1,0 +1,97 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   INLINE CHECKBOX — compact silver-themed check for form contexts
+   Pairs with <label class="form-check"> pattern from design.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space2);
+    cursor: pointer;
+    user-select: none;
+    font-size: var(--text-lead);
+    color: var(--text-muted);
+    transition: color var(--form-input-transition);
+}
+
+.form-check:hover {
+    color: var(--text-primary);
+}
+
+.form-check input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.form-check-box {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 5px;
+    border: 1.5px solid var(--silver1);
+    background: var(--white7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        border-color var(--form-input-transition),
+        background var(--form-input-transition),
+        box-shadow var(--form-input-transition);
+}
+
+.form-check:hover .form-check-box {
+    border-color: var(--silver3);
+}
+
+.form-check input:checked ~ .form-check-box {
+    background: linear-gradient(135deg, var(--silver8), #fff);
+    border-color: var(--silver8);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.25);
+}
+
+.form-check-box svg {
+    width: 11px;
+    height: 11px;
+    color: var(--gray2);
+    opacity: 0;
+    transform: scale(0.5);
+    transition:
+        opacity var(--form-input-transition),
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.form-check input:checked ~ .form-check-box svg {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.form-check input:focus-visible ~ .form-check-box {
+    outline: 2px solid var(--silver7);
+    outline-offset: 2px;
+}
+
+/* Large variant with stacked label */
+.form-check-lg {
+    align-items: flex-start;
+}
+
+.form-check-lg .form-check-box {
+    margin-top: 2px;
+}
+
+/* Disabled */
+.form-check[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-check-box,
+    .form-check-box svg {
+        transition: none;
+    }
+}

@@ -1,0 +1,59 @@
+/* ───── TAB ROOT ───── */
+.tab-root {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ───── HORIZONTAL TAB BAR ───── */
+.tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--tab-border);
+    gap: 0;
+}
+
+/* ───── TAB TRIGGER (button style) ───── */
+.tab-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--tab-height);
+    padding: 0 var(--space4);
+    font-size: var(--tab-font-size);
+    font-weight: var(--tab-font-weight);
+    color: var(--tab-color);
+    background: none;
+    border: none;
+    border-bottom: var(--tab-indicator-height) solid transparent;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.tab-trigger:hover {
+    color: var(--tab-active-color);
+}
+
+.tab-trigger.tab-active,
+.tab-trigger[aria-selected="true"],
+.tab-trigger[data-active="true"] {
+    color: var(--tab-active-color);
+    border-bottom-color: var(--tab-indicator-color);
+}
+
+/* ───── TAB PANEL ───── */
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.tab-active,
+.tab-panel[data-active="true"] {
+    display: block;
+}
+
+/* ───── REDUCED MOTION ───── */
+@media (prefers-reduced-motion: reduce) {
+    .tab-trigger {
+        transition: none;
+    }
+}

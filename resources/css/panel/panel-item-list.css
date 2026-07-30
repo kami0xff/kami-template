@@ -1,0 +1,12 @@
+
+
+/*TODO we need a regular list of links */
+/*TODO and in that list we need to be able to insert collapsable items <>*/
+.panel-item-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--panel-item-list-gap);
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+}

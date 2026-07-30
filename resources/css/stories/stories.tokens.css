@@ -1,0 +1,61 @@
+/*
+    Stories — Instagram-style rings, trays, pinned highlights, fullscreen viewer.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --stories-fg: #fff;
+    --stories-muted: rgba(255, 255, 255, 0.72);
+    --stories-faint: rgba(255, 255, 255, 0.45);
+    --stories-tray-bg: transparent;
+    --stories-ring-bg: var(--gray2);
+    --stories-ring-gap-color: var(--gray1, #121212);
+    --stories-ring-seen: var(--gray5);
+    --stories-ring-unseen: conic-gradient(
+        from 0deg,
+        #f9ce34 0deg,
+        #ee2a7b 90deg,
+        #6228d7 180deg,
+        #ee2a7b 270deg,
+        #f9ce34 360deg
+    );
+    --stories-ring-live: linear-gradient(135deg, #ff4d6d, #e44545 55%, #ff8a5c);
+    --stories-ring-close: linear-gradient(135deg, #2ecc71, #27ae60);
+    --stories-ring-add: var(--color-accent);
+    --stories-ring-pinned: var(--gray5);
+    --stories-ring-new-glow: color-mix(in srgb, #ee2a7b 45%, transparent);
+    --stories-live-badge: #e44545;
+    --stories-viewer-bg: #000;
+    --stories-viewer-overlay: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.55) 0%,
+        transparent 22%,
+        transparent 72%,
+        rgba(0, 0, 0, 0.65) 100%
+    );
+    --stories-progress-track: rgba(255, 255, 255, 0.28);
+    --stories-progress-fill: #fff;
+    --stories-reply-bg: rgba(255, 255, 255, 0.12);
+    --stories-reply-border: rgba(255, 255, 255, 0.28);
+
+    /* ===== B) Layout ================================================= */
+    --stories-tray-gap: 14px;
+    --stories-tray-pad: 10px 4px 6px;
+    --stories-ring-size: 74px;
+    --stories-ring-size-sm: 64px;
+    --stories-ring-halo: 2.5px;
+    --stories-ring-halo-new: 3.5px;
+    --stories-ring-gap: 3px;
+    --stories-label-max: 74px;
+    --stories-viewer-z: 1200;
+    --stories-viewer-max-w: min(420px, 100vw);
+    --stories-viewer-pad: 12px;
+    --stories-progress-h: 2px;
+    --stories-progress-gap: 3px;
+    --stories-tap-zone: 32%;
+
+    /* ===== C) Effects ================================================ */
+    --stories-transition: color 0.14s ease, background 0.14s ease, opacity 0.14s ease, transform 0.16s ease, box-shadow 0.2s ease;
+    --stories-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+    --stories-ring-spin: 10s;
+    --stories-ring-pulse: 2.4s;
+}

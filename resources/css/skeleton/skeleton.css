@@ -1,0 +1,36 @@
+/* Skeleton — loading placeholder. (Astryx: Skeleton, adapted.) */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--skeleton-radius);
+    background: var(--skeleton-bg);
+}
+
+.skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent);
+    translate: -100% 0;
+    animation: skeleton-shine var(--skeleton-duration) infinite;
+}
+
+@keyframes skeleton-shine {
+    to { translate: 100% 0; }
+}
+
+.skeleton--line {
+    height: var(--skeleton-line-height);
+    width: 100%;
+}
+
+.skeleton--circle {
+    border-radius: 50%;
+    aspect-ratio: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton::after {
+        animation: none;
+    }
+}

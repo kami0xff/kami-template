@@ -1,0 +1,134 @@
+:root {
+    /* Accent — ALL checked/focus/selected states derive from this.
+       Retheme forms by overriding --color-primary (or this token). */
+    --form-accent: var(--color-primary);
+    --form-accent-strong: color-mix(in srgb, var(--form-accent) 75%, black);
+    --form-accent-ring: color-mix(in srgb, var(--form-accent) 15%, transparent);
+
+    /* Form shell */
+    --form-gap: var(--space5);
+
+    /* Group (fieldset-like section with a heading) */
+    --form-group-gap: var(--space4);
+    --form-group-title-size: var(--text-lead);
+    --form-group-title-weight: var(--font-bold4);
+    --form-group-title-color: var(--text-primary);
+    --form-group-description-size: var(--text-small);
+    --form-group-description-color: var(--text-muted);
+
+    /* Row (horizontal layout for side-by-side fields) */
+    --form-row-gap: var(--space4);
+
+    /* Field (label + input + error wrapper) */
+    --form-field-gap: var(--space2);
+    --form-label-size: var(--text-small);
+    --form-label-weight: var(--font-bold4);
+    --form-label-color: var(--text-muted);
+    --form-required-color: var(--color-danger);
+
+    /* Inputs (text, email, number, textarea, select) */
+    --form-input-height: 42px;
+    --form-input-padding: 0 var(--space3);
+    --form-input-radius: var(--radius2);
+    --form-input-font-size: var(--text-body);
+    --form-input-bg: var(--white7);
+    --form-input-border: var(--white-alpha-120);
+    --form-input-color: var(--text-primary);
+    --form-input-placeholder: var(--text-faint);
+    --form-input-hover-border: var(--white5);
+    --form-input-focus-border: var(--form-accent);
+    --form-input-focus-ring: var(--form-accent-ring);
+    --form-input-disabled-opacity: 0.4;
+    --form-input-transition: 0.2s ease;
+
+    /* Textarea */
+    --form-textarea-min-height: 100px;
+    --form-textarea-padding: var(--space3);
+    --form-textarea-resize: vertical;
+
+    /* Select */
+    --form-select-chevron-size: 16px;
+    --form-select-chevron-color: var(--text-muted);
+
+    /* Toggle switch */
+    --form-toggle-width: 40px;
+    --form-toggle-height: 22px;
+    --form-toggle-radius: var(--radius-pill);
+    --form-toggle-bg: rgba(255, 255, 255, 0.08);
+    --form-toggle-border: var(--white-alpha-120);
+    --form-toggle-checked-bg-start: var(--form-accent);
+    --form-toggle-checked-bg-end: var(--form-accent-strong);
+    --form-toggle-knob-size: 16px;
+    --form-toggle-knob-offset: 3px;
+    --form-toggle-knob-bg: var(--silver5);
+    --form-toggle-knob-checked-bg: var(--gray1);
+    --form-toggle-transition: 0.25s ease;
+
+    /* Radio */
+    --form-radio-size: 20px;
+    --form-radio-border: var(--white-alpha-120);
+    --form-radio-dot-size: 8px;
+    --form-radio-checked-border: var(--form-accent);
+    --form-radio-checked-dot: var(--form-accent);
+
+    /* Input wrap */
+    --form-wrap-focus-bg: var(--gray5);
+    --form-icon-size: 36px;
+    --form-icon-color: var(--text-muted);
+    --form-icon-focus-color: var(--silver7);
+    --form-trail-size: 32px;
+    --form-addon-size: var(--text-lead);
+    --form-addon-color: var(--text-muted);
+
+    /* Validation states */
+    --form-state-success: var(--color-success);
+    --form-state-success-ring: color-mix(in srgb, var(--color-success) 15%, transparent);
+    --form-state-error: var(--color-danger);
+    --form-state-error-ring: color-mix(in srgb, var(--color-danger) 15%, transparent);
+
+    /* Error / Help text */
+    --form-error-size: var(--text-small);
+    --form-error-color: var(--color-danger);
+    --form-help-size: var(--text-small);
+    --form-help-color: var(--text-faint);
+
+    /* Separator */
+    --form-separator-color: var(--white-alpha-120);
+
+    /* Actions row */
+    --form-actions-gap: var(--space3);
+
+    /* Media uploader (YouTube-style dropzone + job queue) */
+    --uploader-drop-bg: var(--white7);
+    --uploader-drop-bg-hover: rgba(255, 255, 255, 0.04);
+    --uploader-drop-bg-active: color-mix(in srgb, var(--form-accent) 8%, transparent);
+    --uploader-drop-border: var(--white-alpha-120);
+    --uploader-drop-border-hover: var(--silver1);
+    --uploader-drop-border-active: var(--form-accent);
+    --uploader-drop-radius: var(--radius-container);
+    --uploader-drop-padding: var(--space6) var(--space5);
+    --uploader-drop-min-height: 200px;
+    --uploader-icon-fg: var(--text-muted);
+    --uploader-icon-active: var(--form-accent);
+    --uploader-title-size: var(--text-lead);
+    --uploader-title-fg: var(--text-primary);
+    --uploader-hint-size: var(--text-small);
+    --uploader-hint-fg: var(--text-muted);
+    --uploader-jobs-gap: var(--space3);
+    --uploader-job-bg: var(--surface1, var(--gray5));
+    --uploader-job-border: var(--white-alpha-120);
+    --uploader-job-radius: var(--radius-element);
+    --uploader-job-padding: var(--space3);
+    --uploader-thumb-size: 72px;
+    --uploader-thumb-radius: var(--radius-inner);
+    --uploader-thumb-bg: var(--gray8);
+    --uploader-name-fg: var(--text-primary);
+    --uploader-meta-fg: var(--text-faint);
+    --uploader-status-fg: var(--text-muted);
+    --uploader-status-uploading: var(--form-accent);
+    --uploader-status-done: var(--color-success);
+    --uploader-status-error: var(--color-danger);
+    --uploader-progress-height: 4px;
+    --uploader-progress-bg: rgba(255, 255, 255, 0.08);
+    --uploader-progress-fill: var(--form-accent);
+}

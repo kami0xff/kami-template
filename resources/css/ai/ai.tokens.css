@@ -1,0 +1,61 @@
+/*
+    AI workspace tokens — floating charcoal chrome shared with
+    chat-dock settings menus / panels / bottom-nav.
+
+    Recipe (keep in sync with panel.tokens.css):
+      surface   #222222
+      hairline  rgba(255,255,255,0.10)
+      radius    18px shells · 12px rows/controls
+      shadow    0 14px 40px rgba(0,0,0,0.55)
+      fg        rgba(255,255,255,0.88)
+      muted     rgba(255,255,255,0.48)
+      hover     rgba(255,255,255,0.07)
+      input bg  rgba(255,255,255,0.06)
+
+    AI identity accent stays teal (--ai-mark) so model chats read
+    differently from people chats without leaving the chrome family.
+*/
+:root {
+    /* ===== Shared surface (panel chrome) ============================= */
+    --ai-bg: var(--panel-bg, #222222);
+    --ai-bg-deep: color-mix(in srgb, var(--panel-bg, #222) 88%, #000);
+    --ai-surface: var(--panel-surface, #222222);
+    --ai-border: var(--panel-border, rgba(255, 255, 255, 0.1));
+    --ai-border-strong: var(--panel-border-strong, rgba(255, 255, 255, 0.14));
+    --ai-fg: var(--panel-list-item-fg, rgba(255, 255, 255, 0.88));
+    --ai-fg-strong: #ffffff;
+    --ai-muted: var(--panel-list-item-fg-muted, rgba(255, 255, 255, 0.48));
+    --ai-faint: rgba(255, 255, 255, 0.38);
+    --ai-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.07));
+    --ai-input-bg: rgba(255, 255, 255, 0.06);
+    --ai-divider: var(--panel-divider-fill, rgba(255, 255, 255, 0.1));
+
+    /* Product accent (tips / danger CTAs) + AI mark (identity) */
+    --ai-accent: var(--color-accent, #e44545);
+    --ai-mark: var(--chat-ai-mark, #5ec8c0);
+    --ai-mark-fg: var(--chat-ai-mark-fg, #0b1212);
+    --ai-mark-tint: color-mix(in srgb, var(--ai-mark) 10%, var(--ai-bg));
+
+    --ai-radius: var(--panel-radius, 18px);
+    --ai-radius-sm: 12px;
+    --ai-radius-pill: 999px;
+    --ai-shadow: var(--panel-shadow, 0 14px 40px rgba(0, 0, 0, 0.55));
+    --ai-shadow-soft: var(--panel-elevation-medium, 0 10px 28px rgba(0, 0, 0, 0.48));
+
+    /* ===== Chat ====================================================== */
+    --ai-chat-sidebar-w: 268px;
+    --ai-chat-aside-w: 300px;
+    --ai-chat-min-h: min(720px, calc(100vh - 160px));
+    --ai-msg-user-bg: color-mix(in srgb, var(--ai-accent) 72%, #1a1a1a);
+    --ai-msg-assistant-bg: rgba(255, 255, 255, 0.06);
+    --ai-msg-system-fg: var(--ai-faint);
+    --ai-composer-radius: var(--ai-radius-pill);
+    --ai-conv-pad: var(--panel-list-item-padding, 11px 12px);
+    --ai-conv-gap: 2px;
+
+    /* ===== Studio ==================================================== */
+    --ai-card-w: 148px;
+    --ai-card-ratio: 3 / 4;
+    --ai-lora-weight-w: 72px;
+    --ai-studio-aside-w: 340px;
+}

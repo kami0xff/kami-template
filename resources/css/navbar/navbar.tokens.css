@@ -1,0 +1,38 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --navbar-bg: var(--surface1);
+    --navbar-border: var(--border-strong);
+    --navbar-icon-fg: var(--text-faint);
+    --navbar-icon-hover-bg: rgba(255, 255, 255, 0.06);
+    --navbar-live-bg: rgba(255, 255, 255, 0.04);
+    --navbar-live-border: rgba(255, 255, 255, 0.08);
+    --navbar-live-fg: #cccccc;
+    --navbar-live-dot-bg: #4ade80;
+    --navbar-notification-dot-bg: var(--navbar-live-dot-bg);
+    --navbar-notification-dot-border: #0a0a0a;
+
+    /* ===== B) Layout ================================================= */
+    --navbar-height: 54px;
+    --navbar-padding-inline: var(--space3);
+    --navbar-gap: var(--space3);
+    --navbar-side-gap: 10px;
+    --navbar-right-gap: 6px;
+    --navbar-icon-size: 32px;
+    --navbar-icon-radius: var(--radius2);
+    --navbar-hamburger-line-width: 16px;
+    --navbar-hamburger-line-height: 1.5px;
+    --navbar-center-max-width: 400px;
+    --navbar-logo-font: var(--font-display);
+    --navbar-logo-size: 20px;
+    --navbar-logo-tracking: 3px;
+
+    /* ===== C) Effects ================================================ */
+    /* Clean defaults — the vivid chrome look (texture, metallic logo,
+       inset bevels) lives in themes/glow.css as an opt-in spec. */
+    --navbar-z: var(--z-overlay);
+    --navbar-transition: all var(--duration2);
+    --navbar-shadow: none;
+    --navbar-texture: none;
+    --navbar-logo-fill: var(--text-primary);
+    --navbar-live-shadow: none;
+}

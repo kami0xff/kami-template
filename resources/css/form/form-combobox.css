@@ -1,0 +1,159 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMBOBOX / AUTOCOMPLETE — search input + suggestion popover
+   Controlled via [data-open="true"] on .form-combobox.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-combobox {
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+}
+
+.form-combobox[data-open="true"] {
+    z-index: calc(var(--z-dropdown, 40) + 1);
+}
+
+/* Suggestion panel */
+.form-combo-suggestions {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--space1) 0;
+    background: var(--gray4, #1c1c1c);
+    border: 1px solid var(--gray8, #3a3a3a);
+    border-radius: 10px;
+    box-shadow: var(--shadow3, 0 12px 32px rgba(0, 0, 0, 0.45));
+    z-index: var(--z-dropdown, 40);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition:
+        opacity var(--form-input-transition, 0.15s ease),
+        transform var(--form-input-transition, 0.15s ease),
+        visibility var(--form-input-transition, 0.15s ease);
+}
+
+.form-combobox[data-open="true"] .form-combo-suggestions {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.form-combo-suggestions[hidden] {
+    display: none !important;
+}
+
+/* Section header inside suggestions */
+.form-combo-section {
+    padding: var(--space2) var(--space3);
+    font-size: 10px;
+    font-weight: var(--font-bold4, 600);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver5, #8a8a8a);
+}
+
+/* Suggestion item — reset button chrome */
+.form-combo-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    width: 100%;
+    margin: 0;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    box-shadow: inset 2px 0 0 transparent;
+    transition: background var(--form-input-transition, 0.15s ease), box-shadow var(--form-input-transition, 0.15s ease);
+}
+
+.form-combo-item:hover,
+.form-combo-item.active {
+    background: var(--white7, rgba(255, 255, 255, 0.06));
+}
+
+.form-combo-item.active {
+    box-shadow: inset 2px 0 0 var(--silver7, #cfcfcf);
+}
+
+/* Avatar in suggestion */
+.form-combo-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gray8, #333);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.form-combo-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.form-combo-avatar svg {
+    width: 60%;
+    height: 60%;
+}
+
+/* Meta text */
+.form-combo-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    flex: 1;
+}
+
+.form-combo-meta span {
+    font-size: var(--text-lead, 14px);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-combo-meta small {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.form-combo-meta mark {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* Keyboard hint */
+.form-combo-kbd {
+    margin-left: auto;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    color: var(--silver3, #777);
+    flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-combo-suggestions,
+    .form-combo-item {
+        transition: none;
+    }
+}

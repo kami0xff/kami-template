@@ -1,0 +1,18 @@
+/* Context menu — a .menu shown at the cursor on right-click.
+   (Astryx: ContextMenu, adapted.) Positioning is ContextMenuManager.ts. */
+.context-menu {
+    position: fixed;
+    z-index: var(--z-max);
+    min-width: var(--menu-min-width);
+    border: 1px solid var(--popover-border);
+    border-radius: var(--popover-radius);
+    background: var(--popover-bg);
+    box-shadow: var(--popover-elevation);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.context-menu--open {
+    visibility: visible;
+    opacity: 1;
+}

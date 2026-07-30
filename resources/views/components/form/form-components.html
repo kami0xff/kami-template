@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOYCAM — Form Components</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="form-components.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background: #111;
+  font-family: 'DM Sans', sans-serif;
+  color: #f0f0f0;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 30%, rgba(255,255,255,.025), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(80,80,80,.04), transparent 70%);
+}
+
+/* DEMO PAGE CHROME */
+.demo-navbar{
+  height: 48px;
+  background-color: #0e0e0e;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.012) 1px,rgba(255,255,255,.012) 2px),
+    repeating-linear-gradient(90deg,transparent,transparent 6px,rgba(255,255,255,.008) 6px,rgba(255,255,255,.008) 7px),
+    linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.01) 40%,rgba(0,0,0,.15) 100%);
+  border-bottom: 1px solid #1c1c1c;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 1px 0 rgba(0,0,0,.6);
+  display: flex; align-items: center; padding: 0 14px; gap: 12px;
+}
+.demo-navbar .logo{
+  font-family: 'Bebas Neue', sans-serif; font-size:20px; letter-spacing:4px;
+  background: linear-gradient(135deg,#777,#fff 45%,#888 75%,#ccc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.demo-navbar .file-name{
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 11px; color: #888;
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.demo-navbar .file-dot{
+  width:6px;height:6px;border-radius:50%;background:#aaa;
+  box-shadow:0 0 6px rgba(255,255,255,.2);
+}
+
+.page{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 56px 32px 120px;
+}
+
+.page-eyebrow{
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.page-title{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px; letter-spacing: 3px;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.page-title span{
+  -webkit-text-stroke: 1px rgba(200,200,200,0.45);
+  color: transparent;
+}
+.page-sub{
+  font-size: 15px;
+  color: #bbb;
+  max-width: 560px;
+  line-height: 1.6;
+  margin-bottom: 56px;
+}
+.page-sub code{
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 13px;
+  padding: 2px 6px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 5px;
+  color: #ddd;
+}
+
+/* section */
+.section{
+  margin-bottom: 64px;
+}
+.section-head{
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #1c1c1c;
+}
+.section-num{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px; letter-spacing: 3px;
+  color: #aaa;
+}
+.section-title{
+  font-size: 18px; font-weight: 600;
+  color: #fff;
+}
+.section-desc{
+  font-size: 13px;
+  color: #888;
+  margin-left: auto;
+}
+
+.demo-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.demo-grid.cols-1{ grid-template-columns: 1fr; }
+.demo-grid.cols-3{ grid-template-columns: repeat(3, 1fr); }
+
+.demo-card{
+  background: #0c0c0c;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.demo-card::before{
+  content:''; position:absolute; top:0; left:0; right:0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+}
+.demo-card-label{
+  font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 18px;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.demo-card-label::before{
+  content:'';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#ccc,#888);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+}
+
+.demo-stack{
+  display: flex; flex-direction: column;
+  gap: 14px;
+}
+.demo-row{
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+
+/* code label under example */
+.code-tag{
+  display: inline-block;
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  color: #555;
+  margin-top: 6px;
+  letter-spacing: .3px;
+}
+.code-tag::before{ content:'< '; opacity: .5; }
+.code-tag::after{ content:' />'; opacity: .5; }
+
+@media (max-width: 760px){
+  .demo-grid, .demo-grid.cols-3{ grid-template-columns: 1fr; }
+  .page-title{ font-size: 42px; }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-navbar">
+  <span class="logo">BOYCAM</span>
+  <span style="font-size:11px;color:#888;letter-spacing:2px;text-transform:uppercase;">Form Components</span>
+  <span class="file-name"><span class="file-dot"></span>form-components.css</span>
+</div>
+
+<div class="page">
+
+  <div class="page-eyebrow">Stylesheet · Form Kit</div>
+  <h1 class="page-title">FORM <span>COMPONENTS</span></h1>
+  <p class="page-sub">
+    Drop-in CSS in the BOYCAM <strong>black + silver + green</strong> vocabulary. Brushed-metal surfaces, subtle silver borders, green accent for validation, focus and primary actions. Import once via <code>form-components.css</code>.
+  </p>
+
+  <!-- ───── 01. INPUTS ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">Text Inputs</span>
+      <span class="section-desc">Email, password, search, with icon &amp; states</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Default</div>
+        <div class="demo-stack">
+
+          <div class="bc-field">
+            <label class="bc-label">Email</label>
+            <div class="bc-input-wrap">
+              <span class="bc-input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input class="bc-input" type="email" placeholder="nom@exemple.com">
+            </div>
+          </div>
+
+          <div class="bc-field">
+            <label class="bc-label">Mot de passe<a href="#" class="bc-label-link">Mot de passe oublié ?</a></label>
+            <div class="bc-input-wrap">
+              <span class="bc-input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input class="bc-input" type="password" placeholder="••••••••••••" value="secretvalue">
+              <button class="bc-input-trail" type="button" aria-label="Show">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="bc-field">
+            <label class="bc-label">Recherche</label>
+            <div class="bc-input-wrap">
+              <span class="bc-input-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              </span>
+              <input class="bc-input" type="text" placeholder="Rechercher des membres…">
+            </div>
+          </div>
+
+          <div class="bc-field">
+            <label class="bc-label">Disabled</label>
+            <div class="bc-input-wrap">
+              <input class="bc-input" type="text" value="Read only value" disabled>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">States</div>
+        <div class="demo-stack">
+
+          <div class="bc-field is-focus">
+            <label class="bc-label">Focused</label>
+            <div class="bc-input-wrap">
+              <input class="bc-input" type="text" value="Typing…">
+              <span class="bc-input-caret"></span>
+            </div>
+            <div class="bc-help">Silver border + soft inset highlight</div>
+          </div>
+
+          <div class="bc-field is-valid">
+            <label class="bc-label">Valide</label>
+            <div class="bc-input-wrap">
+              <input class="bc-input" type="text" value="username_99">
+              <span class="bc-input-trail bc-status">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+            </div>
+            <div class="bc-help bc-help-success">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Disponible
+            </div>
+          </div>
+
+          <div class="bc-field is-error">
+            <label class="bc-label">Erreur</label>
+            <div class="bc-input-wrap">
+              <input class="bc-input" type="email" value="not-an-email">
+              <span class="bc-input-trail bc-status">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </span>
+            </div>
+            <div class="bc-help bc-help-error">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Adresse email invalide
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 02. TEXTAREA + COMBINED ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Textarea &amp; Compound</span>
+      <span class="section-desc">Multi-line, prefix, suffix, character count</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Textarea</div>
+        <div class="bc-field">
+          <label class="bc-label">Message<span class="bc-counter"><strong>32</strong>/240</span></label>
+          <div class="bc-input-wrap">
+            <textarea class="bc-input bc-textarea" rows="4" placeholder="Écrivez votre message…">Bonjour, j'aimerais réserver un show privé pour ce soir.</textarea>
+          </div>
+        </div>
+
+        <div class="bc-field" style="margin-top:16px;">
+          <label class="bc-label">Prix par minute</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix">
+              <span class="bc-coin"></span>
+            </span>
+            <input class="bc-input" type="number" value="12">
+            <span class="bc-input-suffix">jetons / min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Group &amp; Hint</div>
+
+        <div class="bc-field">
+          <label class="bc-label">URL personnalisée</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix">boycam.com/</span>
+            <input class="bc-input" type="text" value="marcuslive">
+            <span class="bc-input-trail bc-status bc-status-success">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+        </div>
+
+        <div class="bc-field" style="margin-top:16px;">
+          <label class="bc-label">Téléphone</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix bc-input-prefix-flag">🇫🇷 +33</span>
+            <input class="bc-input" type="tel" placeholder="6 12 34 56 78">
+          </div>
+          <div class="bc-help">Utilisé uniquement pour la vérification 2FA.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 03. SELECTS ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">Selects</span>
+      <span class="section-desc">Native + custom dropdown</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Native select</div>
+        <div class="demo-stack">
+          <div class="bc-field">
+            <label class="bc-label">Pays</label>
+            <div class="bc-input-wrap">
+              <select class="bc-input bc-select">
+                <option>France</option>
+                <option>Belgique</option>
+                <option>Suisse</option>
+                <option>Canada</option>
+              </select>
+              <span class="bc-input-trail bc-caret">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="bc-field">
+            <label class="bc-label">Langue</label>
+            <div class="bc-input-wrap">
+              <select class="bc-input bc-select">
+                <option>Français</option>
+                <option>English</option>
+                <option>Español</option>
+              </select>
+              <span class="bc-input-trail bc-caret">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Custom dropdown (open)</div>
+        <div class="bc-dropdown" data-open="true">
+          <button class="bc-dropdown-trigger">
+            <span class="bc-dropdown-value">
+              <span class="bc-flag">🇫🇷</span>
+              France
+            </span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="bc-dropdown-menu">
+            <div class="bc-dropdown-item selected">
+              <span class="bc-flag">🇫🇷</span> France
+              <svg style="margin-left:auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="bc-dropdown-item"><span class="bc-flag">🇧🇪</span> Belgique</div>
+            <div class="bc-dropdown-item"><span class="bc-flag">🇨🇭</span> Suisse</div>
+            <div class="bc-dropdown-item"><span class="bc-flag">🇨🇦</span> Canada</div>
+            <div class="bc-dropdown-item"><span class="bc-flag">🇱🇺</span> Luxembourg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 04. CHECKBOXES / RADIOS / TOGGLES ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-title">Choices</span>
+      <span class="section-desc">Checkboxes, radios, toggles</span>
+    </div>
+
+    <div class="demo-grid cols-3">
+      <div class="demo-card">
+        <div class="demo-card-label">Checkboxes</div>
+        <div class="demo-stack">
+          <label class="bc-check">
+            <input type="checkbox" checked>
+            <span class="bc-check-box"></span>
+            Rester connecté 30 jours
+          </label>
+          <label class="bc-check">
+            <input type="checkbox">
+            <span class="bc-check-box"></span>
+            Recevoir les emails
+          </label>
+          <label class="bc-check bc-check-lg">
+            <input type="checkbox" checked>
+            <span class="bc-check-box"></span>
+            <div>
+              <strong>J'ai 18 ans ou plus</strong>
+              <span class="bc-help-inline">Conformément aux conditions</span>
+            </div>
+          </label>
+          <label class="bc-check" aria-disabled="true">
+            <input type="checkbox" disabled>
+            <span class="bc-check-box"></span>
+            Option désactivée
+          </label>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Radios</div>
+        <div class="demo-stack">
+          <label class="bc-radio">
+            <input type="radio" name="r-demo" checked>
+            <span class="bc-radio-dot"></span>
+            Tous les modèles
+          </label>
+          <label class="bc-radio">
+            <input type="radio" name="r-demo">
+            <span class="bc-radio-dot"></span>
+            En ligne uniquement
+          </label>
+          <label class="bc-radio">
+            <input type="radio" name="r-demo">
+            <span class="bc-radio-dot"></span>
+            Favoris
+          </label>
+
+          <div class="bc-segmented">
+            <button class="bc-seg active">Tous</button>
+            <button class="bc-seg">En ligne</button>
+            <button class="bc-seg">VR</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Toggles</div>
+        <div class="demo-stack">
+          <label class="bc-toggle-row">
+            <span>Mode invisible</span>
+            <span class="bc-toggle"><span class="bc-toggle-knob"></span></span>
+            <input type="checkbox">
+          </label>
+          <label class="bc-toggle-row">
+            <span>Notifications push</span>
+            <span class="bc-toggle on"><span class="bc-toggle-knob"></span></span>
+            <input type="checkbox" checked>
+          </label>
+          <label class="bc-toggle-row">
+            <span>Auto-rechargement</span>
+            <span class="bc-toggle on"><span class="bc-toggle-knob"></span></span>
+            <input type="checkbox" checked>
+          </label>
+          <label class="bc-toggle-row" aria-disabled="true">
+            <span style="opacity:.5">VR Cam2Cam</span>
+            <span class="bc-toggle"><span class="bc-toggle-knob"></span></span>
+            <input type="checkbox" disabled>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 05. SLIDERS ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-title">Sliders</span>
+      <span class="section-desc">Range, dual-thumb, stepped</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Single</div>
+        <div class="demo-stack">
+          <div class="bc-field">
+            <label class="bc-label">Volume <span class="bc-counter"><strong>72</strong>%</span></label>
+            <div class="bc-slider" style="--p:72%">
+              <div class="bc-slider-track"></div>
+              <div class="bc-slider-fill"></div>
+              <div class="bc-slider-thumb"></div>
+            </div>
+          </div>
+
+          <div class="bc-field">
+            <label class="bc-label">Tip rapide <span class="bc-counter"><strong>25</strong> jt</span></label>
+            <div class="bc-slider" style="--p:25%">
+              <div class="bc-slider-track"></div>
+              <div class="bc-slider-fill"></div>
+              <div class="bc-slider-thumb"></div>
+              <div class="bc-slider-stops">
+                <span style="left:0%"></span>
+                <span style="left:25%"></span>
+                <span style="left:50%"></span>
+                <span style="left:75%"></span>
+                <span style="left:100%"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Range</div>
+        <div class="bc-field">
+          <label class="bc-label">Prix (jetons/min)<span class="bc-counter"><strong>8</strong> – <strong>32</strong></span></label>
+          <div class="bc-slider" style="--p1:20%;--p2:75%">
+            <div class="bc-slider-track"></div>
+            <div class="bc-slider-fill bc-slider-fill-range"></div>
+            <div class="bc-slider-thumb bc-thumb-1"></div>
+            <div class="bc-slider-thumb bc-thumb-2"></div>
+          </div>
+          <div class="bc-help">Filtrer les modèles par tarif privé.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 06. FIELDSET / FILE / PIN ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <span class="section-title">Specials</span>
+      <span class="section-desc">File upload, PIN input, fieldset</span>
+    </div>
+
+    <div class="demo-grid">
+
+      <div class="demo-card">
+        <div class="demo-card-label">File upload</div>
+        <label class="bc-dropzone">
+          <input type="file" hidden>
+          <span class="bc-dropzone-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </span>
+          <div class="bc-dropzone-text">
+            <strong>Cliquez ou glissez votre fichier</strong>
+            <span>PNG, JPG, MP4 · max 50 Mo</span>
+          </div>
+        </label>
+
+        <div class="bc-file-item" style="margin-top:14px">
+          <span class="bc-file-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <div class="bc-file-meta">
+            <strong>profile_photo.jpg</strong>
+            <span>2.4 Mo · uploaded</span>
+          </div>
+          <span class="bc-status-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+            OK
+          </span>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">PIN / OTP</div>
+        <div class="bc-field">
+          <label class="bc-label">Code de vérification</label>
+          <div class="bc-pin">
+            <input class="bc-pin-cell" value="4" maxlength="1">
+            <input class="bc-pin-cell" value="2" maxlength="1">
+            <input class="bc-pin-cell" value="9" maxlength="1">
+            <input class="bc-pin-cell is-focus" value="" maxlength="1">
+            <input class="bc-pin-cell" value="" maxlength="1">
+            <input class="bc-pin-cell" value="" maxlength="1">
+          </div>
+          <div class="bc-help">Saisissez le code envoyé à votre email.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── 08. TOKEN PICKER ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">08</span>
+      <span class="section-title">Token Picker</span>
+      <span class="section-desc">Quick chips with bonuses + custom amount</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Quick chips</div>
+        <div class="bc-token-picker">
+          <div class="bc-token-chips" id="token-chips-demo">
+            <div class="bc-token-chip">
+              <strong>50</strong>
+              <small>5,99 €</small>
+            </div>
+            <div class="bc-token-chip selected">
+              <strong>200</strong>
+              <small>20,99 €</small>
+              <span class="bc-token-bonus">−10%</span>
+            </div>
+            <div class="bc-token-chip">
+              <strong>520</strong>
+              <small>49,99 €</small>
+              <span class="bc-token-bonus">−15%</span>
+            </div>
+            <div class="bc-token-chip">
+              <strong>2,250</strong>
+              <small>199,99 €</small>
+              <span class="bc-token-bonus">−25%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Custom amount + stepper</div>
+        <div class="bc-field">
+          <label class="bc-label">Quantité de jetons</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix"><span class="bc-coin"></span></span>
+            <input class="bc-input" type="number" value="320">
+            <span class="bc-input-suffix">≈ 32,00 €</span>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <label class="bc-label">Stepper</label>
+          <div class="bc-stepper">
+            <button class="bc-stepper-btn" type="button">−</button>
+            <input class="bc-stepper-input" type="number" value="4" min="0" max="99">
+            <button class="bc-stepper-btn" type="button">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 09. PAYMENT ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">09</span>
+      <span class="section-title">Card Payment</span>
+      <span class="section-desc">Card number with brand · expiry · CVV</span>
+    </div>
+
+    <div class="demo-card">
+      <div class="bc-field">
+        <label class="bc-label">Numéro de carte<span class="bc-required">*</span></label>
+        <div class="bc-input-wrap">
+          <span class="bc-input-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </span>
+          <input class="bc-input bc-input-mono" type="text" value="4242  4242  4242  4242">
+          <span class="bc-card-brand">
+            <span class="bc-card-brand-logo visa">VISA</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="bc-card-row" style="margin-top:14px;">
+        <div class="bc-field">
+          <label class="bc-label">Nom sur la carte</label>
+          <div class="bc-input-wrap">
+            <input class="bc-input" type="text" value="MARCUS DUPONT">
+          </div>
+        </div>
+        <div class="bc-field">
+          <label class="bc-label">MM / YY</label>
+          <div class="bc-input-wrap">
+            <input class="bc-input bc-input-mono" type="text" placeholder="12/27" value="12/27">
+          </div>
+        </div>
+        <div class="bc-field">
+          <label class="bc-label">CVV</label>
+          <div class="bc-input-wrap">
+            <input class="bc-input bc-input-mono" type="text" placeholder="•••" value="•••" maxlength="4">
+            <span class="bc-input-trail">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 10. PASSWORD + AVAILABILITY ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">10</span>
+      <span class="section-title">Live Validation</span>
+      <span class="section-desc">Password strength · username availability</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Password strength</div>
+        <div class="bc-field">
+          <label class="bc-label">Mot de passe<span class="bc-required">*</span></label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input class="bc-input" type="password" value="MyP4ssword!">
+            <button class="bc-input-trail" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="bc-pwd-strength" data-level="4">
+            <div class="bc-pwd-bar">
+              <div class="bc-pwd-seg"></div>
+              <div class="bc-pwd-seg"></div>
+              <div class="bc-pwd-seg"></div>
+              <div class="bc-pwd-seg"></div>
+            </div>
+            <div class="bc-pwd-label">
+              <span>Force</span>
+              <strong>Excellent</strong>
+            </div>
+            <div class="bc-pwd-checklist">
+              <span class="bc-pwd-check done"><span class="ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>8 caractères</span>
+              <span class="bc-pwd-check done"><span class="ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Majuscule</span>
+              <span class="bc-pwd-check done"><span class="ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Chiffre</span>
+              <span class="bc-pwd-check done"><span class="ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Symbole</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Username availability</div>
+
+        <div class="bc-field is-checking" style="margin-bottom:14px;">
+          <label class="bc-label">Vérification…</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix">boycam.com/</span>
+            <input class="bc-input" type="text" value="marcus_2026">
+            <span class="bc-input-trail">
+              <span class="bc-spinner"></span>
+            </span>
+          </div>
+          <div class="bc-help">Vérification en cours…</div>
+        </div>
+
+        <div class="bc-field is-valid" style="margin-bottom:14px;">
+          <label class="bc-label">Disponible</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix">boycam.com/</span>
+            <input class="bc-input" type="text" value="meghan_nill">
+            <span class="bc-input-trail bc-status">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </div>
+          <div class="bc-help bc-help-success"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Disponible</div>
+        </div>
+
+        <div class="bc-field is-error">
+          <label class="bc-label">Déjà pris</label>
+          <div class="bc-input-wrap">
+            <span class="bc-input-prefix">boycam.com/</span>
+            <input class="bc-input" type="text" value="admin">
+            <span class="bc-input-trail bc-status">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </span>
+          </div>
+          <div class="bc-help bc-help-error"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Ce nom est déjà pris</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 11. TAGS + AUTOCOMPLETE ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">11</span>
+      <span class="section-title">Tags &amp; Autocomplete</span>
+      <span class="section-desc">Multi-select chips · typeahead combobox</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Tag / multi-select input</div>
+        <div class="bc-field">
+          <label class="bc-label">Activités proposées<span class="bc-optional">(facultatif)</span></label>
+          <div class="bc-tag-input" id="tag-input-demo">
+            <span class="bc-tag">Show huileux<button class="bc-tag-remove" aria-label="remove"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
+            <span class="bc-tag">Strip-tease<button class="bc-tag-remove" aria-label="remove"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
+            <span class="bc-tag accent">VR Cam2Cam<button class="bc-tag-remove" aria-label="remove"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>
+            <input class="bc-tag-input-field" type="text" placeholder="Ajouter une activité…">
+          </div>
+          <div class="bc-help">Appuyez sur <kbd style="font-family:'SF Mono',Menlo,monospace;font-size:10px;background:rgba(255,255,255,.05);padding:1px 5px;border-radius:3px;border:1px solid #2a2a2a;color:#aaa;">Enter</kbd> pour ajouter.</div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Autocomplete (open)</div>
+        <div class="bc-field">
+          <label class="bc-label">Rechercher un modèle</label>
+          <div class="bc-combobox" data-open="true">
+            <div class="bc-input-wrap" style="border-color:#444;background:#181818;box-shadow:0 0 0 3px rgba(255,255,255,.04);">
+              <span class="bc-input-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+              <input class="bc-input" type="text" value="meg">
+            </div>
+            <div class="bc-combo-suggestions">
+              <div class="bc-combo-section">Modèles</div>
+              <div class="bc-combo-item active">
+                <span class="bc-combo-avatar"><svg viewBox="0 0 80 110"><ellipse cx="40" cy="22" rx="16" ry="18" fill="white"/><path d="M12 110 Q12 62 40 58 Q68 62 68 110Z" fill="white"/></svg></span>
+                <div class="bc-combo-meta">
+                  <span><mark>meg</mark>han_nill</span>
+                  <small>4.9 ★ · 33 évaluations · En privé</small>
+                </div>
+                <span class="bc-combo-kbd">↵</span>
+              </div>
+              <div class="bc-combo-item">
+                <span class="bc-combo-avatar"><svg viewBox="0 0 80 110"><ellipse cx="40" cy="22" rx="16" ry="18" fill="white"/><path d="M12 110 Q12 62 40 58 Q68 62 68 110Z" fill="white"/></svg></span>
+                <div class="bc-combo-meta">
+                  <span><mark>Meg</mark>aBoy</span>
+                  <small>4.7 ★ · En ligne</small>
+                </div>
+              </div>
+              <div class="bc-combo-section">Tags</div>
+              <div class="bc-combo-item">
+                <span style="width:26px;text-align:center;font-size:14px;">#</span>
+                <div class="bc-combo-meta">
+                  <span>#<mark>meg</mark>amuscle</span>
+                  <small>284 modèles</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 12. DATE + DOB ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">12</span>
+      <span class="section-title">Date &amp; Time</span>
+      <span class="section-desc">Native inputs · DOB triplet · mini calendar</span>
+    </div>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="demo-card-label">Native inputs</div>
+        <div class="demo-stack">
+          <div class="bc-field">
+            <label class="bc-label">Date de réservation</label>
+            <div class="bc-input-wrap">
+              <span class="bc-input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+              <input class="bc-input" type="date" value="2026-06-15">
+            </div>
+          </div>
+          <div class="bc-field">
+            <label class="bc-label">Heure</label>
+            <div class="bc-input-wrap">
+              <span class="bc-input-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              <input class="bc-input" type="time" value="21:30">
+            </div>
+          </div>
+          <div class="bc-field">
+            <label class="bc-label">Date de naissance<span class="bc-required">*</span></label>
+            <div class="bc-dob-row">
+              <div class="bc-input-wrap"><input class="bc-input" type="text" placeholder="JJ" value="14" maxlength="2"></div>
+              <div class="bc-input-wrap"><input class="bc-input" type="text" placeholder="MM" value="08" maxlength="2"></div>
+              <div class="bc-input-wrap"><input class="bc-input" type="text" placeholder="AAAA" value="1995" maxlength="4"></div>
+            </div>
+            <div class="bc-help">Vous devez avoir 18 ans ou plus.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Mini calendar popover</div>
+        <div class="bc-calendar">
+          <div class="bc-cal-head">
+            <div class="bc-cal-month">Juin 2026</div>
+            <div class="bc-cal-nav">
+              <button><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+          <div class="bc-cal-grid">
+            <div class="bc-cal-dow">L</div><div class="bc-cal-dow">M</div><div class="bc-cal-dow">M</div><div class="bc-cal-dow">J</div><div class="bc-cal-dow">V</div><div class="bc-cal-dow">S</div><div class="bc-cal-dow">D</div>
+
+            <div class="bc-cal-day muted">26</div><div class="bc-cal-day muted">27</div><div class="bc-cal-day muted">28</div><div class="bc-cal-day muted">29</div><div class="bc-cal-day muted">30</div><div class="bc-cal-day muted">31</div><div class="bc-cal-day">1</div>
+            <div class="bc-cal-day">2</div><div class="bc-cal-day">3</div><div class="bc-cal-day">4</div><div class="bc-cal-day">5</div><div class="bc-cal-day">6</div><div class="bc-cal-day">7</div><div class="bc-cal-day">8</div>
+            <div class="bc-cal-day">9</div><div class="bc-cal-day">10</div><div class="bc-cal-day in-range">11</div><div class="bc-cal-day in-range">12</div><div class="bc-cal-day in-range">13</div><div class="bc-cal-day in-range">14</div><div class="bc-cal-day selected">15</div>
+            <div class="bc-cal-day">16</div><div class="bc-cal-day">17</div><div class="bc-cal-day">18</div><div class="bc-cal-day today">19</div><div class="bc-cal-day">20</div><div class="bc-cal-day">21</div><div class="bc-cal-day">22</div>
+            <div class="bc-cal-day">23</div><div class="bc-cal-day">24</div><div class="bc-cal-day">25</div><div class="bc-cal-day">26</div><div class="bc-cal-day">27</div><div class="bc-cal-day">28</div><div class="bc-cal-day">29</div>
+            <div class="bc-cal-day">30</div><div class="bc-cal-day muted">1</div><div class="bc-cal-day muted">2</div><div class="bc-cal-day muted">3</div><div class="bc-cal-day muted">4</div><div class="bc-cal-day muted">5</div><div class="bc-cal-day muted">6</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 13. RATING + AVATAR ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">13</span>
+      <span class="section-title">Rating &amp; Avatar</span>
+      <span class="section-desc">Star input · avatar uploader · OTP timer</span>
+    </div>
+
+    <div class="demo-grid cols-3">
+      <div class="demo-card">
+        <div class="demo-card-label">Star rating input</div>
+        <div class="bc-field">
+          <label class="bc-label">Note du show</label>
+          <div class="bc-rating" id="rating-demo">
+            <button class="bc-rating-star filled"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+            <button class="bc-rating-star filled"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+            <button class="bc-rating-star filled"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+            <button class="bc-rating-star filled"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+            <button class="bc-rating-star"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
+          </div>
+          <div class="bc-help">Vous avez noté <strong style="color:#fff">4 / 5</strong></div>
+        </div>
+
+        <div class="bc-field" style="margin-top:14px;">
+          <label class="bc-label">Compact</label>
+          <div class="bc-rating sm">
+            <span class="bc-rating-star filled"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span class="bc-rating-star filled"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span class="bc-rating-star filled"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span class="bc-rating-star filled"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span class="bc-rating-star filled"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">Avatar uploader</div>
+        <div style="display:flex;align-items:center;gap:18px;">
+          <label class="bc-avatar-upload has-image">
+            <input type="file" hidden accept="image/*">
+            <svg viewBox="0 0 80 110" style="width:60%;opacity:.4;"><ellipse cx="40" cy="32" rx="16" ry="18" fill="white"/><path d="M12 110 Q12 72 40 68 Q68 72 68 110Z" fill="white"/></svg>
+            <span class="bc-avatar-edit">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </span>
+          </label>
+          <div style="font-size:12px;color:#888;line-height:1.6;">
+            <strong style="display:block;color:#fff;font-size:13px;margin-bottom:3px;">Photo de profil</strong>
+            JPG, PNG · max 5 Mo<br>
+            Recommandé : <strong style="color:#bbb">512 × 512</strong>
+          </div>
+        </div>
+
+        <label class="bc-avatar-upload" style="margin-top:18px;">
+          <input type="file" hidden>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </label>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-card-label">OTP with resend timer</div>
+        <div class="bc-field">
+          <label class="bc-label">Code à 6 chiffres</label>
+          <div class="bc-pin">
+            <input class="bc-pin-cell" value="4" maxlength="1">
+            <input class="bc-pin-cell" value="2" maxlength="1">
+            <input class="bc-pin-cell" value="9" maxlength="1">
+            <input class="bc-pin-cell" value="7" maxlength="1">
+            <input class="bc-pin-cell is-focus" value="" maxlength="1">
+            <input class="bc-pin-cell" value="" maxlength="1">
+          </div>
+          <div class="bc-resend">
+            Pas reçu ? <a href="#" class="disabled">Renvoyer</a>
+            <span>dans</span>
+            <span class="bc-resend-timer">00:28</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 14. WIZARD + SAVE INDICATOR ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">14</span>
+      <span class="section-title">Wizard &amp; Save State</span>
+      <span class="section-desc">Step indicator · save status pills</span>
+    </div>
+
+    <div class="demo-card">
+      <div class="bc-steps">
+        <div class="bc-step done">
+          <div class="bc-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="bc-step-label">Compte</div>
+        </div>
+        <div class="bc-step done">
+          <div class="bc-step-num"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="bc-step-label">Identité</div>
+        </div>
+        <div class="bc-step active">
+          <div class="bc-step-num">3</div>
+          <div class="bc-step-label">Paiement</div>
+        </div>
+        <div class="bc-step">
+          <div class="bc-step-num">4</div>
+          <div class="bc-step-label">Préférences</div>
+        </div>
+        <div class="bc-step">
+          <div class="bc-step-num">5</div>
+          <div class="bc-step-label">Confirmer</div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:#1c1c1c;margin:28px 0;"></div>
+
+      <div class="demo-card-label">Compact pill version</div>
+      <div class="bc-steps bc-steps-bar" style="max-width:560px;">
+        <div class="bc-step done"><div class="bc-step-num"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></div><div class="bc-step-label">Profil</div></div>
+        <div class="bc-step active"><div class="bc-step-num">2</div><div class="bc-step-label">Tarifs</div></div>
+        <div class="bc-step"><div class="bc-step-num">3</div><div class="bc-step-label">Disponibilité</div></div>
+        <div class="bc-step"><div class="bc-step-num">4</div><div class="bc-step-label">Payout</div></div>
+      </div>
+
+      <div style="height:1px;background:#1c1c1c;margin:28px 0;"></div>
+
+      <div class="demo-card-label">Save indicators</div>
+      <div class="demo-row">
+        <div class="bc-save saving"><span class="bc-save-icon"></span> Sauvegarde…</div>
+        <div class="bc-save saved"><span class="bc-save-icon"></span> Sauvegardé</div>
+        <div class="bc-save error"><span class="bc-save-icon"></span> Erreur — réessayer</div>
+        <div class="bc-save"><span class="bc-save-icon"></span> Toutes les modifs sont sauvegardées</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 15. COLLAPSIBLE + MARKERS ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">15</span>
+      <span class="section-title">Sections</span>
+      <span class="section-desc">Collapsible form groups · required &amp; optional markers</span>
+    </div>
+
+    <div class="demo-grid cols-1">
+      <div class="bc-section-block open">
+        <button class="bc-section-head" onclick="this.closest('.bc-section-block').classList.toggle('open')">
+          <span class="bc-section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <span class="bc-section-meta">
+            <strong>Informations personnelles</strong>
+            <span>3 champs · obligatoires</span>
+          </span>
+          <svg class="bc-section-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="bc-section-body">
+          <div class="bc-card-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="bc-field">
+              <label class="bc-label">Prénom<span class="bc-required">*</span></label>
+              <div class="bc-input-wrap"><input class="bc-input" type="text" value="Marcus"></div>
+            </div>
+            <div class="bc-field">
+              <label class="bc-label">Nom<span class="bc-required">*</span></label>
+              <div class="bc-input-wrap"><input class="bc-input" type="text" value="Dupont"></div>
+            </div>
+          </div>
+          <div class="bc-field" style="margin-top:14px;">
+            <label class="bc-label">Pseudo public<span class="bc-optional">(visible sur votre profil)</span></label>
+            <div class="bc-input-wrap"><input class="bc-input" type="text" value="MarcusLive"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-section-block" style="margin-top:10px;">
+        <button class="bc-section-head" onclick="this.closest('.bc-section-block').classList.toggle('open')">
+          <span class="bc-section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+          <span class="bc-section-meta">
+            <strong>Adresse de facturation</strong>
+            <span>Cliquez pour développer</span>
+          </span>
+          <svg class="bc-section-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="bc-section-body">
+          <div class="bc-field">
+            <label class="bc-label">Adresse</label>
+            <div class="bc-input-wrap"><input class="bc-input" type="text" placeholder="123 rue de Paris"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-section-block" style="margin-top:10px;">
+        <button class="bc-section-head" onclick="this.closest('.bc-section-block').classList.toggle('open')">
+          <span class="bc-section-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+          <span class="bc-section-meta">
+            <strong>Notifications</strong>
+            <span>Préférences d'email et de push</span>
+          </span>
+          <svg class="bc-section-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="bc-section-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── 16. FOOTER ACTIONS ───── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-num">16</span>
+      <span class="section-title">Actions</span>
+      <span class="section-desc">Form submit, ghost, link</span>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-row">
+        <button class="bc-btn bc-btn-primary">
+          Continuer
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="bc-btn bc-btn-success">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+          Confirmer
+        </button>
+        <button class="bc-btn bc-btn-metal">Enregistrer</button>
+        <button class="bc-btn bc-btn-ghost">Annuler</button>
+        <button class="bc-btn bc-btn-link">En savoir plus →</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // Light interactivity for the demo
+  document.querySelectorAll('.bc-toggle-row').forEach(row => {
+    row.addEventListener('click', e => {
+      if (e.target.tagName === 'INPUT') return;
+      const t = row.querySelector('.bc-toggle');
+      const i = row.querySelector('input');
+      t.classList.toggle('on');
+      if (i) i.checked = t.classList.contains('on');
+    });
+  });
+  document.querySelectorAll('.bc-segmented .bc-seg').forEach(b => {
+    b.addEventListener('click', () => {
+      b.parentElement.querySelectorAll('.bc-seg').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.bc-dropdown').forEach(dd => {
+    dd.querySelector('.bc-dropdown-trigger').addEventListener('click', () => {
+      dd.dataset.open = dd.dataset.open === 'true' ? 'false' : 'true';
+    });
+    dd.querySelectorAll('.bc-dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        dd.querySelectorAll('.bc-dropdown-item').forEach(x => x.classList.remove('selected'));
+        item.classList.add('selected');
+        dd.querySelector('.bc-dropdown-value').innerHTML = item.innerHTML.replace(/<svg[\s\S]*?<\/svg>/,'');
+        dd.dataset.open = 'false';
+      });
+    });
+  });
+  // input password trail toggle
+  document.querySelectorAll('.bc-input-trail svg').forEach(s => {
+    s.parentElement.addEventListener('click', () => {
+      const inp = s.parentElement.parentElement.querySelector('input');
+      if (!inp) return;
+      if (inp.type === 'password') inp.type = 'text';
+      else if (inp.type === 'text' && inp.placeholder.includes('•')) inp.type = 'password';
+    });
+  });
+
+  // token chips
+  document.querySelectorAll('#token-chips-demo .bc-token-chip').forEach(c => {
+    c.addEventListener('click', () => {
+      c.parentElement.querySelectorAll('.bc-token-chip').forEach(x => x.classList.remove('selected'));
+      c.classList.add('selected');
+    });
+  });
+
+  // number stepper
+  document.querySelectorAll('.bc-stepper').forEach(st => {
+    const inp = st.querySelector('.bc-stepper-input');
+    const [dec, inc] = st.querySelectorAll('.bc-stepper-btn');
+    dec.addEventListener('click', () => { inp.value = Math.max(+inp.min || 0, (+inp.value || 0) - 1); });
+    inc.addEventListener('click', () => { inp.value = Math.min(+inp.max || 999, (+inp.value || 0) + 1); });
+  });
+
+  // star rating
+  const ratingEl = document.getElementById('rating-demo');
+  if (ratingEl) {
+    const stars = [...ratingEl.querySelectorAll('.bc-rating-star')];
+    stars.forEach((star, i) => {
+      star.addEventListener('mouseenter', () => stars.forEach((s, j) => s.classList.toggle('filled', j <= i)));
+      star.addEventListener('click', () => {
+        ratingEl.dataset.value = i + 1;
+        stars.forEach((s, j) => s.classList.toggle('filled', j <= i));
+      });
+    });
+    ratingEl.addEventListener('mouseleave', () => {
+      const v = +ratingEl.dataset.value || 4;
+      stars.forEach((s, j) => s.classList.toggle('filled', j < v));
+    });
+  }
+
+  // OTP timer demo
+  const timerEl = document.querySelector('.bc-resend-timer');
+  const resendLink = document.querySelector('.bc-resend a');
+  if (timerEl && resendLink) {
+    let sec = 28;
+    const tick = () => {
+      if (sec <= 0) {
+        resendLink.classList.remove('disabled');
+        timerEl.style.display = 'none';
+        document.querySelectorAll('.bc-resend span').forEach(s => s.style.display = 'none');
+        return;
+      }
+      timerEl.textContent = '00:' + String(sec).padStart(2, '0');
+      sec--;
+      setTimeout(tick, 1000);
+    };
+    tick();
+  }
+
+  // save indicator cycle demo
+  let saveIdx = 0;
+  const saveStates = ['saving', 'saved', '', 'error'];
+  const saveLabels = ['Sauvegarde…', 'Sauvegardé', 'Toutes les modifs sont sauvegardées', 'Erreur — réessayer'];
+  // (kept static for showcase — uncomment to cycle:)
+  // setInterval(() => {
+  //   const s = document.querySelectorAll('.bc-save')[0];
+  //   if (!s) return;
+  //   saveStates.forEach(c => s.classList.remove(c));
+  //   if (saveStates[saveIdx]) s.classList.add(saveStates[saveIdx]);
+  //   s.lastChild.textContent = ' ' + saveLabels[saveIdx];
+  //   saveIdx = (saveIdx + 1) % 4;
+  // }, 2000);
+</script>
+
+</body>
+</html>

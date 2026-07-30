@@ -1,0 +1,86 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAG INPUT — multi-select chips with inline text entry
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 8px var(--space3);
+    min-height: var(--form-input-height);
+    background: var(--form-input-bg);
+    border: 1px solid var(--form-input-border);
+    border-radius: var(--form-input-radius);
+    cursor: text;
+    transition:
+        border-color var(--form-input-transition),
+        box-shadow var(--form-input-transition);
+}
+
+.form-tag-input:focus-within {
+    border-color: var(--form-input-focus-border);
+    box-shadow: 0 0 0 3px var(--form-input-focus-ring);
+}
+
+/* Individual tag */
+.form-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space1);
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--white6);
+    border: 1px solid var(--white-alpha-120);
+    color: var(--text-primary);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold5);
+    white-space: nowrap;
+}
+
+.form-tag.accent {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--form-accent) 15%, transparent), color-mix(in srgb, var(--form-accent) 8%, transparent));
+    border-color: color-mix(in srgb, var(--form-accent) 25%, transparent);
+    color: var(--form-accent);
+}
+
+.form-tag-remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color var(--form-input-transition);
+}
+
+.form-tag-remove:hover {
+    color: var(--text-primary);
+}
+
+/* Inline field inside tag input */
+.form-tag-input-field {
+    flex: 1;
+    min-width: 120px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: var(--text-lead);
+    font-family: inherit;
+    outline: none;
+}
+
+.form-tag-input-field::placeholder {
+    color: var(--form-input-placeholder);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-tag-input {
+        transition: none;
+    }
+}

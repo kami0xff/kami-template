@@ -1,0 +1,71 @@
+/*
+   Panel — component tokens
+
+   Floating dark chrome shared with bottom-nav / chat menus:
+   charcoal surface, soft hairline, generous radius, quiet hover wash.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --panel-bg: #222222;
+    --panel-surface: #222222;
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --panel-border-strong: rgba(255, 255, 255, 0.14);
+    --panel-border-glow: rgba(255, 255, 255, 0.12);
+    --panel-frost-bg: rgba(34, 34, 34, 0.72);
+
+    /* Row items inside dropdown panels */
+    --panel-list-item-fg: rgba(255, 255, 255, 0.88);
+    --panel-list-item-fg-hover: #ffffff;
+    --panel-list-item-fg-muted: rgba(255, 255, 255, 0.48);
+    --panel-list-item-icon: rgba(255, 255, 255, 0.72);
+    --panel-list-item-icon-hover: #ffffff;
+    --panel-list-item-hover-bg: rgba(255, 255, 255, 0.07);
+    --panel-head-title-fg: #ffffff;
+    --panel-head-subtitle-fg: rgba(255, 255, 255, 0.48);
+    --panel-divider-fill: rgba(255, 255, 255, 0.1);
+
+    /* ===== B) Layout ================================================= */
+    --panel-radius: 18px;
+    --panel-padding: 8px;
+    --panel-max-width: 360px;
+    --panel-offset-from-anchor: var(--space3);
+    --panel-frost-blur: 40px;
+
+    --panel-list-item-padding: 11px 12px;
+    --panel-list-item-gap: 12px;
+    --panel-list-font-size: 14px;
+    --panel-list-transition: color 0.12s ease, background 0.12s ease;
+    --panel-item-list-gap: 2px;
+    --panel-head-gap: var(--space3);
+    --panel-head-padding: 12px 14px 10px;
+    --panel-head-title-size: 14px;
+    --panel-head-title-weight: var(--font-bold4);
+    --panel-head-title-tracking: 0.1px;
+    --panel-head-subtitle-size: 11px;
+    --panel-head-subtitle-margin-top: 2px;
+    --panel-divider-height: 1px;
+    --panel-divider-margin: 6px 0;
+
+    --duration-panel-enter: var(--duration2);
+    --duration-panel-slide: var(--duration3);
+    --ease-panel-bounce: var(--ease-bounce);
+    --ease-panel-out: var(--ease-out);
+
+    /* ===== C) Effects ================================================ */
+    --panel-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+    --panel-elevation-default: var(--panel-shadow);
+    --panel-elevation-high: var(--panel-shadow);
+    --panel-elevation-medium: 0 10px 28px rgba(0, 0, 0, 0.48);
+    --panel-elevation-low: 0 8px 20px rgba(0, 0, 0, 0.4);
+    --panel-elevation-flat: none;
+    --panel-elevation-frost: 0 14px 40px rgba(0, 0, 0, 0.45);
+    --panel-elevation-glow-outline:
+        0 14px 40px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+
+    /* Highlight strip (optional — off by default on panels) */
+    --panel-highlight-shimmer-stripe: rgba(255, 255, 255, 0.03);
+    --panel-highlight-shimmer-fade-from: transparent;
+    --panel-highlight-shimmer-fade-mid: rgba(255, 255, 255, 0.12);
+    --panel-highlight-shimmer-fade-peak: rgba(255, 255, 255, 0.22);
+}

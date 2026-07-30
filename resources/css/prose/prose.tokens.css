@@ -1,0 +1,14 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --prose-fg: var(--text-muted);
+    --prose-heading-fg: var(--text-primary);
+    --prose-link-fg: var(--color-primary);
+    --prose-code-bg: var(--white7);
+    --prose-quote-border: var(--color-primary);
+
+    /* ===== B) Layout ================================================= */
+    --prose-max-width: 68ch;
+    --prose-font-size: var(--text-body);
+    --prose-line-height: 1.7;
+    --prose-block-gap: 1.2em;
+}

@@ -1,0 +1,19 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    /* Inverted surface (adapted from Astryx): bg = text color, text = surface
+       color. On a dark theme that's a light tooltip — maximal contrast. */
+    --tooltip-bg: var(--text-primary);
+    --tooltip-fg: var(--surface-black);
+    --tooltip-border: transparent;
+
+    /* ===== B) Layout ================================================= */
+    --tooltip-font-size: var(--text-small);
+    --tooltip-padding: 4px 8px;
+    --tooltip-radius: var(--radius1);
+    --tooltip-gap: 6px;
+    --tooltip-z: var(--z-tooltip);
+
+    /* ===== C) Effects ================================================ */
+    --tooltip-elevation: var(--elevation2);
+    --tooltip-transition: opacity var(--duration1) var(--ease-out);
+}

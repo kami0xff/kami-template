@@ -1,0 +1,12 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --thumbnail-bg: var(--surface2);
+    --thumbnail-border: var(--border-strong);
+    --thumbnail-overlay-bg: var(--black5);
+    --thumbnail-overlay-fg: var(--white1);
+
+    /* ===== B) Layout ================================================= */
+    --thumbnail-radius: var(--radius2);
+    --thumbnail-ratio: 16 / 9;
+    --thumbnail-badge-inset: var(--space2);
+}

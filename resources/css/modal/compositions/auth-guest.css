@@ -1,0 +1,598 @@
+/*
+    Guest auth modals — login (compact) + signup (split promo).
+    Site-agnostic; theme via --auth-guest-* tokens / accent.
+*/
+
+:root {
+    --auth-guest-bg: color-mix(in srgb, var(--gray1) 92%, #000);
+    --auth-guest-fg: var(--text-primary);
+    --auth-guest-muted: var(--text-muted);
+    --auth-guest-faint: var(--text-faint);
+    --auth-guest-input-bg: var(--gray3);
+    --auth-guest-input-border: var(--border-strong);
+    --auth-guest-accent: var(--color-accent);
+    --auth-guest-accent-fg: #fff;
+    --auth-guest-radius: 22px;
+    --auth-guest-control-radius: 999px;
+    --auth-guest-pad: 28px 28px 22px;
+    --auth-guest-promo-bg: color-mix(in srgb, var(--color-accent) 10%, #141014);
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.auth-guest-overlay .modal {
+    background: var(--auth-guest-bg);
+    border-radius: var(--auth-guest-radius);
+    border: 1px solid var(--border-default);
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.auth-guest-overlay--login .modal {
+    padding: 0;
+}
+
+.auth-guest-overlay--signup .modal {
+    display: flex;
+    flex-direction: column;
+    max-width: min(860px, 96vw);
+}
+
+.auth-guest-overlay .modal-close {
+    top: 14px;
+    right: 14px;
+    z-index: 5;
+}
+
+.auth-guest-overlay .modal-head {
+    display: none;
+}
+
+.auth-guest-head {
+    padding: 28px 28px 0;
+    text-align: center;
+}
+
+.auth-guest-brand {
+    padding: 18px 20px 0;
+    text-align: center;
+    color: var(--auth-guest-fg);
+    font-size: 13px;
+    font-weight: var(--font-bold5, 700);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.auth-guest-title {
+    margin: 0;
+    color: var(--auth-guest-fg);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    font-weight: var(--font-bold5, 700);
+    line-height: 1.2;
+    text-align: center;
+}
+
+.auth-guest {
+    padding: var(--auth-guest-pad);
+}
+
+.auth-guest--login {
+    display: grid;
+    gap: 14px;
+    justify-items: stretch;
+    text-align: center;
+}
+
+.auth-guest--signup {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.95fr);
+    gap: 0;
+    padding: 0;
+    min-height: 420px;
+}
+
+.auth-guest-col--form {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 8px 28px 28px;
+}
+
+.auth-guest-col--form .auth-guest-title {
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+.auth-guest-col--promo {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+    padding: 28px 24px;
+    background:
+        radial-gradient(ellipse 80% 60% at 70% 20%, color-mix(in srgb, var(--auth-guest-accent) 28%, transparent), transparent 60%),
+        var(--auth-guest-promo-bg);
+    border-left: 1px solid var(--border-default);
+}
+
+.auth-guest-form {
+    display: grid;
+    gap: 12px;
+}
+
+.auth-guest-field {
+    position: relative;
+    display: block;
+}
+
+.auth-guest-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 18px;
+    border: 1.5px solid var(--auth-guest-input-border);
+    border-radius: var(--auth-guest-control-radius);
+    background: var(--auth-guest-input-bg);
+    color: var(--auth-guest-fg);
+    font: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-guest-field:has(.auth-guest-suggest) .auth-guest-input {
+    padding-right: 46px;
+}
+
+.auth-guest-input::placeholder {
+    color: var(--auth-guest-faint);
+}
+
+.auth-guest-input:focus {
+    border-color: var(--auth-guest-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-guest-accent) 28%, transparent);
+}
+
+.auth-guest-suggest {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--auth-guest-muted);
+    cursor: pointer;
+}
+
+.auth-guest-suggest:hover {
+    color: var(--auth-guest-fg);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.auth-guest-submit {
+    height: 48px;
+    border: 0;
+    border-radius: var(--auth-guest-control-radius);
+    background: var(--auth-guest-accent);
+    color: var(--auth-guest-accent-fg);
+    font: inherit;
+    font-size: 15px;
+    font-weight: var(--font-bold4, 600);
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.auth-guest-submit:hover {
+    filter: brightness(1.08);
+}
+
+.auth-guest-link,
+.auth-guest-passless,
+.auth-guest-switch,
+.auth-guest-footer-link {
+    border: 0;
+    background: transparent;
+    color: var(--auth-guest-muted);
+    font: inherit;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.auth-guest-link:hover,
+.auth-guest-passless:hover,
+.auth-guest-switch:hover,
+.auth-guest-footer-link:hover {
+    color: var(--auth-guest-fg);
+    text-decoration: underline;
+}
+
+.auth-guest-passless {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.auth-guest-switch {
+    margin-top: 4px;
+    color: var(--auth-guest-fg);
+    font-weight: var(--font-bold4, 600);
+}
+
+.auth-guest-divider {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 0;
+    color: var(--auth-guest-faint);
+    font-size: 12px;
+}
+
+.auth-guest-divider::before,
+.auth-guest-divider::after {
+    content: "";
+    height: 1px;
+    background: var(--border-default);
+}
+
+.auth-guest-socials {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.auth-guest-social {
+    display: grid;
+    place-items: center;
+    height: 46px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--auth-guest-control-radius);
+    background: var(--auth-guest-input-bg);
+    color: var(--auth-guest-fg);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.auth-guest-social:hover {
+    background: color-mix(in srgb, var(--auth-guest-input-bg) 80%, #fff);
+    border-color: var(--border-default);
+}
+
+.auth-guest-outline {
+    height: 46px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: var(--auth-guest-control-radius);
+    background: transparent;
+    color: var(--auth-guest-fg);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.auth-guest-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.auth-guest-footer {
+    margin: 8px 0 0;
+    color: var(--auth-guest-muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+.auth-guest-footer-link {
+    font-weight: var(--font-bold4, 600);
+    color: var(--auth-guest-fg);
+}
+
+.auth-guest-reward {
+    text-align: center;
+}
+
+.auth-guest-reward-num {
+    color: var(--auth-guest-accent);
+    font-size: clamp(4rem, 8vw, 5.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-shadow: 0 8px 28px color-mix(in srgb, var(--auth-guest-accent) 45%, transparent);
+}
+
+.auth-guest-reward-label {
+    margin-top: 6px;
+    color: var(--auth-guest-accent);
+    font-size: 15px;
+    font-weight: var(--font-bold5, 700);
+    letter-spacing: 0.04em;
+}
+
+.auth-guest-reward-sub {
+    color: var(--auth-guest-fg);
+    font-size: 14px;
+}
+
+.auth-guest-benefits {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.auth-guest-benefits li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    align-items: start;
+    color: var(--auth-guest-muted);
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.auth-guest-benefits strong {
+    color: var(--auth-guest-fg);
+    font-weight: var(--font-bold4, 600);
+}
+
+.auth-guest-benefit-icon {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    color: var(--auth-guest-fg);
+}
+
+.auth-guest-benefit-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.auth-guest-legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 18px;
+    padding: 12px 22px 16px;
+    border-top: 1px solid var(--border-default);
+    color: var(--auth-guest-faint);
+    font-size: 12px;
+}
+
+.auth-guest-legal a {
+    color: var(--auth-guest-muted);
+}
+
+.auth-guest-legal a:hover {
+    color: var(--auth-guest-fg);
+}
+
+.auth-guest-creator-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--auth-guest-fg) !important;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-guest-creator-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+    .auth-guest--signup {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-guest-col--promo {
+        border-left: 0;
+        border-top: 1px solid var(--border-default);
+        order: -1;
+        padding: 22px 20px;
+    }
+
+    .auth-guest-reward-num {
+        font-size: 3.4rem;
+    }
+
+    .auth-guest-col--form {
+        padding: 8px 20px 22px;
+    }
+
+    .auth-guest-legal {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ───── Sticky bottom signup promo ───── */
+
+.signup-promo {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: calc(var(--z-banner, 1100) + 2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 10px 44px 10px 16px;
+    background: color-mix(in srgb, var(--color-accent) 72%, #3a1018);
+    color: #fff;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.28);
+}
+
+.signup-promo[hidden] {
+    display: none !important;
+}
+
+.signup-promo-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px 16px;
+    max-width: 920px;
+}
+
+.signup-promo-mark {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.signup-promo-mark svg {
+    width: 15px;
+    height: 15px;
+}
+
+.signup-promo-text {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.signup-promo-cta {
+    height: 34px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    color: #222;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.signup-promo-cta:hover {
+    filter: brightness(0.96);
+}
+
+.signup-promo-close {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-top: -14px;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+}
+
+.signup-promo-close:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 640px) {
+    .signup-promo {
+        padding-inline: 12px 40px;
+    }
+
+    .signup-promo-text {
+        font-size: 13px;
+        text-align: center;
+    }
+}
+
+/* BannerManager bottom signup variant (JS-created) */
+.banner-bottom-root {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: calc(var(--z-banner, 1100) + 2);
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+}
+
+.banner-bottom-root > * {
+    pointer-events: auto;
+}
+
+.banner-top--signup.banner-top--bottom,
+.banner-top.banner-top--signup {
+    justify-content: center;
+    min-height: 52px;
+    padding: 10px 44px 10px 16px;
+    background: color-mix(in srgb, var(--color-accent) 72%, #3a1018) !important;
+    border: 0;
+    animation: banner-bottom-in 0.25s ease-out;
+}
+
+.banner-top--signup::before {
+    display: none;
+}
+
+.banner-top--signup .banner-top-body {
+    justify-content: center;
+    gap: 14px;
+}
+
+.banner-top--signup .banner-top-content {
+    color: #fff;
+    font-weight: 500;
+}
+
+.banner-top--signup .banner-top-action--primary {
+    height: 34px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    color: #222;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.banner-top--signup .banner-top-close {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.banner-top--signup.banner-top--dismissing {
+    animation: banner-bottom-out 0.2s ease-in forwards;
+}
+
+@keyframes banner-bottom-in {
+    from { opacity: 0; transform: translateY(100%); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes banner-bottom-out {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(100%); }
+}

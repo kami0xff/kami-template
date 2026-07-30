@@ -1,0 +1,26 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --corner-highlight-button-border-fill: linear-gradient(to bottom right, #7a7a7a, #3a3a3a, #1a1a1a, #141414);
+    --corner-highlight-button-inner-bg: rgba(8, 8, 8, 0.85);
+    --corner-highlight-button-inner-bg-hover: rgba(255, 255, 255, 0.05);
+    --corner-highlight-button-fg: #d0d0d0;
+    --corner-highlight-button-fg-hover: var(--white1);
+    --corner-highlight-button-star-fill: linear-gradient(135deg, #aaaaaa, #ffffff, #888888);
+
+    /* ===== B) Layout ================================================= */
+    --corner-highlight-button-radius: 9px;
+    --corner-highlight-button-padding: 1.5px;
+    --corner-highlight-button-inner-radius: 7.5px;
+    --corner-highlight-button-inner-padding: var(--space1) 11px;
+    --corner-highlight-button-inner-gap: 6px;
+    --corner-highlight-button-font-size: 11px;
+    --corner-highlight-button-star-size: 10px;
+    --corner-highlight-button-glow-size: 22px;
+    --corner-highlight-button-glow-top: -9px;
+    --corner-highlight-button-glow-left: -8px;
+
+    /* ===== C) Effects ================================================ */
+    --corner-highlight-button-transition: all var(--duration2);
+    --corner-highlight-button-glow: radial-gradient(ellipse at center, #ffffff, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08), transparent, transparent);
+    --corner-highlight-button-glow-blur: 0.8px;
+}

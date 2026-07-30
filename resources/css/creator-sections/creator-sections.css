@@ -1,0 +1,366 @@
+/*
+    Creator custom sections
+
+    Anatomy:
+        .creator-sections              [data-creator-sections]
+            .creator-sections-toolbar  (edit mode)
+            .creator-section           [data-creator-section]
+                .creator-section-head
+                .creator-section-body
+                    .creator-socials | .creator-ad | .creator-links | .creator-text
+*/
+
+.creator-sections {
+    display: grid;
+    gap: var(--creator-sections-gap);
+    color: var(--creator-section-fg);
+}
+
+.creator-sections-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space2);
+}
+
+.creator-sections-toolbar[hidden] {
+    display: none;
+}
+
+.creator-section {
+    position: relative;
+    display: grid;
+    gap: var(--creator-section-gap);
+    padding: var(--creator-section-pad);
+    border: 1px solid var(--creator-section-border);
+    border-radius: var(--creator-section-radius);
+    background: var(--creator-section-bg);
+    box-shadow: var(--creator-section-shadow);
+}
+
+.creator-section-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    min-height: 28px;
+}
+
+.creator-section-title {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    color: var(--creator-section-fg);
+    font-size: 13px;
+    font-weight: var(--font-bold4);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.creator-section-title-input {
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--creator-section-border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--creator-section-fg);
+    font: inherit;
+    font-size: 13px;
+    font-weight: var(--font-bold4);
+    outline: none;
+}
+
+.creator-section-title-input:focus {
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.creator-section-actions {
+    display: none;
+    align-items: center;
+    gap: 2px;
+}
+
+.creator-sections--editing .creator-section-actions {
+    display: inline-flex;
+}
+
+.creator-section-action {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--creator-section-faint);
+    cursor: pointer;
+    transition: var(--creator-section-transition);
+}
+
+.creator-section-action:hover,
+.creator-section-action:focus-visible {
+    color: var(--creator-section-fg);
+    background: var(--creator-section-hover);
+    outline: none;
+}
+
+.creator-section-action--danger:hover,
+.creator-section-action--danger:focus-visible {
+    color: #f87171;
+}
+
+.creator-section-action svg {
+    width: 14px;
+    height: 14px;
+}
+
+.creator-section-body {
+    min-width: 0;
+}
+
+.creator-section-empty {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border: 1px dashed var(--creator-section-border);
+    border-radius: 10px;
+    color: var(--creator-section-muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* === Socials ========================================================= */
+.creator-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.creator-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--creator-social-size);
+    padding: 0 12px 0 10px;
+    border: 1px solid var(--creator-section-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--creator-section-fg);
+    font-size: 13px;
+    font-weight: var(--font-bold4);
+    text-decoration: none;
+    transition: var(--creator-section-transition);
+}
+
+.creator-social:hover,
+.creator-social:focus-visible {
+    background: var(--creator-section-hover);
+    outline: none;
+}
+
+.creator-social-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    color: var(--creator-section-muted);
+}
+
+.creator-social-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.creator-social:hover .creator-social-icon {
+    color: var(--creator-section-fg);
+}
+
+/* Icon-only compact variant */
+.creator-socials--icons .creator-social {
+    width: var(--creator-social-size);
+    padding: 0;
+    justify-content: center;
+}
+
+.creator-socials--icons .creator-social-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+/* === Ad ============================================================== */
+.creator-ad {
+    display: grid;
+    gap: 10px;
+}
+
+.creator-ad-media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid var(--creator-section-border);
+    background: rgba(255, 255, 255, 0.03);
+    aspect-ratio: 16 / 9;
+}
+
+.creator-ad-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.creator-ad-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 10px;
+    font-weight: var(--font-bold4);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.creator-ad-meta {
+    display: grid;
+    gap: 4px;
+}
+
+.creator-ad-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: var(--font-bold4);
+}
+
+.creator-ad-text {
+    margin: 0;
+    color: var(--creator-section-muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.creator-ad-cta {
+    justify-self: start;
+    margin-top: 4px;
+}
+
+/* === Links (linktree-style) ========================================== */
+.creator-links {
+    display: grid;
+    gap: 8px;
+}
+
+.creator-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--creator-section-border);
+    border-radius: var(--creator-link-radius);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--creator-section-fg);
+    font-size: 14px;
+    font-weight: var(--font-bold4);
+    text-align: center;
+    text-decoration: none;
+    transition: var(--creator-section-transition);
+}
+
+.creator-link:hover,
+.creator-link:focus-visible {
+    background: var(--creator-section-hover);
+    border-color: rgba(255, 255, 255, 0.14);
+    outline: none;
+}
+
+/* === Text ============================================================ */
+.creator-text {
+    margin: 0;
+    color: var(--creator-section-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.creator-text-input {
+    width: 100%;
+    min-height: 88px;
+    resize: vertical;
+    padding: 10px 12px;
+    border: 1px solid var(--creator-section-border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--creator-section-fg);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    outline: none;
+}
+
+.creator-text-input:focus {
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Edit-only fields */
+.creator-sections:not(.creator-sections--editing) [data-creator-edit-only] {
+    display: none !important;
+}
+
+.creator-sections--editing [data-creator-view-only] {
+    display: none !important;
+}
+
+.creator-add-menu {
+    position: relative;
+}
+
+.creator-add-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: var(--z-dropdown, 50);
+    display: none;
+    min-width: 200px;
+    padding: 6px;
+    border: 1px solid var(--creator-section-border);
+    border-radius: 10px;
+    background: var(--creator-section-bg);
+    box-shadow: var(--creator-section-shadow);
+}
+
+.creator-add-menu.is-open .creator-add-panel {
+    display: grid;
+    gap: 2px;
+}
+
+.creator-add-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 36px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--creator-section-fg);
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.creator-add-item:hover,
+.creator-add-item:focus-visible {
+    background: var(--creator-section-hover);
+    outline: none;
+}

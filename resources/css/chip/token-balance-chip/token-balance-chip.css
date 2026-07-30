@@ -1,0 +1,38 @@
+
+
+@keyframes glint{
+    0%,80%,100%{opacity:0;transform:translateX(-100%) skewX(-12deg)}
+    85%{opacity:1}
+    92%{opacity:0;transform:translateX(400%) skewX(-12deg)}
+}
+
+.token-balance-chip{
+    padding: var(--token-balance-chip-padding); border-radius: var(--token-balance-chip-radius);
+    background-color: var(--token-balance-chip-bg);
+    background-image: var(--token-balance-chip-texture);
+    border:1px solid var(--token-balance-chip-border);
+    box-shadow: var(--token-balance-chip-shadow);
+    display: inline-flex; align-items: center; gap: var(--token-balance-chip-gap);
+    cursor:pointer; transition: var(--token-balance-chip-transition); position:relative; overflow:hidden;
+}
+
+.token-balance-chip::after{
+    content:'';position:absolute;inset:0;
+    background:var(--token-balance-chip-glint);
+    animation:glint var(--token-balance-chip-glint-duration) ease-in-out infinite
+}
+
+.token-coin{
+    width: var(--token-coin-size); height: var(--token-coin-size);
+    border-radius: var(--radius-pill);
+    background:var(--token-coin-fill);
+    flex-shrink: 0;
+    /*TODO add the G inside the token*/
+    /*color: black;*/
+    /*font-size: 2px;*/
+}
+.token-balance{font-size:var(--token-balance-size);font-weight:var(--font-bold4);color:var(--token-balance-fg);letter-spacing:.3px}
+.token-add{font-size:var(--token-add-size);color:var(--token-add-fg);margin-left:2px;transition:color var(--duration2)}
+.token-balance-chip:hover .token-add{color:var(--token-add-fg-hover)}
+
+

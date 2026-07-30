@@ -1,0 +1,29 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --avatar-bg: var(--white7);
+    --avatar-fg: var(--text-muted);
+    --avatar-ring: var(--white-alpha-120);
+    --avatar-ring-hover: var(--silver3);
+    --avatar-ring-active: var(--color-primary);
+    --avatar-initials-fg: var(--text-primary);
+    --avatar-notification-bg: var(--color-primary);
+    --avatar-dot-ring: var(--surface-black);
+    --avatar-status-online: var(--color-live);
+    --avatar-status-live: var(--color-live);
+    --avatar-status-busy: var(--color-danger);
+    --avatar-status-away: var(--color-warning);
+
+    /* ===== B) Layout ================================================= */
+    --avatar-radius: var(--radius-pill);
+    --avatar-size-xs: 24px;
+    --avatar-size-sm: 32px;
+    --avatar-size-md: 44px;
+    --avatar-size-lg: 64px;
+    --avatar-group-overlap: 10px;
+    --avatar-notification-size: 9px;
+    --avatar-notification-offset: -1px;
+    --avatar-status-size: 10px;
+
+    /* ===== C) Effects ================================================ */
+    --avatar-transition: 0.15s ease;
+}

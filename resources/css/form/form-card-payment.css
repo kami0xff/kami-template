@@ -1,0 +1,19 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARD PAYMENT — side-by-side card fields layout
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space3);
+}
+
+@media (max-width: 480px) {
+    .form-card-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-card-row > .form-field:first-child {
+        grid-column: 1 / -1;
+    }
+}

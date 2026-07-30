@@ -1,0 +1,97 @@
+:root {
+    /* Dock — Facebook-style bottom stack */
+    --chat-dock-right: var(--space4);
+    --chat-dock-gap: var(--space3);
+    --chat-dock-z: calc(var(--z-overlay) + 5);
+
+    /* Window — floating dark chrome (shared with panels) */
+    --chat-window-width: 348px;
+    --chat-window-height: 480px;
+    --chat-window-radius: 18px 18px 0 0;
+    --chat-window-bg: var(--panel-bg, #222);
+    --chat-window-border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.1));
+    --chat-window-shadow: var(--panel-shadow, 0 14px 40px rgba(0, 0, 0, 0.55));
+    --chat-window-accent-line: transparent;
+
+    /* Head */
+    --chat-head-bg: var(--panel-bg, #222);
+    --chat-head-border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.1));
+    --chat-head-height: 56px;
+    --chat-head-padding: 0 var(--space4);
+    --chat-head-name-size: var(--text-body);
+    --chat-head-name-weight: var(--font-bold4);
+    --chat-head-meta-size: var(--text-micro);
+    --chat-head-meta-color: var(--panel-list-item-fg-muted, rgba(255, 255, 255, 0.48));
+    --chat-head-action-size: 32px;
+    --chat-head-action-gap: 8px;
+    --chat-head-action-color: var(--panel-list-item-fg-muted, rgba(255, 255, 255, 0.48));
+    --chat-head-action-hover: #fff;
+
+    /* Messages — Astryx ChatMessage-inspired */
+    --chat-messages-padding: var(--space4) var(--space4);
+    --chat-messages-gap: 2px;
+    --chat-msg-group-gap: var(--space3);
+    --chat-avatar-gutter: 28px;
+    --chat-day-color: var(--text-faint);
+    --chat-day-size: var(--text-micro);
+
+    /* Bubbles */
+    --chat-bubble-them-bg: var(--gray6);
+    --chat-bubble-me-bg: color-mix(in srgb, var(--color-accent) 72%, #1a1a1a);
+    --chat-bubble-radius: 18px;
+    --chat-bubble-padding: 8px 12px;
+    --chat-bubble-text: var(--text-primary);
+    --chat-bubble-meta: var(--text-faint);
+    --chat-bubble-max: 78%;
+
+    /* Composer — Astryx ChatComposer-inspired */
+    --chat-composer-bg: var(--panel-bg, #222);
+    --chat-composer-padding: 12px var(--space4) 14px;
+    --chat-composer-gap: 12px;
+    --chat-input-bg: rgba(255, 255, 255, 0.06);
+    --chat-input-border: 1px solid rgba(255, 255, 255, 0.1);
+    --chat-input-radius: var(--radius-pill);
+    --chat-input-height: 42px;
+    --chat-input-pad-inline: 14px 10px 14px 16px;
+    --chat-tool-gap: 6px;
+    --chat-tool-size: 30px;
+    --chat-action-btn-size: 38px;
+    --chat-gift-color: #e8b923;
+    --chat-send-bg: rgba(255, 255, 255, 0.1);
+    --chat-send-color: #fff;
+
+    /* AI — same chrome language, distinct identity */
+    --chat-ai-mark: #5ec8c0;
+    --chat-ai-mark-fg: #0b1212;
+    --chat-ai-tint: color-mix(in srgb, var(--chat-ai-mark) 8%, var(--panel-bg, #222));
+    --chat-ai-bar-bg: color-mix(in srgb, var(--chat-ai-mark) 6%, var(--panel-bg, #222));
+    --chat-ai-bar-border: 1px solid color-mix(in srgb, var(--chat-ai-mark) 22%, var(--panel-border, rgba(255,255,255,0.1)));
+    --chat-ai-bar-padding: 8px var(--space4);
+    --chat-ai-bar-gap: 6px;
+    --chat-ai-badge-bg: var(--chat-ai-mark);
+    --chat-ai-badge-fg: var(--chat-ai-mark-fg);
+
+    /* Minimized heads — floating avatar pills */
+    --chat-pill-size: 48px;
+    --chat-pill-gap: var(--space2);
+    --chat-pill-shadow: var(--panel-elevation-medium, 0 10px 28px rgba(0, 0, 0, 0.48));
+    --chat-pill-badge-bg: var(--color-accent);
+    --chat-pill-badge-fg: #fff;
+    --chat-heads-max: 10;
+    --chat-heads-menu-width: 280px;
+
+    /* LIVE / AI badge — sits under the avatar, doesn’t cover the face */
+    --chat-live-bg: var(--color-accent);
+    --chat-live-fg: #fff;
+
+    /* Settings menu — same floating charcoal as global panels */
+    --chat-menu-bg: var(--panel-bg);
+    --chat-menu-border: 1px solid var(--panel-border);
+    --chat-menu-radius: var(--panel-radius);
+    --chat-menu-item-pad: var(--panel-list-item-padding);
+    --chat-menu-item-gap: var(--panel-list-item-gap);
+    --chat-menu-hover: var(--panel-list-item-hover-bg);
+    --chat-menu-sep: var(--panel-divider-fill);
+    --chat-menu-toggle-track: rgba(255, 255, 255, 0.18);
+    --chat-menu-toggle-knob: #fff;
+}

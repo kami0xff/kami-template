@@ -1,0 +1,32 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --dt-surface: var(--gray2);
+    --dt-background: var(--gray3);
+    --dt-border: var(--white-alpha-080);
+    --dt-row-border: var(--white7);
+    --dt-text: var(--white2);
+    --dt-text-muted: var(--silver5);
+    --dt-primary: var(--silver7);
+    --dt-focus-bg: rgba(255, 255, 255, 0.04);
+    --dt-hover-bg: rgba(255, 255, 255, 0.03);
+    --dt-page-hover-bg: rgba(255, 255, 255, 0.05);
+    --dt-striped-bg: rgba(255, 255, 255, 0.015);
+
+    /* ===== B) Layout ================================================= */
+    --dt-radius: var(--radius2);
+    --dt-radius-sm: var(--radius1);
+    --dt-toolbar-gap: 0.5rem;
+    --dt-toolbar-padding: 0.5rem 0.75rem;
+    --dt-cell-padding: 0.4rem 0.6rem;
+    --dt-cell-padding-dense: 0.25rem 0.5rem;
+    --dt-header-padding: 0.5rem 0.6rem;
+    --dt-header-padding-dense: 0.35rem 0.5rem;
+    --dt-font-size: 0.8rem;
+    --dt-font-size-sm: 0.75rem;
+    --dt-font-size-xs: 0.675rem;
+
+    /* ===== C) Effects ================================================ */
+    --dt-shadow: none;
+    --dt-shadow-scrolled: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --dt-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.08);
+}

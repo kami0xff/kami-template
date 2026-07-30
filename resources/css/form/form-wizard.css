@@ -1,0 +1,165 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   WIZARD STEPS + SAVE STATE INDICATORS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-steps {
+    display: flex;
+    align-items: flex-start;
+    counter-reset: step;
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space2);
+    flex: 1;
+    position: relative;
+}
+
+/* Connector line between steps */
+.form-step + .form-step::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    right: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--white-alpha-120);
+    z-index: 0;
+}
+
+.form-step.done + .form-step::before,
+.form-step.done + .form-step.done::before,
+.form-step.done + .form-step.active::before {
+    background: linear-gradient(90deg, var(--silver6), var(--silver3));
+}
+
+/* Step number circle */
+.form-step-num {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid var(--white-alpha-120);
+    background: var(--gray3);
+    color: var(--silver3);
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+}
+
+.form-step.active .form-step-num {
+    border-color: var(--silver7);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    color: var(--text-primary);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+}
+
+.form-step.done .form-step-num {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--silver8), #fff);
+    color: var(--gray1);
+}
+
+.form-step-label {
+    font-size: 11px;
+    font-weight: var(--font-bold5);
+    color: var(--silver3);
+    text-align: center;
+}
+
+.form-step.active .form-step-label {
+    color: var(--text-primary);
+}
+
+.form-step.done .form-step-label {
+    color: var(--silver6);
+}
+
+/* ───── COMPACT PILL / BAR VARIANT ───── */
+.form-steps-bar {
+    gap: 4px;
+}
+
+.form-steps-bar .form-step {
+    flex-direction: row;
+    gap: var(--space2);
+    flex: none;
+}
+
+.form-steps-bar .form-step + .form-step::before {
+    display: none;
+}
+
+.form-steps-bar .form-step-num {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+}
+
+.form-steps-bar .form-step-label {
+    font-size: 11px;
+}
+
+/* Connector dashes for bar variant */
+.form-steps-bar .form-step + .form-step {
+    margin-left: var(--space3);
+}
+
+/* ───── SAVE STATE INDICATORS ───── */
+.form-save {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space2);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--white-alpha-120);
+    background: var(--white7);
+    font-size: 11px;
+    font-weight: var(--font-bold5);
+    color: var(--text-muted);
+}
+
+.form-save-icon {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--silver3);
+}
+
+.form-save.saving .form-save-icon {
+    background: var(--amber2);
+    animation: form-save-pulse 1s infinite;
+}
+
+.form-save.saved {
+    border-color: color-mix(in srgb, var(--color-success) 20%, transparent);
+}
+
+.form-save.saved .form-save-icon {
+    background: var(--color-success);
+}
+
+.form-save.error {
+    border-color: rgba(255, 91, 91, 0.2);
+    color: var(--color-danger);
+}
+
+.form-save.error .form-save-icon {
+    background: var(--color-danger);
+}
+
+@keyframes form-save-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-save.saving .form-save-icon {
+        animation: none;
+    }
+}

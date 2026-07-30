@@ -1,0 +1,21 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --link-fg-primary: var(--color-primary);
+    --link-fg-danger: var(--color-danger);
+    --link-fg-success: var(--color-success);
+    --link-fg-muted: var(--text-muted);
+    --link-fg-warning: var(--color-warning);
+
+    /* ===== B) Typography ============================================= */
+    --link-font-size: 0.8rem;
+    --link-font-weight: var(--font-bold5);
+    --link-font-size-xs: 0.7rem;
+    --link-font-size-sm: 0.75rem;
+    --link-font-size-lg: 0.9rem;
+    --link-font-size-xl: 1rem;
+
+    /* ===== C) Effects ================================================ */
+    --link-hover-opacity: 0.85;
+    --link-visited-opacity: 0.75;
+    --link-active-opacity: 0.6;
+}

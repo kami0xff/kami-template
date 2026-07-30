@@ -1,0 +1,46 @@
+/*
+    Explore — short-form / mixed-media discovery feed.
+    Sticky media-type toggles + category filters while scrolling.
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --explore-fg: var(--text-primary);
+    --explore-muted: var(--text-muted);
+    --explore-faint: var(--text-faint);
+    --explore-bg: transparent;
+    --explore-surface: var(--gray1);
+    --explore-border: var(--border-default);
+    --explore-bar-bg: color-mix(in srgb, var(--gray1) 92%, transparent);
+    --explore-bar-border: var(--border-default);
+    --explore-chip-bg: var(--gray3);
+    --explore-chip-fg: var(--text-muted);
+    --explore-chip-border: var(--border-default);
+    --explore-chip-on-bg: color-mix(in srgb, var(--color-accent) 22%, var(--gray3));
+    --explore-chip-on-fg: var(--text-primary);
+    --explore-chip-on-border: color-mix(in srgb, var(--color-accent) 45%, var(--border-default));
+    --explore-live: #e44545;
+    --explore-ai: #5ec8c0;
+    --explore-card-bg: var(--gray2);
+    --explore-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.2) 45%, transparent 70%);
+
+    /* ===== B) Layout ================================================= */
+    --explore-height: min(78dvh, 760px);
+    --explore-gap: 0;
+    --explore-bar-gap: 10px;
+    --explore-bar-pad: 10px 12px 12px;
+    --explore-chip-h: 32px;
+    --explore-chip-pad: 0 12px;
+    --explore-chip-radius: 999px;
+    --explore-card-radius: 0;
+    --explore-feed-gap: 0;
+    --explore-strip-max: 100%;
+    --explore-grid-min: 220px;
+    --explore-media-ratio: 3 / 4;
+    --explore-z-bar: 20;
+    --explore-panel-radius: 14px;
+    --explore-panel-border: 1px solid var(--border-default);
+
+    /* ===== C) Effects ================================================ */
+    --explore-transition: color 0.14s ease, background 0.14s ease, border-color 0.14s ease, opacity 0.14s ease, transform 0.14s ease;
+    --explore-shadow: var(--elevation2, 0 8px 24px rgba(0, 0, 0, 0.28));
+}

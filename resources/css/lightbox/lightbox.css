@@ -1,0 +1,75 @@
+/* Lightbox — fullscreen media viewer. (Astryx: Lightbox, adapted.)
+   Attribute-driven, DOM is created by LightboxManager:
+
+       <a href="/img/full.jpg" data-lightbox="gallery" data-caption="Backstage">
+           <img src="/img/thumb.jpg" alt="">
+       </a>
+
+   Items sharing the same data-lightbox value form a navigable group. */
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--lightbox-z);
+    display: grid;
+    place-items: center;
+    background: var(--lightbox-bg);
+    opacity: 0;
+    transition: var(--lightbox-transition);
+}
+
+.lightbox-overlay--visible {
+    opacity: 1;
+}
+
+.lightbox-media {
+    max-width: calc(var(--lightbox-media-max) * 1vw);
+    max-height: calc(var(--lightbox-media-max) * 1vh);
+    border-radius: var(--radius2);
+}
+
+.lightbox-caption {
+    position: absolute;
+    bottom: var(--space5);
+    left: 50%;
+    translate: -50% 0;
+    max-width: 80vw;
+    color: var(--lightbox-fg);
+    font-size: var(--text-lead);
+    text-align: center;
+}
+
+.lightbox-counter {
+    position: absolute;
+    top: var(--space4);
+    left: var(--space5);
+    color: var(--text-muted);
+    font-size: var(--text-small);
+}
+
+.lightbox-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: var(--lightbox-control-size);
+    height: var(--lightbox-control-size);
+    border: 0;
+    border-radius: 50%;
+    background: var(--lightbox-control-bg);
+    color: var(--lightbox-fg);
+    font-size: 20px;
+    cursor: pointer;
+    transition: background var(--duration1);
+}
+
+.lightbox-btn:hover {
+    background: var(--white6);
+}
+
+.lightbox-btn--close { top: var(--space4); right: var(--space4); }
+.lightbox-btn--prev { left: var(--space4); top: 50%; translate: 0 -50%; }
+.lightbox-btn--next { right: var(--space4); top: 50%; translate: 0 -50%; }
+
+.lightbox-btn svg {
+    width: 18px;
+    height: 18px;
+}

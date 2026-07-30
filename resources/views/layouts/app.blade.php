@@ -124,8 +124,15 @@
               href="{{ url(config('seo.feed.url', '/feed')) }}">
     @endif
 
+    {{-- ===== FONTS (design system: --font-body / --font-display) ===== --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     {{-- ===== ASSETS (Vite build --watch → public/build) ===== --}}
     <link rel="stylesheet" href="{{ vite_asset('assets/app.css') }}">
+    {{-- Country flags (flag-icons) — used via <x-atom.flag code="fr" /> --}}
+    <link rel="stylesheet" href="{{ asset('vendor/flag-icons/css/flag-icons.min.css') }}">
     <script type="module" src="{{ vite_asset('assets/app.js') }}"></script>
 
     {{-- ===== STYLES ===== --}}

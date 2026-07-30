@@ -1,0 +1,96 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   COLLAPSIBLE FORM SECTIONS — accordion with icon + meta
+   Toggled by adding/removing .open on .form-section-block.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-section-block {
+    border: 1px solid var(--white-alpha-120);
+    border-radius: 10px;
+    background: var(--white7);
+    overflow: hidden;
+}
+
+.form-section-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space3);
+    width: 100%;
+    padding: var(--space4) var(--space4);
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--text-lead);
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--form-input-transition);
+}
+
+.form-section-head:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.form-section-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--white-alpha-080);
+    color: var(--silver5);
+    flex-shrink: 0;
+}
+
+.form-section-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.form-section-meta strong {
+    font-weight: var(--font-bold4);
+}
+
+.form-section-meta span {
+    font-size: var(--text-small);
+    color: var(--text-muted);
+}
+
+/* Caret (rotates when open) */
+.form-section-caret {
+    margin-left: auto;
+    color: var(--silver3);
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+
+.form-section-block.open .form-section-caret {
+    transform: rotate(180deg);
+}
+
+/* Body */
+.form-section-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 var(--space4);
+}
+
+.form-section-block.open .form-section-body {
+    max-height: 600px;
+    padding: 0 var(--space4) var(--space4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-section-caret,
+    .form-section-body,
+    .form-section-head {
+        transition: none;
+    }
+
+    .form-section-block.open .form-section-body {
+        max-height: none;
+    }
+}

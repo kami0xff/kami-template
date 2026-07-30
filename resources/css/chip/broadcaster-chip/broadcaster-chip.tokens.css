@@ -1,0 +1,23 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --broadcaster-chip-bg: rgba(255, 255, 255, 0.04);
+    --broadcaster-chip-bg-hover: rgba(255, 255, 255, 0.08);
+    --broadcaster-chip-border: rgba(255, 255, 255, 0.08);
+    --broadcaster-chip-border-hover: rgba(255, 255, 255, 0.14);
+    --broadcaster-chip-name-fg: #d0d0d0;
+    --broadcaster-chip-meta-fg: #555555;
+    --broadcaster-chip-avatar-bg: linear-gradient(135deg, #2a2a2a, #111111);
+
+    /* ===== B) Layout ================================================= */
+    --broadcaster-chip-gap: 10px;
+    --broadcaster-chip-radius: var(--radius-pill);
+    --broadcaster-chip-padding: 3px 10px 3px 4px;
+    --broadcaster-chip-avatar-size: 24px;
+    --broadcaster-chip-avatar-padding: var(--space1);
+    --broadcaster-chip-name-size: 11px;
+    --broadcaster-chip-meta-size: 9px;
+
+    /* ===== C) Effects ================================================ */
+    --broadcaster-chip-transition: all var(--duration2);
+    --broadcaster-chip-shadow: inset 1px 0 rgba(255, 255, 255, 0.01);
+}

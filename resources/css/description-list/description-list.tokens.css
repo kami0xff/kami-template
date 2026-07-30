@@ -1,0 +1,11 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --dl-term-fg: var(--text-muted);
+    --dl-desc-fg: var(--text-primary);
+    --dl-divider: var(--border-default);
+
+    /* ===== B) Layout ================================================= */
+    --dl-term-width: 160px;
+    --dl-row-padding: var(--space2) 0;
+    --dl-font-size: var(--text-lead);
+}

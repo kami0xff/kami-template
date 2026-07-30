@@ -1,0 +1,28 @@
+/* Stat / KPI — large value with a label, optional delta. */
+.stat {
+    display: grid;
+    gap: var(--stat-gap);
+}
+
+.stat-value {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space2);
+    color: var(--stat-value-fg);
+    font-size: var(--stat-value-size);
+    font-weight: var(--font-bold3);
+    line-height: 1.1;
+}
+
+.stat-label {
+    color: var(--stat-label-fg);
+    font-size: var(--text-small);
+}
+
+.stat-delta {
+    font-size: var(--text-small);
+    font-weight: var(--font-bold4);
+}
+
+.stat-delta--up { color: var(--stat-delta-up); }
+.stat-delta--down { color: var(--stat-delta-down); }

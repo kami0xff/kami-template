@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOYCAM — Acheter des jetons</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* base — same vocabulary as navbar.html */
+  --bg-page:   #111;
+  --modal-bg:  #0a0a0a;
+  --modal-bg-2:#0c0c0c;
+  --row-bg:    #131313;
+  --row-bg-hover: #181818;
+  --row-border:   #1e1e1e;
+
+  /* selected state — silver/white */
+  --sel-bg:    rgba(255,255,255,.04);
+  --sel-bg-2:  rgba(255,255,255,.06);
+  --sel-border:#aaa;
+  --sel-glow:  rgba(255,255,255,.15);
+
+  /* text */
+  --white:  #f0f0f0;
+  --dim:    #bbb;
+  --dimmer: #888;
+  --label:  #555;
+  --faint:  #3a3a3a;
+
+  /* save chip (subtle accent) */
+  --save-color: #6fbf73;
+
+  --display: 'Bebas Neue', sans-serif;
+  --body:    'DM Sans', sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background: var(--bg-page);
+  font-family: var(--body);
+  color: var(--white);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 40%, rgba(120,120,120,.04), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(80,80,80,.04), transparent 70%);
+}
+
+@keyframes glint{
+  0%,85%,100%{opacity:0;transform:translateX(-100%) skewX(-12deg)}
+  88%{opacity:1}
+  93%{opacity:0;transform:translateX(300%) skewX(-12deg)}
+}
+@keyframes pulse-dot{
+  0%,100%{opacity:.5;transform:scale(.9)}
+  50%{opacity:1;transform:scale(1.1)}
+}
+
+/* ───── FAKE NAVBAR ───── */
+.demo-navbar{
+  height: 48px;
+  background-color: #0e0e0e;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.012) 1px,rgba(255,255,255,.012) 2px),
+    repeating-linear-gradient(90deg,transparent,transparent 6px,rgba(255,255,255,.008) 6px,rgba(255,255,255,.008) 7px),
+    linear-gradient(180deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.01) 40%,rgba(0,0,0,.15) 100%);
+  border-bottom: 1px solid #1c1c1c;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 1px 0 rgba(0,0,0,.6);
+  display: flex; align-items: center; padding: 0 14px; gap: 12px;
+}
+.demo-navbar .logo{
+  font-family: var(--display); font-size:20px; letter-spacing:4px;
+  background: linear-gradient(135deg,#777,#fff 45%,#888 75%,#ccc);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  white-space:nowrap;
+}
+.demo-navbar .chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border-radius:100px;
+  background: rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  font-size:11px;color:#ccc;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+.demo-navbar .chip .dot{
+  width:6px;height:6px;border-radius:50%;background:#4ade80;
+  border:1.5px solid rgba(74,222,128,.3);
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* ───── MODAL ───── */
+.scrim{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(6px);
+  z-index: 50;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 48px 24px;
+  overflow-y: auto;
+}
+
+.modal{
+  width: 100%;
+  max-width: 1080px;
+  background: var(--modal-bg);
+  border: 1px solid #1e1e1e;
+  border-radius: 18px;
+  position: relative;
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.85),
+    0 2px 12px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  overflow: hidden;
+}
+
+/* brushed metal top strip */
+.modal::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.03) 1px,rgba(255,255,255,.03) 2px),
+    linear-gradient(90deg,#111 0%,#555 35%,#999 55%,#555 75%,#111 100%);
+  z-index:2;
+}
+
+.modal-head{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 28px 18px;
+  border-bottom: 1px solid #1c1c1c;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+}
+.head-title{
+  display: flex; align-items: center; gap: 12px;
+}
+.head-title svg{ color: #888; }
+.head-title h2{
+  font-family: var(--body);
+  font-size: 18px; font-weight: 600;
+  color: var(--white);
+  letter-spacing: .2px;
+}
+.close-btn{
+  width: 34px; height: 34px; border-radius: 10px;
+  background: transparent; border: 1px solid #1e1e1e;
+  color: #888; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.close-btn:hover{
+  background: rgba(255,255,255,.06);
+  border-color: #444;
+  color: #fff;
+}
+
+/* body grid */
+.modal-body{
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.col-label{
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 14px;
+  letter-spacing: .2px;
+}
+
+/* ───── ROW ───── */
+.row{
+  position: relative;
+  display: flex; align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--row-bg);
+  border: 1.5px solid var(--row-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s;
+  min-height: 56px;
+}
+.row + .row{ margin-top: 10px; }
+.row:hover{
+  background: var(--row-bg-hover);
+  border-color: #2e2e2e;
+}
+.row.selected{
+  background: linear-gradient(135deg, var(--sel-bg-2), var(--sel-bg));
+  border-color: var(--sel-border);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.10),
+    0 0 24px var(--sel-glow),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* radio mark */
+.radio{
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid #444;
+  flex-shrink: 0;
+  position: relative;
+  transition: all .2s;
+}
+.row:hover .radio{ border-color: #666; }
+.row.selected .radio{
+  background: linear-gradient(135deg,#ccc,#fff);
+  border-color: #fff;
+  box-shadow: 0 0 6px rgba(255,255,255,.4);
+}
+.row.selected .radio::after{
+  content:''; position:absolute;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  width:7px;height:7px;border-radius:50%;
+  background:#0a0a0a;
+}
+
+.row-main{
+  flex: 1;
+  display: flex; flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.row-title{
+  font-size: 14px; font-weight: 500;
+  color: var(--white);
+  letter-spacing: .1px;
+}
+.row-sub{
+  font-size: 12px;
+  color: var(--dimmer);
+}
+.row.selected .row-sub{ color: var(--dim); }
+
+/* row right side */
+.row-right{
+  display: flex; flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* payment method logos */
+.pm-logos{
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 3px;
+  align-items: center;
+}
+.pm-logo{
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 18px; padding: 1px 6px;
+  background: #fff;
+  border-radius: 3px;
+  font-family: var(--body);
+  font-size: 9px; font-weight: 700;
+  color: #111;
+  white-space: nowrap;
+}
+.pm-logo.tall{ height: 28px; }
+.pm-logo svg{ display:block; }
+
+.logo-paypal{
+  background: #fff;
+  font-style: italic; font-weight: 800; font-size: 11px;
+  padding: 3px 9px;
+}
+.logo-paypal .pp1{ color: #003087; }
+.logo-paypal .pp2{ color: #009cde; }
+
+.logo-skrill{
+  background: #fff;
+  color: #862165;
+  font-weight: 800; font-size: 11px;
+  padding: 3px 9px;
+  font-style: italic;
+}
+
+.logo-paysafe{
+  background: #e9eaef;
+  color: #e31e23;
+  font-weight: 800; font-size: 8px;
+  padding: 3px 6px;
+  line-height: 1.05;
+  text-align: center;
+  border-radius: 4px;
+  height: auto;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-wero{
+  background: linear-gradient(135deg,#ff3366,#7a1fa2);
+  color: #fff;
+  font-weight: 800; font-size: 9px;
+  padding: 3px 7px;
+  letter-spacing: .5px;
+  border-radius: 4px;
+}
+.logo-ideal{
+  background: #fff;
+  color: #cc0066;
+  font-weight: 800; font-size: 9px;
+  padding: 3px 6px;
+  font-style: italic;
+}
+
+.crypto-icons{
+  display: flex; gap: 2px;
+  align-items: center;
+}
+.crypto-icon{
+  width: 18px; height: 18px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff;
+  border: 1.5px solid var(--modal-bg);
+  margin-left: -4px;
+}
+.crypto-icon:first-child{ margin-left: 0; }
+.crypto-btc{ background: #f7931a; }
+.crypto-eth{ background: #627eea; }
+.crypto-usdt{ background: #26a17b; }
+.crypto-usdc{ background: #2775ca; }
+
+.cb-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+.cb-brand{
+  background: #fff;
+  border-radius: 3px;
+  padding: 3px 6px;
+  display: flex; align-items: center; justify-content: center;
+  height: 20px;
+}
+
+/* ───── PACK ROWS (right col) ───── */
+.pack-row{
+  position: relative;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; min-height: 58px;
+  background: var(--row-bg);
+  border: 1.5px solid var(--row-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.pack-row + .pack-row{ margin-top: 10px; }
+.pack-row:hover{
+  background: var(--row-bg-hover);
+  border-color: #2e2e2e;
+}
+.pack-row.selected{
+  background: linear-gradient(135deg, var(--sel-bg-2), var(--sel-bg));
+  border-color: var(--sel-border);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.10),
+    0 0 24px var(--sel-glow);
+}
+
+/* Highlight banner (Abonnement Suprême) — brushed metal */
+.pack-row.highlight{
+  background-color: #1e1e1e;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.02) 1px,rgba(255,255,255,.02) 2px),
+    repeating-linear-gradient(90deg,transparent,transparent 6px,rgba(255,255,255,.012) 6px,rgba(255,255,255,.012) 7px),
+    linear-gradient(180deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,.02) 40%, rgba(0,0,0,.2) 100%);
+  border: 1.5px solid #555;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.15),
+    inset 0 -1px 0 rgba(0,0,0,.4),
+    0 4px 16px rgba(0,0,0,.5);
+  overflow: hidden;
+}
+.pack-row.highlight::before{
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+  animation: glint 5s ease-in-out infinite;
+  pointer-events: none;
+}
+.pack-row.highlight .radio{
+  border-color: #888;
+  background: rgba(255,255,255,.08);
+}
+.pack-row.highlight.selected .radio{
+  background: linear-gradient(135deg,#fff,#ddd);
+  border-color: #fff;
+}
+.pack-row.highlight.selected .radio::after{
+  background: #0a0a0a;
+}
+.pack-row.highlight .pack-title{ color: #fff; font-weight: 600; }
+.pack-row.highlight .pack-sub{
+  color: #ccc; font-weight: 500;
+}
+
+.pack-main{
+  flex: 1;
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+.pack-title{
+  font-size: 14px; font-weight: 500;
+  color: var(--white);
+  display: flex; align-items: center; gap: 8px;
+}
+.pack-title .help{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(255,255,255,.10);
+  font-size: 10px; font-weight: 700;
+  color: rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.pack-sub{
+  font-size: 12px;
+  color: var(--dimmer);
+}
+
+.pack-right{
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 2px;
+  flex-shrink: 0;
+}
+.pack-price{
+  font-size: 15px; font-weight: 600;
+  color: var(--white);
+  letter-spacing: .2px;
+}
+.pack-strike{
+  font-size: 13px;
+  color: #888;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,.4);
+}
+.pack-save{
+  font-size: 11px;
+  color: var(--save-color);
+  font-weight: 600;
+}
+
+.show-more{
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #aaa;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color .15s;
+}
+.show-more:hover{ color: #fff; }
+
+/* ───── GATEWAY ROWS ───── */
+.gw-section{ margin-top: 24px; }
+.gw-label{
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600; color: var(--white);
+  margin-bottom: 14px;
+}
+.gw-label .help{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.10);
+  font-size: 10px; font-weight: 700;
+  color: #aaa;
+}
+
+.gw-row .pm-logo.gw{
+  height: 22px;
+  padding: 3px 9px;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: .3px;
+}
+.logo-paymentico{
+  background: linear-gradient(135deg,#4fa3ff,#1e6fd9);
+  color: #fff;
+  font-weight: 800;
+  font-size: 9px;
+  padding: 3px 9px;
+  letter-spacing: .5px;
+}
+.logo-epoch{
+  background: #21c95f;
+  color: #fff;
+}
+
+/* ───── CTA + FOOTER ───── */
+.cta-wrap{
+  display: flex; justify-content: center;
+  margin-top: 28px;
+}
+.cta{
+  position: relative;
+  padding: 14px 56px;
+  background-color: #2a2a2a;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 1px,rgba(255,255,255,.025) 1px,rgba(255,255,255,.025) 2px),
+    linear-gradient(180deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.04) 50%,rgba(0,0,0,.15) 100%);
+  border: 1px solid #555;
+  border-radius: 100px;
+  color: #fff;
+  font-family: var(--body);
+  font-size: 16px; font-weight: 600;
+  letter-spacing: .3px;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(0,0,0,.4),
+    0 6px 20px rgba(0,0,0,.6);
+  overflow: hidden;
+}
+.cta::after{
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+  animation: glint 5s ease-in-out infinite;
+  pointer-events: none;
+}
+.cta:hover{
+  border-color: #777;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.4),
+    0 10px 28px rgba(0,0,0,.7);
+}
+
+.fine-print{
+  text-align: center;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #777;
+  line-height: 1.7;
+}
+.fine-print .lock{
+  display: inline-flex; vertical-align: -3px; margin-right: 4px;
+  color: #888;
+}
+
+.trust-row{
+  display: flex; align-items: center; justify-content: center;
+  gap: 28px;
+  margin: 22px 0 30px;
+  flex-wrap: wrap;
+}
+.trust{
+  display: flex; align-items: center; gap: 9px;
+  color: #555;
+}
+.trust-icon{
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 7px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  color: #999;
+}
+.trust-text{ display: flex; flex-direction: column; line-height: 1.15; }
+.trust-text strong{
+  font-family: var(--display);
+  font-size: 14px; letter-spacing: 1.5px;
+  color: var(--white);
+}
+.trust-text span{
+  font-size: 9px; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #555;
+}
+
+@media (max-width: 760px){
+  .modal-body{ grid-template-columns: 1fr; gap: 24px; padding: 20px; }
+  .modal-head{ padding: 18px 20px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-navbar">
+  <span class="logo">BOYCAM</span>
+  <span class="chip"><span class="dot"></span> 8,360 LIVE</span>
+  <span class="chip">Meilleurs Modèles</span>
+  <span style="margin-left:auto;"></span>
+  <span class="chip">Magic Search</span>
+  <span class="chip"><span style="color:#fff;font-weight:700;">320</span> jetons +</span>
+</div>
+
+<div class="scrim">
+  <div class="modal">
+
+    <div class="modal-head">
+      <div class="head-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>
+        </svg>
+        <h2>Acheter des jetons</h2>
+      </div>
+      <button class="close-btn" aria-label="Fermer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- LEFT -->
+      <div>
+        <div class="col-label">Moyen de paiement</div>
+
+        <div class="row" data-group="pm">
+          <div class="radio"></div>
+          <div class="row-main"><div class="row-title">iDEAL | Wero</div></div>
+          <div class="row-right">
+            <div class="pm-logos">
+              <div class="logo-ideal pm-logo">iDEAL</div>
+              <div class="logo-wero pm-logo">WERO</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row selected" data-group="pm">
+          <div class="radio"></div>
+          <div class="row-main"><div class="row-title">Carte bancaire</div></div>
+          <div class="row-right">
+            <div class="cb-grid">
+              <div class="cb-brand"><svg width="30" height="10" viewBox="0 0 78 26"><text x="0" y="20" font-family="Arial Black,Arial" font-weight="900" font-size="22" font-style="italic" fill="#1a1f71">VISA</text></svg></div>
+              <div class="cb-brand">
+                <svg width="22" height="14" viewBox="0 0 32 20">
+                  <circle cx="11" cy="10" r="9" fill="#eb001b"/>
+                  <circle cx="21" cy="10" r="9" fill="#f79e1b" fill-opacity=".88"/>
+                </svg>
+              </div>
+              <div class="cb-brand">
+                <svg width="26" height="14" viewBox="0 0 40 20">
+                  <circle cx="9" cy="10" r="7" fill="#0079be"/>
+                  <circle cx="20" cy="10" r="7" fill="#fff"/>
+                  <circle cx="31" cy="10" r="7" fill="#ea0029"/>
+                </svg>
+              </div>
+              <div class="cb-brand"><svg width="34" height="10" viewBox="0 0 90 22"><text x="0" y="17" font-family="Arial Black,Arial" font-weight="900" font-size="17" fill="#231f20" letter-spacing="-.5">DISC</text><text x="42" y="17" font-family="Arial Black,Arial" font-weight="900" font-size="17" fill="#f76b1c" letter-spacing="-.5">VER</text><circle cx="40" cy="11" r="6" fill="#f76b1c"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" data-group="pm">
+          <div class="radio"></div>
+          <div class="row-main"><div class="row-title">PayPal</div></div>
+          <div class="row-right">
+            <div class="logo-paypal pm-logo"><span class="pp1">Pay</span><span class="pp2">Pal</span></div>
+          </div>
+        </div>
+
+        <div class="row" data-group="pm">
+          <div class="radio"></div>
+          <div class="row-main"><div class="row-title">paysafecard</div></div>
+          <div class="row-right">
+            <div class="logo-paysafe pm-logo">paysafe<br>card</div>
+          </div>
+        </div>
+
+        <div class="row" data-group="pm">
+          <div class="radio"></div>
+          <div class="row-main"><div class="row-title">Skrill</div></div>
+          <div class="row-right">
+            <div class="logo-skrill pm-logo">Skrill</div>
+          </div>
+        </div>
+
+        <div class="row" data-group="pm">
+          <div class="radio"></div>
+          <div class="row-main"><div class="row-title">USDT, BTC, ETH, USDC, etc.</div></div>
+          <div class="row-right">
+            <div class="crypto-icons">
+              <span class="crypto-icon crypto-usdt">₮</span>
+              <span class="crypto-icon crypto-btc">₿</span>
+              <span class="crypto-icon crypto-eth">Ξ</span>
+              <span class="crypto-icon crypto-usdc">$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="col-label">Packs de jetons</div>
+
+        <div class="pack-row highlight" data-group="pack">
+          <div class="radio"></div>
+          <div class="pack-main">
+            <div class="pack-title">Abonnement Suprême <span class="help">?</span></div>
+            <div class="pack-sub">–50 % sur le plan annuel</div>
+          </div>
+          <div class="pack-right">
+            <div class="pack-strike">199,00 €</div>
+            <div class="pack-price">99,99 €/an</div>
+          </div>
+        </div>
+
+        <div class="pack-row selected" data-group="pack">
+          <div class="radio"></div>
+          <div class="pack-main"><div class="pack-title">200 jetons</div></div>
+          <div class="pack-right">
+            <div class="pack-price">20,99 €</div>
+            <div class="pack-save">Économisez 2,25 €</div>
+          </div>
+        </div>
+
+        <div class="pack-row" data-group="pack">
+          <div class="radio"></div>
+          <div class="pack-main"><div class="pack-title">520 jetons</div></div>
+          <div class="pack-right">
+            <div class="pack-price">49,99 €</div>
+            <div class="pack-save">Économisez 10 €</div>
+          </div>
+        </div>
+
+        <div class="pack-row" data-group="pack">
+          <div class="radio"></div>
+          <div class="pack-main"><div class="pack-title">2,250 jetons</div></div>
+          <div class="pack-right">
+            <div class="pack-price">199,99 €</div>
+            <div class="pack-save">Économisez 61 €</div>
+          </div>
+        </div>
+
+        <a class="show-more">Afficher plus de packs</a>
+
+        <div class="gw-section">
+          <div class="gw-label">Passerelle de paiement <span class="help">?</span></div>
+
+          <div class="pack-row gw-row selected" data-group="gw">
+            <div class="radio"></div>
+            <div class="pack-main">
+              <div class="pack-title">Paymentico</div>
+              <div class="pack-sub">Facturé par Paymentico</div>
+            </div>
+            <div class="pack-right">
+              <div class="logo-paymentico pm-logo gw">PAYMENTICO</div>
+            </div>
+          </div>
+
+          <div class="pack-row gw-row" data-group="gw">
+            <div class="radio"></div>
+            <div class="pack-main">
+              <div class="pack-title">Epoch</div>
+              <div class="pack-sub">Facturé par EPOCH.COM<br><span style="opacity:.7">*Technius</span></div>
+            </div>
+            <div class="pack-right">
+              <div class="logo-epoch pm-logo gw">epoch</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="cta-wrap">
+      <button class="cta">Continuer</button>
+    </div>
+
+    <div class="fine-print">
+      Prix TTC.<br>
+      <svg class="lock" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Vous ne serez facturé qu'une seule fois, en toute sécurité. Aucuns frais récurrents.
+    </div>
+
+    <div class="trust-row">
+      <div class="trust">
+        <span class="trust-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span>
+        <div class="trust-text"><strong>COMODO</strong><span>Secure</span></div>
+      </div>
+      <div class="trust">
+        <span class="trust-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <div class="trust-text"><strong>256 BIT</strong><span>SSL Encryption</span></div>
+      </div>
+      <div class="trust">
+        <span class="trust-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/><circle cx="12" cy="11" r="2.5"/></svg>
+        </span>
+        <div class="trust-text"><strong>PRIVACY</strong><span>In Bank Statement</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('[data-group]').forEach(el => {
+    el.addEventListener('click', () => {
+      const g = el.dataset.group;
+      document.querySelectorAll('[data-group="'+g+'"]').forEach(s => s.classList.remove('selected'));
+      el.classList.add('selected');
+    });
+  });
+</script>
+
+</body>
+</html>

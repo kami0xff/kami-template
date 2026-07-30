@@ -1,0 +1,186 @@
+/*
+    Pagination — Astryx-inspired page controls.
+
+    Variants (on .pagination):
+        (default) / --pill   pill current page
+        --boxed              bordered square-ish items
+        --simple             prev / "Page X of Y" / next
+        --compact            smaller hit targets
+
+    Size: --sm
+    Footer bar: .pagination-bar (meta + per-page select + controls)
+*/
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--pagination-gap);
+}
+
+.pagination-item {
+    display: grid;
+    place-items: center;
+    min-width: var(--pagination-size);
+    height: var(--pagination-size);
+    padding: 0 var(--space2);
+    border: 0;
+    border-radius: var(--pagination-radius);
+    background: transparent;
+    color: var(--pagination-fg);
+    font-size: var(--pagination-font-size);
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard);
+}
+
+.pagination-item:hover {
+    background: var(--pagination-bg-hover);
+    color: var(--pagination-fg-hover);
+}
+
+.pagination-item--current,
+.pagination-item--current:hover {
+    background: var(--pagination-bg-current);
+    color: var(--pagination-fg-current);
+    font-weight: var(--font-bold5);
+    cursor: default;
+}
+
+.pagination-item--disabled,
+.pagination-item--disabled:hover {
+    background: transparent;
+    color: var(--text-faint);
+    cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+    min-width: var(--pagination-size);
+    text-align: center;
+    color: var(--text-faint);
+    user-select: none;
+}
+
+.pagination-status {
+    padding: 0 var(--space2);
+    color: var(--pagination-fg);
+    font-size: var(--pagination-font-size);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.pagination-status strong {
+    color: var(--text-primary);
+    font-weight: var(--font-bold4);
+}
+
+/* ── Size: sm ─────────────────────────────────────────────────────── */
+.pagination--sm .pagination-item,
+.pagination--sm .pagination-ellipsis {
+    min-width: var(--pagination-size-sm);
+    height: var(--pagination-size-sm);
+    font-size: var(--pagination-font-size-sm);
+}
+
+.pagination--sm .pagination-status {
+    font-size: var(--pagination-font-size-sm);
+}
+
+/* ── Variant: boxed ───────────────────────────────────────────────── */
+.pagination--boxed .pagination-item {
+    border: 1px solid var(--pagination-border);
+    border-radius: var(--pagination-radius-boxed);
+    background: transparent;
+}
+
+.pagination--boxed .pagination-item:hover {
+    border-color: color-mix(in srgb, var(--pagination-border-current) 45%, transparent);
+    background: var(--pagination-bg-hover);
+}
+
+.pagination--boxed .pagination-item--current,
+.pagination--boxed .pagination-item--current:hover {
+    border-color: var(--pagination-border-current);
+    background: var(--pagination-bg-current);
+    color: var(--pagination-fg-current);
+}
+
+.pagination--boxed .pagination-item--disabled,
+.pagination--boxed .pagination-item--disabled:hover {
+    border-color: transparent;
+    background: transparent;
+}
+
+/* ── Variant: simple ──────────────────────────────────────────────── */
+.pagination--simple {
+    gap: var(--space2);
+}
+
+/* ── Table / list footer bar ──────────────────────────────────────── */
+.pagination-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--pagination-bar-gap);
+    width: 100%;
+}
+
+.pagination-bar-meta {
+    font-size: var(--text-small);
+    color: var(--pagination-bar-fg);
+    font-variant-numeric: tabular-nums;
+}
+
+.pagination-bar-meta strong {
+    color: var(--pagination-bar-fg-strong);
+    font-weight: var(--font-bold4);
+}
+
+.pagination-bar-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space3);
+    margin-left: auto;
+}
+
+.pagination-bar-size {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space2);
+    font-size: var(--text-small);
+    color: var(--pagination-bar-fg);
+}
+
+.pagination-bar-size select {
+    height: 32px;
+    padding: 0 var(--space5) 0 var(--space2);
+    border: 1px solid var(--pagination-bar-select-border);
+    border-radius: var(--pagination-bar-select-radius);
+    background: var(--pagination-bar-select-bg);
+    color: var(--text-primary);
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+}
+
+.pagination-bar-size select:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+}
+
+@media (max-width: 640px) {
+    .pagination-bar-controls {
+        width: 100%;
+        justify-content: space-between;
+        margin-left: 0;
+    }
+}

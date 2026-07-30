@@ -1,0 +1,7 @@
+/*
+    HHentai — site manifest.
+    Base system + navy/azure theme. Add site compositions below as the
+    site grows (sidebar/compositions/hhentai/, pages/, …).
+*/
+@import '../app.css';
+@import '../themes/hhentai.css';

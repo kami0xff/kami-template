@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLIDER — single + dual-thumb range, stepped
+   Position is driven by --p (single) or --p1/--p2 (range) CSS variables.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-slider {
+    --p: 50%;
+    position: relative;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    touch-action: none;
+}
+
+/* Track */
+.form-slider-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--white-alpha-120);
+}
+
+/* Filled portion */
+.form-slider-fill {
+    position: absolute;
+    left: 0;
+    height: 4px;
+    width: var(--p);
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--form-accent-strong), var(--form-accent));
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    transition: width var(--form-input-transition);
+}
+
+/* Range fill (between two thumbs) */
+.form-slider-fill-range {
+    left: var(--p1, 20%);
+    width: calc(var(--p2, 75%) - var(--p1, 20%));
+}
+
+/* Thumb */
+.form-slider-thumb {
+    position: absolute;
+    left: var(--p);
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    margin-left: -9px;
+    margin-top: -9px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--silver9), #fff);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 0 6px rgba(255, 255, 255, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.5);
+    cursor: grab;
+    transition:
+        transform var(--form-input-transition),
+        box-shadow var(--form-input-transition);
+    z-index: 2;
+}
+
+.form-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.form-slider-thumb:active {
+    cursor: grabbing;
+}
+
+/* Range dual thumbs */
+.form-thumb-1 {
+    left: var(--p1, 20%);
+}
+
+.form-thumb-2 {
+    left: var(--p2, 75%);
+}
+
+/* Stops (discrete steps) */
+.form-slider-stops {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 0;
+    pointer-events: none;
+}
+
+.form-slider-stops span {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    margin-left: -3px;
+    margin-top: -3px;
+    border-radius: 50%;
+    background: var(--silver1);
+    border: 1px solid var(--gray5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-slider-fill,
+    .form-slider-thumb {
+        transition: none;
+    }
+}

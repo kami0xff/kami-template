@@ -1,0 +1,12 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --skeleton-bg: var(--white7);
+    --skeleton-shine: var(--white6);
+
+    /* ===== B) Layout ================================================= */
+    --skeleton-radius: var(--radius1);
+    --skeleton-line-height: 12px;
+
+    /* ===== C) Effects ================================================ */
+    --skeleton-duration: 1.4s;
+}

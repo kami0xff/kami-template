@@ -1,0 +1,27 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --pagination-fg: var(--text-muted);
+    --pagination-fg-hover: var(--text-primary);
+    --pagination-bg-hover: var(--white7);
+    --pagination-bg-current: var(--color-primary);
+    --pagination-fg-current: var(--white1);
+    --pagination-border: var(--white-alpha-120);
+    --pagination-border-current: var(--color-primary);
+
+    /* ===== B) Layout ================================================= */
+    --pagination-size: 36px;
+    --pagination-size-sm: 30px;
+    --pagination-gap: var(--space1);
+    --pagination-radius: var(--radius-pill);
+    --pagination-radius-boxed: var(--radius-element);
+    --pagination-font-size: var(--text-lead);
+    --pagination-font-size-sm: var(--text-small);
+
+    /* Table / list footer bar */
+    --pagination-bar-gap: var(--space3);
+    --pagination-bar-fg: var(--text-muted);
+    --pagination-bar-fg-strong: var(--text-primary);
+    --pagination-bar-select-bg: var(--white7);
+    --pagination-bar-select-border: var(--white-alpha-120);
+    --pagination-bar-select-radius: var(--radius-element);
+}

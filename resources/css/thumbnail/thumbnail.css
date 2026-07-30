@@ -1,0 +1,40 @@
+/* Thumbnail — fixed-ratio media frame with overlay corner slots.
+   (Astryx: Thumbnail / AspectRatio, adapted.) */
+.thumbnail {
+    position: relative;
+    display: block;
+    aspect-ratio: var(--thumbnail-ratio);
+    border: 1px solid var(--thumbnail-border);
+    border-radius: var(--thumbnail-radius);
+    background: var(--thumbnail-bg);
+    overflow: hidden;
+}
+
+.thumbnail--square { --thumbnail-ratio: 1; }
+.thumbnail--portrait { --thumbnail-ratio: 3 / 4; }
+.thumbnail--photo { --thumbnail-ratio: 4 / 3; }
+
+.thumbnail img,
+.thumbnail video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-overlay {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space1);
+    padding: 2px 7px;
+    border-radius: var(--radius-pill);
+    background: var(--thumbnail-overlay-bg);
+    color: var(--thumbnail-overlay-fg);
+    font-size: var(--text-small);
+    line-height: 1.5;
+}
+
+.thumbnail-overlay--tl { top: var(--thumbnail-badge-inset); left: var(--thumbnail-badge-inset); }
+.thumbnail-overlay--tr { top: var(--thumbnail-badge-inset); right: var(--thumbnail-badge-inset); }
+.thumbnail-overlay--bl { bottom: var(--thumbnail-badge-inset); left: var(--thumbnail-badge-inset); }
+.thumbnail-overlay--br { bottom: var(--thumbnail-badge-inset); right: var(--thumbnail-badge-inset); }

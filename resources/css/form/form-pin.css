@@ -1,0 +1,86 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIN / OTP INPUT — fixed-width cells with cursor animation
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.form-pin {
+    display: flex;
+    gap: 8px;
+}
+
+.form-pin-cell {
+    width: 46px;
+    height: 52px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: var(--font-bold4);
+    font-family: 'SF Mono', Menlo, monospace;
+    letter-spacing: 0;
+    color: var(--text-primary);
+    background: var(--form-input-bg);
+    border: 1.5px solid var(--white-alpha-120);
+    border-radius: 8px;
+    outline: none;
+    caret-color: var(--silver7);
+    transition:
+        border-color var(--form-input-transition),
+        box-shadow var(--form-input-transition),
+        background var(--form-input-transition);
+}
+
+.form-pin-cell::placeholder {
+    color: var(--text-faint);
+}
+
+.form-pin-cell:hover {
+    border-color: var(--form-input-hover-border);
+}
+
+.form-pin-cell:focus,
+.form-pin-cell.is-focus {
+    border-color: var(--form-input-focus-border);
+    background: var(--gray5);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.04);
+}
+
+/* Filled cells */
+.form-pin-cell:not(:placeholder-shown) {
+    border-color: var(--silver1);
+}
+
+/* ───── RESEND TIMER (OTP) ───── */
+.form-resend {
+    margin-top: var(--space3);
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--space1);
+}
+
+.form-resend a {
+    color: var(--text-primary);
+    font-weight: var(--font-bold5);
+    text-decoration: none;
+}
+
+.form-resend a:hover {
+    text-decoration: underline;
+}
+
+.form-resend a.disabled {
+    color: var(--text-faint);
+    pointer-events: none;
+}
+
+.form-resend-timer {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    font-weight: var(--font-bold4);
+    color: var(--silver5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-pin-cell {
+        transition: none;
+    }
+}

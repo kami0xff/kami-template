@@ -1,0 +1,54 @@
+:root {
+    /* Layout */
+    --modal-max-width: 1080px;
+    --modal-padding: var(--space7);
+    --modal-radius: var(--radius-container);
+    --modal-z-index: var(--z-modal);
+
+    /* Surface */
+    --modal-bg: var(--gray1);
+    --modal-border: var(--border-strong);
+    --modal-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.85),
+        0 2px 12px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+
+
+    /* what does scrim mean in this context ? */
+
+    /* Scrim */
+    --modal-overlay-bg: rgba(0, 0, 0, 0.78);
+    --modal-overlay-blur: 6px;
+    --modal-overlay-padding: var(--space8) var(--space6);
+
+    /* Head */
+    --modal-head-padding: 22px var(--space7) 18px;
+    --modal-head-border: var(--gray6);
+    --modal-head-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+    --modal-head-title-size: 18px;
+    --modal-head-title-weight: var(--font-bold4);
+    --modal-head-icon-color: var(--text-muted);
+
+    /* Close button */
+    --modal-close-size: 34px;
+    --modal-close-radius: 10px;
+    --modal-close-border: var(--border-strong);
+    --modal-close-color: var(--text-muted);
+    --modal-close-hover-bg: rgba(255, 255, 255, 0.06);
+    --modal-close-hover-border: var(--silver1);
+    --modal-close-hover-color: var(--text-primary);
+
+    /* Body */
+    --modal-body-padding: var(--space7);
+    --modal-body-gap: var(--space7);
+
+    /* Footer */
+    --modal-footer-padding: var(--space4) var(--space7) var(--space6);
+    --modal-footer-border: var(--gray6);
+    --modal-footer-bg: transparent;
+
+    /* Motion */
+    --modal-transition: var(--duration2);
+    --modal-ease: var(--ease-out);
+}

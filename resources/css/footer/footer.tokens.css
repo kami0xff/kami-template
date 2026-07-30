@@ -1,0 +1,59 @@
+/*
+   Footer — component tokens
+
+   Three sections:
+     A) SETTINGS   — backgrounds, muted text, link ladder
+     B) LAYOUT     — padding, gaps, watermark typography
+     C) EFFECTS    — column glow geometry + dividers (wraps shared gradients)
+*/
+:root {
+  /* ===== A) Settings =============================================== */
+  --footer-bg: var(--surface-black);
+  --footer-muted: var(--white4);
+  --footer-social-fg: var(--footer-muted);
+  --footer-social-fg-hover: var(--footer-link5);
+  --footer-social-bg: rgba(255, 255, 255, 0.04);
+  --footer-social-bg-hover: rgba(255, 255, 255, 0.08);
+  --footer-social-border: rgba(255, 255, 255, 0.08);
+
+  /* Link column "ladder" (1 = base … 5 = strongest / hover target) */
+  --footer-link-header: var(--white1);
+  --footer-link1: rgba(255, 255, 255, 0.45);
+  --footer-link2: rgba(255, 255, 255, 0.55);
+  --footer-link3: rgba(255, 255, 255, 0.70);
+  --footer-link4: rgba(255, 255, 255, 0.85);
+  --footer-link5: rgba(255, 255, 255, 1);
+
+  /* ===== B) Layout ================================================= */
+  --footer-padding-block: var(--space9);
+  --footer-padding-inline: var(--space10);
+  --footer-padding-top: var(--space5);
+  --footer-padding-bottom: var(--space2);
+  --footer-padding-left: var(--space5);
+  --footer-padding-right: var(--space5);
+  --footer-gap-columns: var(--space5);
+  --footer-gap-rows: var(--space1);
+  --footer-column-min-height: 220px;
+
+  --footer-text-art-tracking: -0.04em;
+  --footer-text-art-leading: 0.85;
+  --footer-text-art-weight: var(--font-bold1);
+  --footer-social-size: 32px;
+  --footer-social-icon-size: 16px;
+  --footer-social-radius: var(--radius-pill);
+  --footer-social-gap: var(--space2);
+
+  /* ===== C) Effects ================================================ */
+  /* Clean defaults — gradient dividers and the radial column glow live
+     in themes/glow.css as an opt-in spec. */
+  --footer-column-glow-height: 140px;
+  --footer-column-glow-sides: -30%;
+  --footer-column-line-inset: 10%;
+  --footer-text-art-bottom: -20px;
+
+  --footer-divider: var(--border-default);
+  --footer-divider-solid: rgba(255, 255, 255, 0.18);
+  --footer-column-glow: none;
+  --footer-text-art-fill: var(--gradient-text2);
+  --footer-social-transition: all var(--duration2);
+}

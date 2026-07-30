@@ -1,0 +1,13 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --table-head-fg: var(--text-muted);
+    --table-cell-fg: var(--text-primary);
+    --table-divider: var(--border-default);
+    --table-stripe-bg: var(--white8);
+    --table-row-hover-bg: var(--white7);
+
+    /* ===== B) Layout ================================================= */
+    --table-cell-padding: var(--space3);
+    --table-cell-padding-compact: var(--space2);
+    --table-font-size: var(--text-lead);
+}

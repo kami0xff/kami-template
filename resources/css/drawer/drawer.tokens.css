@@ -1,0 +1,28 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    /* Charcoal chrome — shared with chat settings / account panels */
+    --drawer-bg: var(--panel-bg, #222222);
+    --drawer-border: var(--panel-border, rgba(255, 255, 255, 0.1));
+    --drawer-overlay-bg: var(--modal-overlay-bg);
+    --drawer-fg: var(--panel-list-item-fg, rgba(255, 255, 255, 0.88));
+    --drawer-muted: var(--panel-list-item-fg-muted, rgba(255, 255, 255, 0.48));
+    --drawer-hover: var(--panel-list-item-hover-bg, rgba(255, 255, 255, 0.07));
+
+    /* ===== B) Layout ================================================= */
+    --drawer-width: 360px;
+    --drawer-height: 60dvh; /* bottom sheet */
+    --drawer-padding: 14px;
+    --drawer-z: var(--modal-z-index);
+    --drawer-inset: 12px; /* float variant — gap from viewport edges */
+    --drawer-radius-float: 16px;
+
+    /* ===== C) Effects ================================================ */
+    --drawer-shadow: var(--panel-shadow, 0 14px 40px rgba(0, 0, 0, 0.55));
+    --drawer-transition: translate var(--duration3) var(--ease-out);
+    --drawer-transition-float: opacity var(--duration3) var(--ease-out);
+    --drawer-float-border: rgba(200, 210, 220, 0.28);
+    --drawer-float-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 0 24px rgba(180, 200, 220, 0.12);
+}

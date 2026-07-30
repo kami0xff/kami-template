@@ -1,0 +1,16 @@
+:root {
+    /* ===== A) Settings =============================================== */
+    --alert-bg: var(--white7);
+    --alert-fg: var(--text-primary);
+    --alert-body-fg: var(--text-muted);
+    --alert-border: var(--border-strong);
+    --alert-tint-strength: 12%;
+    --alert-border-strength: 35%;
+
+    /* ===== B) Layout ================================================= */
+    --alert-padding: var(--space3) var(--space4);
+    --alert-radius: var(--radius-container);
+    --alert-gap: var(--space3);
+    --alert-icon-size: 18px;
+    --alert-font-size: var(--text-lead);
+}
