@@ -38,6 +38,14 @@
     @endphp
     <link rel="canonical" href="{{ $canonical }}">
 
+    {{-- ===== HREFLANG ===== --}}
+    {{-- Auto-derived from the current named route (every localized page gets
+         self-referencing tags + x-default). Content pages with per-locale
+         slugs set seo()->hreflang([...]) explicitly from their translations. --}}
+    @foreach(seo()->hreflang() as $hreflangLocale => $hreflangUrl)
+    <link rel="alternate" hreflang="{{ $hreflangLocale }}" href="{{ $hreflangUrl }}">
+    @endforeach
+
     {{-- ===== OPEN GRAPH ===== --}}
     <meta property="og:type" content="{{ seo()->get('og_type') ?: 'website' }}">
     <meta property="og:site_name" content="{{ config('app.name', 'Kami Template') }}">

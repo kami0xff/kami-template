@@ -399,8 +399,10 @@ What happens automatically for every translated document:
 - A language switcher in the site header (only on pages that actually have
   a translation)
 - Per-locale sitemap entries and a per-locale RSS feed (`/es/feed.xml`)
-- Localized UI chrome via `lang/{locale}.json` (`es` and `fr` ship with the
-  template) and `lang="{locale}"` on `<html>`
+- Localized UI chrome via `lang/{locale}.json` and `lang="{locale}"` on `<html>`
+- Per-site UI string overrides via `resources/sites/{key}/lang/` — mirrors
+  the app `lang/` structure (`{locale}.json` and `{locale}/{group}.php`);
+  site strings win key-by-key, everything else falls back to the app files
 - The static build renders every locale (`/es/...` output directories)
 
 Untranslated documents simply don't exist in the other locale: no hreflang,
@@ -551,26 +553,85 @@ key (retries re-send the same lead with the same id).
 | `<x-seo.schema>` | `resources/views/components/seo/schema.blade.php` | Outputs JSON-LD `<script>` blocks |
 | `<x-seo.hreflang>` | `resources/views/components/seo/hreflang.blade.php` | Outputs `<link rel="alternate" hreflang>` |
 | `<x-seo.breadcrumbs>` | `resources/views/components/seo/breadcrumbs.blade.php` | Breadcrumb navigation |
-| `<x-seo.content-block>` | `resources/views/components/seo/content-block.blade.php` | AI-generated SEO text blocks |
 
 ### Services
 
 | Class | Description |
 |-------|-------------|
+| `SeoManager` (`seo()`) | Per-request meta state: config defaults, page overrides, title suffix, raw tags |
 | `SeoService` | Builds JSON-LD schemas (WebSite, CollectionPage, ItemList, BreadcrumbList, FAQPage, ProfilePage) |
-| `PageSeoContent` | Model for database-backed SEO content with locale fallback |
+
+### Page Meta (config-driven)
+
+Per-page titles/descriptions live in `config/seo.php → 'pages'` and are
+applied in a view or controller with `seo()->page('home')`. Dynamic pages
+use `:tokens`, interpolated from a data array:
+
+```php
+// config/seo.php
+'pages' => [
+    'items.show' => [
+        'title' => ':name — specs, price and reviews',
+        'description' => 'Everything about :name. Free shipping, 30-day returns.',
+    ],
+],
+
+// controller or view
+seo()->page('items.show', ['name' => $item->name]);
+```
+
+Call `seo()->page(...)` first — anything set afterwards via
+`seo()->title(...)` still wins.
+
+### Canonical, hreflang, robots
+
+- **Canonical** — automatic: defaults to the current URL without the query
+  string. Override per page with `seo()->canonical($url)`.
+- **hreflang** — automatic for every named route: the layout derives
+  self-referencing `<link rel="alternate">` tags (all locales + `x-default`)
+  from the localized route group. Content pages whose slugs differ per
+  locale (articles) set the map explicitly from their translation data:
+  `seo()->hreflang(['en' => ..., 'es' => ..., 'x-default' => ...])`.
+- **robots** — `seo()->robots('noindex, follow')` or the `seo()->noindex()`
+  shortcut (`noindex(follow: false)` for `noindex, nofollow`). For links
+  inside user-generated content (comments etc.), use `rel="ugc nofollow"`
+  on the `<a>` tags themselves.
+
+### Sitemap
+
+`php artisan seo:sitemap` writes `public/sitemap.xml` (a static file — the
+web server serves it without PHP) and maintains the `Sitemap:` line in
+`public/robots.txt`. It runs in `deploy.sh`; add it to cron when content
+changes between deploys.
+
+URL sources are registered in `AppServiceProvider::registerSitemapSources()`:
+
+```php
+$this->app->make(Sitemap::class)->add('items', fn() => Item::published()
+    ->get()
+    ->map(fn($item) => Sitemap::forRoute('items.show', ['slug' => $item->slug], $item->updated_at?->toDateString()))
+    ->all());
+```
+
+`Sitemap::forRoute()` emits the default-locale URL as `loc` and every other
+locale as an `xhtml:link` hreflang alternate (+ `x-default`). Static sites
+get the same treatment per domain via their own `/sitemap.xml` route.
+Google caps a sitemap at 50k URLs / 50MB — split into a sitemap index when
+a project outgrows that.
 
 ### Artisan Commands
 
 ```bash
-# Generate SEO content for a page
-php artisan seo:generate-page-content --pages=home
+# Draft title/description variants for a page (prints a table + a
+# paste-ready config snippet — you review, edit, and paste; nothing
+# is auto-published)
+php artisan seo:generate-meta items.show --context="Product detail pages for outdoor gear"
 
-# Translate to all priority locales
-php artisan seo:generate-page-content --translate --priority
+# More variants, another locale
+php artisan seo:generate-meta home --variants=5 --locale=es
 
-# Force regenerate
-php artisan seo:generate-page-content --pages=home --force
+# Write public/sitemap.xml (+ robots.txt Sitemap line) — runs in deploy.sh
+php artisan seo:sitemap
 ```
 
 Requires `ANTHROPIC_API_KEY` in `config/services.php`:
@@ -584,6 +645,9 @@ Requires `ANTHROPIC_API_KEY` in `config/services.php`:
 ### Locale System
 
 **Routing pattern:** English uses bare URLs (`/about`), other locales use prefix (`/es/about`).
+Localized route names get the group prefix: `home` → `localized.home`
+(`route('localized.home', ['locale' => 'es'])`). With only one locale in
+`config/locales.php`, the localized group is not registered at all.
 
 **Middleware:**
 - `detect.locale` — Reads browser `Accept-Language`, redirects on first visit
@@ -650,16 +714,14 @@ app/
   Actions/CreateUser.php            # writes (one class per operation)
   Queries/UserIndexQuery.php        # reads (only layer that knows the schema)
   DTOs/UserData.php                 # immutable validated data between layers
-  Console/Commands/GeneratePageSeoContent.php
+  Console/Commands/{GeneratePageMeta,GenerateSitemap}.php
   Helpers/helpers.php
   Http/Middleware/{DetectLocale,SetLocale}.php
-  Models/PageSeoContent.php
-  Services/SeoService.php
+  Services/{SeoManager,SeoService,Sitemap}.php
 config/locales.php
-database/migrations/create_page_seo_content_table.php
 lang/en/common.php
 resources/views/
-  components/seo/{schema,hreflang,breadcrumbs,content-block}.blade.php
+  components/seo/{schema,hreflang,breadcrumbs}.blade.php
   layouts/app.blade.php
   pages/seo-showcase.blade.php
 routes/web.php

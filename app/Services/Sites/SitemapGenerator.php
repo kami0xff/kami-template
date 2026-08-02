@@ -11,28 +11,54 @@ class SitemapGenerator
     public function __construct(protected ContentRepository $content) {}
 
     /**
-     * All indexable URLs for a site (every locale) with their lastmod dates.
+     * All indexable URLs for a site (every locale) with lastmod dates and
+     * hreflang alternates. Rows are grouped by path: a document that exists
+     * in several locales gets each locale's URL cross-linked via xhtml:link
+     * (+ x-default). Translated posts have per-locale slugs, so they only
+     * cross-link when the slugs match — which is the safe default.
      *
-     * @return list<array{loc: string, lastmod: string|null}>
+     * @return list<array{loc: string, lastmod: string|null, alternates: array<string, string>}>
      */
     public function urls(Site $site): array
     {
-        $urls = [];
+        $paths = [];
 
         foreach ($site->locales as $locale) {
-            $urls = array_merge($urls, $this->localeUrls($site, $locale));
+            foreach ($this->localePaths($site, $locale) as $path => $lastmod) {
+                $paths[$path][$locale] = $lastmod;
+            }
+        }
+
+        $urls = [];
+
+        foreach ($paths as $path => $locales) {
+            $alternates = [];
+
+            if (count($locales) > 1) {
+                foreach (array_keys($locales) as $locale) {
+                    $alternates[$locale] = $site->localizedUrl($path, $locale);
+                }
+
+                // x-default: the site's own locale when the document exists
+                // in it, otherwise the first available locale.
+                $alternates['x-default'] = $alternates[$site->locale] ?? reset($alternates);
+            }
+
+            foreach ($locales as $locale => $lastmod) {
+                $urls[] = $this->row($site->localizedUrl($path, $locale), $lastmod, $alternates);
+            }
         }
 
         return $urls;
     }
 
-    /** @return list<array{loc: string, lastmod: string|null}> */
-    protected function localeUrls(Site $site, string $locale): array
+    /** @return array<string, string|null> path => lastmod */
+    protected function localePaths(Site $site, string $locale): array
     {
-        $urls = [];
+        $paths = [];
 
         if ($this->homeExists($site, $locale)) {
-            $urls[] = $this->row($site->localizedUrl('/', $locale), null);
+            $paths['/'] = null;
         }
 
         foreach ($this->content->pages($site, locale: $locale) as $page) {
@@ -40,29 +66,20 @@ class SitemapGenerator
                 continue;
             }
 
-            $urls[] = $this->row(
-                $site->localizedUrl('/' . $page['path'], $locale),
-                $page['doc']->updated()?->toDateString(),
-            );
+            $paths['/' . $page['path']] = $page['doc']->updated()?->toDateString();
         }
 
         $posts = $this->content->posts($site, locale: $locale);
 
         if ($posts->isNotEmpty()) {
-            $urls[] = $this->row(
-                $site->localizedUrl('/blog', $locale),
-                $posts->first()->updated()?->toDateString(),
-            );
+            $paths['/blog'] = $posts->first()->updated()?->toDateString();
 
             foreach ($posts as $post) {
-                $urls[] = $this->row(
-                    $site->localizedUrl('/blog/' . $post->slug, $locale),
-                    $post->updated()?->toDateString(),
-                );
+                $paths['/blog/' . $post->slug] = $post->updated()?->toDateString();
             }
         }
 
-        return $urls;
+        return $paths;
     }
 
     /**
@@ -77,9 +94,9 @@ class SitemapGenerator
             || $this->content->page($site, 'home', locale: $locale) !== null;
     }
 
-    /** @return array{loc: string, lastmod: string|null} */
-    protected function row(string $loc, ?string $lastmod): array
+    /** @return array{loc: string, lastmod: string|null, alternates: array<string, string>} */
+    protected function row(string $loc, ?string $lastmod, array $alternates = []): array
     {
-        return ['loc' => $loc, 'lastmod' => $lastmod];
+        return ['loc' => $loc, 'lastmod' => $lastmod, 'alternates' => $alternates];
     }
 }

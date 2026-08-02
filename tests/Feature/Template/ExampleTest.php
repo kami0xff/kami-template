@@ -8,8 +8,10 @@ it('renders the home page', function () {
     $this->get('/')->assertOk();
 });
 
-it('renders the home page for a supported locale', function () {
-    $this->get('/es')->assertOk();
+it('404s locale-prefixed URLs while only one locale is supported', function () {
+    // config/locales.php ships with 'en' only, so the localized route group
+    // is never registered. Enable a second locale there to activate /{locale}.
+    $this->get('/es')->assertNotFound();
 });
 
 it('keeps OpenReplay off unless explicitly enabled', function () {

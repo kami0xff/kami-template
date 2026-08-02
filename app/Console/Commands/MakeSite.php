@@ -42,6 +42,9 @@ class MakeSite extends Command
         File::ensureDirectoryExists("{$path}/content/blog");
         File::ensureDirectoryExists("{$path}/content/pages");
         File::ensureDirectoryExists("{$path}/views/pages");
+        // Per-site UI translations (lang/{locale}.json, lang/{locale}/{group}.php)
+        // — mirrors the app's lang/ structure, wins key-by-key for this site.
+        File::ensureDirectoryExists("{$path}/lang");
         // Content images: reference as /images/foo.png in markdown — the
         // pipeline generates WebP variants + srcset automatically.
         File::ensureDirectoryExists("{$path}/images");
@@ -61,7 +64,9 @@ class MakeSite extends Command
             // Multi-locale (optional): extra locales are served under
             // /{locale}/... while the default locale stays at the root.
             // Translations live in content/{locale}/ with matching slugs
-            // (same slug = same document, linked via hreflang).
+            // (same slug = same document, linked via hreflang). UI strings
+            // go in lang/{locale}.json — they override the app's lang/
+            // files key-by-key for this site only.
             // 'locales' => ['es'],
 
             // E-E-A-T author: byline + bio box on articles and Person schema

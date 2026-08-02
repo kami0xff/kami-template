@@ -11,6 +11,7 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // The {locale} route parameter, captured from the URL prefix.
         $locale = $request->route('locale');
         $supportedLocales = array_keys(config('locales.supported', ['en' => []]));
 

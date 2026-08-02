@@ -19,8 +19,10 @@ if (!function_exists('seo')) {
 
 if (!function_exists('localized_route')) {
     /**
-     * Generate a URL for a named route, automatically adding the locale prefix
-     * when the current locale is not the default (English).
+     * Generate a URL for a named route, automatically using its "localized."
+     * variant (which adds the /{locale} prefix) when the current locale is
+     * not the default (English). Falls back to the plain route when no
+     * localized variant exists — e.g. single-locale apps.
      */
     function localized_route(string $name, mixed $parameters = [], bool $absolute = true): string
     {
@@ -30,7 +32,7 @@ if (!function_exists('localized_route')) {
             return route($name, $parameters, $absolute);
         }
 
-        $localizedName = $name . '.localized';
+        $localizedName = 'localized.' . $name;
 
         if (Route::has($localizedName)) {
             if (!is_array($parameters)) {

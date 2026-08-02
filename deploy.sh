@@ -68,6 +68,9 @@ ok "Caches built"
 # Storage link
 ${COMPOSE} exec -T app php artisan storage:link 2>/dev/null || true
 
+# Main-app sitemap (writes public/sitemap.xml + the robots.txt Sitemap line)
+${COMPOSE} exec -T app php artisan seo:sitemap
+
 # Static sites (no-op when resources/sites/ is empty)
 log "Building static sites..."
 if ${COMPOSE} exec -T app php artisan site:build --clean; then

@@ -48,7 +48,7 @@ return [
         'website_id' => env('UMAMI_WEBSITE_ID'),
     ],
 
-    // Used by AI content commands (`seo:generate-page-content`, `site:write`).
+    // Used by the AI commands (`seo:generate-meta`, `site:write`, `site:cluster`).
     'anthropic' => [
         'api_key' => env('ANTHROPIC_API_KEY'),
         'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-20250514'),

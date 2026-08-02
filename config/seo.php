@@ -31,6 +31,53 @@ return [
     */
     'description' => env('SEO_DESCRIPTION', 'Override this in config/seo.php or .env with SEO_DESCRIPTION'),
 
+
+    //TODO this approach is fine for low number of pages but what about 1 or 2 million plus pages 
+    //TODO we need a programatic way of doing things mabye like routing adding {username} {Category} {text} {emoji} {title app name}
+
+    //todo investigate how sitemapas are generated for static sites 
+    //investigate also how the robots.txt is generated 
+
+    //TODO article and content_block trad id equivalent in the admin project add a section in the admin to manage them easily with ai generation + maybe api integraiton with wisewant or something like that
+
+    //     articles — id, status (draft/published), published_at, author_id, cover_image, timestamps. No text here.
+    // article_translations — article_id, locale, title, slug, excerpt, body, seo_title, seo_description, with unique(article_id, locale) and unique(locale, slug). Per-locale slugs are worth it (/es/blog/hola outranks /es/blog/hello); seo_title/seo_description are optional overrides that fall back to title/excerpt.
+    // Non-article SEO texts (category intros, landing copy): a small content_blocks table in the admin (key, locale, body) — legitimate there because it's human-edited CMS content with an owner.
+
+    //TODO monitor performance of data warehouse fetching 
+    //it should be super fast they are literaly on the same network in the same country interconnected with the same fiber optics 
+    //use http call pooling for fetching multiple ressources in parallel for rendering pages 
+    //TCP TLS handshake disapears thanks to octane heyy that is a good thing 
+
+    //caching views articles 
+    //todo push invalidation from the data warehouse 
+    //todo stale while revalidate 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Page Meta
+    |--------------------------------------------------------------------------
+    |
+    | Per-page title / description / keywords / robots / image, applied with
+    | seo()->page('home') in a view or controller. ":tokens" are replaced
+    | from a data array: seo()->page('items.show', ['name' => $item->name]).
+    | Values here override the global defaults above; anything set explicitly
+    | via seo()->title(...) still wins over the pages map.
+    |
+    | Draft variants with: php artisan seo:generate-meta items.show
+    |
+    */
+    'pages' => [
+        'home' => [
+            'title' => 'Hello World',
+            'description' => 'Your new project starts here.',
+        ],
+        // 'items.show' => [
+        //     'title' => ':name — specs, price and reviews',
+        //     'description' => 'Everything about :name. Free shipping, 30-day returns.',
+        // ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Default Keywords

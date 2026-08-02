@@ -138,8 +138,9 @@ seo()-&gt;rawTag('&lt;link rel="manifest" href="/manifest.json"&gt;');</code></p
     </section>
 
     <section style="margin-bottom:3rem;">
-        <h2 style="color:#82b1ff;font-size:1.5rem;margin-bottom:1rem;">AI Content Blocks</h2>
-        <p style="margin-bottom:1rem;"><code>&lt;x-seo.content-block page-key="seo-showcase" /&gt;</code> — php artisan seo:generate-page-content</p>
+        <h2 style="color:#82b1ff;font-size:1.5rem;margin-bottom:1rem;">Page Meta from Config</h2>
+        <p style="margin-bottom:1rem;">Per-page titles/descriptions live in <code>config/seo.php → 'pages'</code> and are applied with <code>seo()->page('home')</code>. Dynamic pages use <code>:tokens</code>: <code>seo()->page('items.show', ['name' => $item->name])</code>.</p>
+        <p style="margin-bottom:1rem;">Draft variants with AI (you review and paste — nothing is auto-published): <code>php artisan seo:generate-meta items.show --context="Product detail pages"</code></p>
     </section>
 
     <section style="margin-bottom:3rem;">

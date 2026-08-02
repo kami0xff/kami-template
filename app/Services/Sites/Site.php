@@ -119,6 +119,17 @@ class Site
         return $this->path . '/views';
     }
 
+    /**
+     * Per-site UI translations, mirroring the app's lang/ structure:
+     * lang/{locale}.json and lang/{locale}/{group}.php. Registered on the
+     * translator after the app lang path, so site strings win key-by-key
+     * and anything undefined falls back to the shared app translations.
+     */
+    public function langPath(): string
+    {
+        return $this->path . '/lang';
+    }
+
     public function contentPath(string $sub = ''): string
     {
         return rtrim($this->path . '/content/' . ltrim($sub, '/'), '/');

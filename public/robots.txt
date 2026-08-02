@@ -20,3 +20,5 @@ Crawl-delay: 1
 
 User-agent: Yandex
 Crawl-delay: 1
+
+Sitemap: http://localhost:8787/sitemap.xml

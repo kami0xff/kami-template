@@ -20,6 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
  *   then resources/views/sites as shared fallbacks.
  * - Binds the current Site instance in the container and shares it with views.
  */
+
+//TODO consider this approach since we are now using cloudflare for the hosting of multi static sites 
+//maybe if one day its no longer possible with cloudflare it would be nice to have a home made alternative ready 
 class SetSite
 {
     public function __construct(protected SiteRegistry $registry) {}
@@ -42,6 +45,18 @@ class SetSite
         ]);
 
         app()->setLocale($locale ?? $site->locale);
+
+        // Per-site UI strings (see Site::langPath). The translator and its
+        // loader are rebuilt per request so one site's lang files can never
+        // leak into another site's — or the main app's — translations in
+        // long-running processes (Octane workers, site:build). The fresh
+        // translator picks up the locale set above from config.
+        app()->forgetInstance('translator');
+        app()->forgetInstance('translation.loader');
+
+        if (is_dir($langPath = $site->langPath())) {
+            app('translation.loader')->addPath($langPath);
+        }
 
         View::replaceNamespace('site', [
             $site->viewsPath(),

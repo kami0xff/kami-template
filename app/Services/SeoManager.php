@@ -17,6 +17,10 @@ class SeoManager
 
     protected array $rawTags = [];
 
+    /** Explicit hreflang map (locale => URL); null until set — then the
+     *  hreflang() getter falls back to route-derived alternates. */
+    protected ?array $hreflangUrls = null;
+
     public function __construct()
     {
         $this->loadConfigDefaults();
@@ -112,6 +116,58 @@ class SeoManager
         return $this->property('robots', $value);
     }
 
+    /**
+     * noindex this page. Keeps "follow" by default so outgoing links still
+     * pass equity — pass false for "noindex, nofollow" (e.g. thin utility
+     * pages you don't want crawled at all).
+     */
+    public function noindex(bool $follow = true): static
+    {
+        return $this->robots($follow ? 'noindex, follow' : 'noindex, nofollow');
+    }
+
+    /**
+     * hreflang alternates (locale => URL, incl. x-default). Set explicitly
+     * for content pages whose slugs differ per locale — e.g. from an
+     * article's translations:
+     *
+     *   seo()->hreflang(['en' => url('/blog/hello'), 'es' => url('/es/blog/hola'), 'x-default' => ...]);
+     *
+     * When never set, the getter derives alternates from the current named
+     * route automatically, so every page in the localized route group gets
+     * correct tags for free ([] in single-locale apps).
+     */
+    public function hreflang(?array $urls = null): static|array
+    {
+        if ($urls !== null) {
+            $this->hreflangUrls = $urls;
+
+            return $this;
+        }
+
+        return $this->hreflangUrls ?? $this->hreflangFromRoute();
+    }
+
+    /** @return array<string, string> */
+    protected function hreflangFromRoute(): array
+    {
+        $route = request()->route();
+        $name = $route?->getName();
+
+        if (!$name) {
+            return [];
+        }
+
+        // On a localized URL the route name carries the "localized." prefix;
+        // routeAlternates() expects the base name.
+        $base = str_starts_with($name, 'localized.') ? substr($name, strlen('localized.')) : $name;
+
+        $params = $route->parameters();
+        unset($params['locale']);
+
+        return Sitemap::routeAlternates($base, $params);
+    }
+
     public function canonical(string|Closure|null $value = null): static|string|null
     {
         return $this->property('canonical', $value);
@@ -133,6 +189,56 @@ class SeoManager
         }
         if ($alt !== null) {
             $this->set('og_image_alt', $alt);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Apply the config-driven meta for a page (config('seo.pages')[$key]).
+     * ":tokens" are interpolated from $data:
+     *
+     *   seo()->page('items.show', ['name' => $item->name]);
+     *
+     * Call it before any page-specific overrides — later seo()->title(...)
+     * calls still win.
+     */
+    public function page(string $key, array $data = []): static
+    {
+        $meta = (config('seo.pages', []))[$key] ?? null;
+
+        if (!$meta) {
+            return $this;
+        }
+
+        // Longest tokens first so ":name" can't eat the prefix of ":name_suffix".
+        uksort($data, fn(string $a, string $b) => strlen($b) <=> strlen($a));
+
+        $interpolate = function (?string $value) use ($data): ?string {
+            if ($value === null) {
+                return null;
+            }
+            foreach ($data as $token => $replacement) {
+                $value = str_replace(':' . $token, (string) $replacement, $value);
+            }
+
+            return $value;
+        };
+
+        if ($title = $interpolate($meta['title'] ?? null)) {
+            $this->title($title);
+        }
+        if ($description = $interpolate($meta['description'] ?? null)) {
+            $this->description($description);
+        }
+        if (!empty($meta['keywords'])) {
+            $this->keywords($interpolate($meta['keywords']));
+        }
+        if (!empty($meta['robots'])) {
+            $this->robots($meta['robots']);
+        }
+        if (!empty($meta['image'])) {
+            $this->image($meta['image']);
         }
 
         return $this;

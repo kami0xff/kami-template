@@ -8,7 +8,9 @@ it('serves the extra locale home under its prefix with localized data', function
     $this->get('http://example.test/es/')
         ->assertOk()
         ->assertSee('lang="es"', false)
-        ->assertSee('Últimos artículos')
+        // "Latest articles" overridden per site in resources/sites/example/lang/es.json
+        // (the app-level lang/es.json says "Últimos artículos").
+        ->assertSee('Lo último del Example Site')
         ->assertSee('Hola Mundo')
         ->assertDontSee('Writing Content in Markdown');
 });

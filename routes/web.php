@@ -9,27 +9,15 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/sites.php';
 
-// ======================================================
-// Health Check
-// ======================================================
-
-Route::get('/up', fn() => response('OK', 200));
+// The health check (/up) is registered via withRouting(health:) in
+// bootstrap/app.php — no need to re-register it here.
 
 // ======================================================
 // Main Routes (English - default, no prefix)
 // ======================================================
 
 Route::middleware('detect.locale')->group(function () {
-    Route::get('/', fn() => view('pages.seo-showcase'))->name('home');
-    Route::get('/seo-showcase', fn() => view('pages.seo-showcase'))->name('seo-showcase');
-    Route::get('/design', fn() => view('pages.design'))->name('design');
-    Route::get('/shader-hero', fn() => view('pages.shader-hero'))->name('shader-hero');
-    Route::get('/payment', fn() => view('pages.payment'))->name('payment');
-    Route::get('/ai', fn() => view('pages.ai'))->name('ai');
-    Route::get('/hhentai', fn() => view('pages.hhentai'))->name('hhentai');
-    Route::get('/pornguru-theme', fn() => view('pages.pornguru-theme'))->name('pornguru-theme');
-    Route::get('/caumont', fn() => view('caumont.pages.home'))->name('caumont');
-    Route::get('/caumont/villa-esterel', fn() => view('caumont.pages.villa-esterel'))->name('caumont.villa');
+    Route::get('/', fn() => view('pages.home'))->name('home');
 
     // Add your English routes here:
     // Route::get('/about', [PageController::class, 'about'])->name('about');
@@ -41,21 +29,30 @@ Route::middleware('detect.locale')->group(function () {
 // ======================================================
 // Localized Routes (/{locale}/...)
 // ======================================================
+// The default locale stays unprefixed; every other supported locale gets
+// a /{locale} prefix. The group's name prefix turns e.g. "home" into
+// "localized.home" — generate URLs with localized_route('home').
 
 $supportedLocales = array_keys(config('locales.supported', []));
 $localePattern = implode('|', array_filter($supportedLocales, fn($l) => $l !== 'en'));
 
-Route::prefix('{locale}')
-    ->where(['locale' => $localePattern])
-    ->middleware('set.locale')
-    ->group(function () {
-        Route::get('/', fn() => view('pages.seo-showcase'))->name('home.localized');
-        Route::get('/seo-showcase', fn() => view('pages.seo-showcase'))->name('seo-showcase.localized');
+// Single-locale apps get no prefixed routes at all. The guard is required:
+// an empty where-pattern makes route compilation throw ("requirement cannot
+// be empty"), which also breaks route:cache.
+if ($localePattern !== '') {
+    Route::prefix('{locale}')
+        ->where(['locale' => $localePattern])
+        ->middleware('set.locale')
+        ->name('localized.')
+        ->group(function () {
+            Route::get('/', fn() => view('pages.home'))->name('home');
 
-        // Mirror all English routes here with ".localized" suffix:
-        // Route::get('/about', [PageController::class, 'about'])->name('about.localized');
-        // Route::get('/items', [ItemController::class, 'index'])->name('items.index.localized');
-    });
+            // Mirror the English routes here with the same names — the
+            // group adds the "localized." prefix automatically:
+            // Route::get('/about', [PageController::class, 'about'])->name('about');
+            // Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+        });
+}
 
 // ======================================================
 // Legal / Static Pages (no locale prefix needed)
@@ -64,3 +61,12 @@ Route::prefix('{locale}')
 // Route::get('/about', fn() => view('legal.about'))->name('about');
 // Route::get('/privacy', fn() => view('legal.privacy'))->name('privacy');
 // Route::get('/terms', fn() => view('legal.terms'))->name('terms');
+
+// ======================================================
+// Demo / design-development routes (local environment only —
+// never registered in production, never in the route cache)
+// ======================================================
+
+if (app()->environment('local')) {
+    require __DIR__ . '/dev.php';
+}

@@ -24,6 +24,16 @@ class DetectLocale
             return $next($request);
         }
 
+        // Single-locale apps need no detection and no prefixed URLs.
+        $supportedLocales = array_keys(config('locales.supported', []));
+        if (count($supportedLocales) <= 1) {
+            return $next($request);
+        }
+
+        // The cookie marks detection as done, so the auto-redirect fires at
+        // most once per visitor — afterwards the URL they are on always wins
+        // over Accept-Language. SetLocale sets the same cookie, so landing on
+        // a localized URL (or picking one in the language switcher) counts.
         if ($request->cookie('locale_detected')) {
             return $next($request);
         }

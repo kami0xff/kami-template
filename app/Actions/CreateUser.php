@@ -16,6 +16,7 @@ use App\Models\User;
  *
  * Scaffold your own with: php artisan make:action Orders/CreateOrder
  */
+//TODO copy une action du kamiadmin pour les dto et les actions 
 final class CreateUser
 {
     public function handle(UserData $data): User

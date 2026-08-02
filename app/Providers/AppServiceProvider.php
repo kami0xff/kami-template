@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Sitemap;
 use App\Services\Sites\SiteRegistry;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(SiteRegistry::class);
+        $this->app->singleton(Sitemap::class);
     }
 
     public function boot(): void
@@ -45,6 +47,32 @@ class AppServiceProvider extends ServiceProvider
         )->by($request->ip()));
 
         $this->authorizeDashboards();
+
+        $this->registerSitemapSources();
+    }
+
+    /**
+     * Main-app sitemap sources, consumed by `php artisan seo:sitemap`
+     * (writes public/sitemap.xml on deploy). Closures run only when the
+     * command executes, never per request. One closure per content type:
+     *
+     *   Sitemap::forRoute('about');
+     *   Sitemap::forRoute('items.show', ['slug' => $item->slug], $item->updated_at?->toDateString());
+     *
+     * forRoute() adds hreflang alternates for every supported locale
+     * automatically once the localized route group is active.
+     */
+    private function registerSitemapSources(): void
+    {
+        $this->app->make(Sitemap::class)->add('pages', fn() => [
+            Sitemap::forRoute('home'),
+        ]);
+
+        // Content example:
+        // $this->app->make(Sitemap::class)->add('items', fn() => Item::published()
+        //     ->get()
+        //     ->map(fn($item) => Sitemap::forRoute('items.show', ['slug' => $item->slug], $item->updated_at?->toDateString()))
+        //     ->all());
     }
 
     /**
