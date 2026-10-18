@@ -173,6 +173,32 @@ DB::connection('read')->...
 It falls back to the main connection when `DB_READ_*` is unset, so Query
 classes written against it work before a replica exists.
 
+### Kami admin APIs (network sites)
+
+Network sites (pornbase, 18fyp, feet.shop, …) get accounts, channels, feeds,
+payments and messages from the admin project over HTTPS, server to server.
+The contract is in the admin repo: `docs/frontends/README.md` and
+`docs/frontends/network-api.md`.
+
+Set `KAMI_ADMIN_URL` (the admin of the same environment, reachable from this
+server) and `KAMI_SITE_TOKEN` (`php artisan network:site-token {site}` in the
+admin). Then use `App\Services\Kami\KamiApi`:
+
+```php
+$api->network()->get('/channels');                  // as the site
+$api->visitor()->get('/feed')->json('data');        // as the visitor (token + visitor id)
+$auth = $api->network()->post('/auth/login', $credentials)->json('data');
+app(VisitorSession::class)->start($auth);           // token kept in the session only
+```
+
+Every non-2xx answer throws `KamiApiException` (`errorCode`, `fields`,
+`retryAfter`); branch on the code with `$e->is('two_factor_required')`.
+Uncaught, it renders the common cases itself: a dead login is forgotten and
+the visitor goes to `KAMI_LOGIN_PATH`, validation errors return to the form,
+`site_not_live` shows the 503 page. `EnsureVisitorId` gives each browser the
+http-only id sent as `X-Visitor-Id`. With the two variables empty nothing is
+active, so static-only projects are unaffected.
+
 ## Static Sites (multi-domain)
 
 One project can host many static sites — each site is a folder under

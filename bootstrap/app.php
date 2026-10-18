@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\DetectLocale;
+use App\Http\Middleware\EnsureVisitorId;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetSite;
 use Illuminate\Foundation\Application;
@@ -29,6 +30,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'detect.locale' => DetectLocale::class,
             'site' => SetSite::class,
         ]);
+
+        // Per-browser id forwarded to the admin as X-Visitor-Id (no-op until
+        // KAMI_ADMIN_URL and KAMI_SITE_TOKEN are set).
+        $middleware->web(append: [EnsureVisitorId::class]);
 
         // Static-site lead forms are baked into pre-rendered HTML and cannot
         // carry a live CSRF token; the endpoint is protected by a honeypot
