@@ -341,6 +341,10 @@ system's token/Blade conventions (options, not defaults):
   `<x-form.multipart>` (multi-step + checkpoints for email reminders),
   `<x-form.calendar>` (month grid, single or range → hidden inputs +
   `calendar:change` event)
+- **Directory**: `<x-directory>` with `.section` / `.group` / `.item` — every
+  category and tag of a site in labelled columns, filtered by a search box and
+  a Main/#/A–Z bar (`DirectoryManager`). Full page by default; `compact` inside
+  `<x-modal.modal>` or `<x-drawer>` for the overlay.
 - **Layout/content**: `<x-collapsible>`, `.resizable` split panes
   (`ResizableManager`), `.prose` long-form typography bundle
 

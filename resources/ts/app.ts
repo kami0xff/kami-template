@@ -42,6 +42,7 @@ import { ShaderHeroManager } from './manager/ShaderHeroManager';
 import { InfiniteScrollManager } from './manager/InfiniteScrollManager';
 import { bootDesignThemeLab } from './manager/DesignThemeLabManager';
 import { MegaMenuManager } from './manager/MegaMenuManager';
+import { DirectoryManager } from './manager/DirectoryManager';
 import { CommentManager } from './manager/CommentManager';
 import { ReactionManager } from './manager/ReactionManager';
 import { CreatorSectionsManager } from './manager/CreatorSectionsManager';
@@ -130,6 +131,7 @@ function bootApp(): void {
     // Same dock as chats — people + AI models share one interface
     window.aiDock = new AiDockManager();
     window.megaMenus = new MegaMenuManager();
+    new DirectoryManager();
 }
 
 // Modules are deferred — DOMContentLoaded may already have fired.

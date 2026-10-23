@@ -1,0 +1,27 @@
+/*
+    Directory — categories / tags index (page or overlay).
+*/
+:root {
+    /* ===== A) Settings =============================================== */
+    --directory-fg: var(--text-primary);
+    --directory-muted: var(--text-muted);
+    --directory-head-bg: var(--surface-muted);
+    --directory-head-fg: var(--text-muted);
+    --directory-letter-active: var(--primary);
+    --directory-rule: var(--border-subtle);
+
+    /* ===== B) Layout ================================================= */
+    --directory-col: 170px;
+    --directory-search: 300px;
+    --directory-gap: var(--space5) var(--space4);
+    --directory-section-gap: var(--space8);
+    --directory-title-size: var(--text-heading);
+    --directory-section-size: var(--text-heading);
+    --directory-item-size: var(--text-small);
+    --directory-count-size: var(--text-caption);
+    --directory-head-size: var(--text-caption);
+    --directory-head-radius: var(--radius-inner);
+
+    /* ===== C) Effects ================================================ */
+    --directory-transition: var(--duration-fast) var(--ease-standard);
+}

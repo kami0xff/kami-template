@@ -1,0 +1,88 @@
+/*
+    <x-directory>
+        .directory-top              title · search · actions
+        .directory-letters          Main / # / A–Z (data-directory-letters, JS)
+        .directory-section          titled block
+            .directory-groups       auto-fill columns
+                .directory-group    grey label bar + list (--wide: whole row, flowing columns)
+                    .directory-item link + muted count
+        .directory-empty
+*/
+
+.directory-top { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space3) var(--space6); }
+.directory-title { margin: 0; font-size: var(--directory-title-size); }
+.directory-search { flex: 0 1 var(--directory-search); }
+.directory-actions { margin-left: auto; }
+
+.directory-letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space1);
+    margin-top: var(--space4);
+    border-bottom: 1px solid var(--directory-rule);
+}
+.directory-letter {
+    padding: var(--space2);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--directory-muted);
+    font: inherit;
+    font-size: var(--directory-item-size);
+    cursor: pointer;
+    transition: color var(--directory-transition), border-color var(--directory-transition);
+}
+.directory-letter:hover:not(:disabled) { color: var(--directory-fg); }
+.directory-letter[aria-pressed="true"] { color: var(--directory-fg); border-bottom-color: var(--directory-letter-active); }
+.directory-letter:disabled { opacity: 0.35; cursor: default; }
+
+.directory-section { margin-top: var(--directory-section-gap); }
+.directory-top + .directory-section,
+.directory-letters + .directory-section { margin-top: var(--space6); }
+.directory-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space2);
+    margin: 0 0 var(--space4);
+    font-size: var(--directory-section-size);
+}
+.directory-section-icon { display: inline-flex; }
+
+.directory-groups {
+    display: grid;
+    gap: var(--directory-gap);
+    grid-template-columns: repeat(auto-fill, minmax(var(--directory-col), 1fr));
+    align-items: start;
+}
+.directory-group--wide { grid-column: 1 / -1; }
+.directory-group--wide .directory-list { columns: var(--directory-col); column-gap: var(--space4); }
+
+.directory-head {
+    margin: 0 0 var(--space2);
+    padding: var(--space1) var(--space2);
+    border-radius: var(--directory-head-radius);
+    background: var(--directory-head-bg);
+    color: var(--directory-head-fg);
+    font-size: var(--directory-head-size);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.directory-list { margin: 0; padding: 0; list-style: none; }
+.directory-item { padding-block: calc(var(--space1) / 2); break-inside: avoid; font-size: var(--directory-item-size); }
+.directory-link { display: inline-flex; align-items: center; gap: var(--space2); color: var(--directory-fg); text-decoration: none; }
+.directory-link:hover,
+.directory-link[aria-current="page"] { text-decoration: underline; }
+.directory-item-icon { display: inline-flex; }
+.directory-count { margin-left: var(--space1); color: var(--directory-muted); font-size: var(--directory-count-size); }
+
+.directory-empty { margin: var(--space6) 0 0; color: var(--directory-muted); }
+
+/* Inside a modal / drawer */
+.directory--compact {
+    --directory-section-gap: var(--space6);
+    --directory-section-size: var(--text-subheading);
+    --directory-gap: var(--space4) var(--space4);
+}
+.directory--compact .directory-section-title { margin-bottom: var(--space3); }

@@ -85,6 +85,7 @@
 @import './chat/chat.tokens.css' layer(tokens);
 @import './bottom-nav/bottom-nav.tokens.css' layer(tokens);
 @import './mega-menu/mega-menu.tokens.css' layer(tokens);
+@import './directory/directory.tokens.css' layer(tokens);
 @import './comments/comments.tokens.css' layer(tokens);
 @import './reactions/reactions.tokens.css' layer(tokens);
 @import './creator-sections/creator-sections.tokens.css' layer(tokens);
@@ -200,6 +201,7 @@
 
 /* 4) Components — mega menu (full-bleed nav panel) */
 @import './mega-menu/mega-menu.css' layer(components);
+@import './directory/directory.css' layer(components);
 
 /* 4) Components — comments thread */
 @import './comments/comments.css' layer(components);

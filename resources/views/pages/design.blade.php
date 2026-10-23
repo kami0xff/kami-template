@@ -553,6 +553,27 @@
         </section>
 
         {{-- ==================== Anchored & dropdown panels ==================== --}}
+        <section class="favorites-section" id="directory">
+            <div class="favorites-header"><h2>Directory</h2></div>
+            <p style="color:var(--text-muted); max-width:52rem; margin:0 0 var(--space4);">
+                Every category and tag in labelled columns, filtered by search and A–Z. Inline below, or
+                <a href="#" onclick="modals.open('demo-directory'); return false;">open it as an overlay</a>.
+            </p>
+            @php
+                $demoDirectory = [
+                    'Age' => ['Teen 18+' => '1,654', 'Young 22+' => '4,390', 'MILF' => '1,848', 'Mature' => '253', 'Granny' => '57'],
+                    'Ethnicity' => ['Arab' => '118', 'Asian' => '1,050', 'Ebony' => '1,215', 'Indian' => '368', 'Latina' => '2,917', 'White' => '2,683'],
+                    'Body type' => ['Skinny' => '3,002', 'Athletic' => '766', 'Curvy' => '1,733', 'BBW' => '360'],
+                    'Hair' => ['Blonde' => '1,393', 'Black' => '2,709', 'Brunette' => '3,649', 'Redhead' => '354'],
+                ];
+                $demoActivities = ['69 Position' => '1,333', 'Ahegao' => '4,764', 'Anal' => '3,067', 'Blowjob' => '6,047', 'Cosplay' => '1,435', 'Dirty Talk' => '6,209', 'Doggy Style' => '6,878', 'Erotic Dance' => '6,512', 'Fingering' => '6,809', 'Glory Hole' => '319', 'Handjob' => '3,972', 'Massage' => '3,029', 'Oil Show' => '5,827', 'Role Play' => '4,133', 'Shower' => '2,288', 'Striptease' => '6,151', 'Twerk' => '5,302', 'Yoga' => '1,799'];
+            @endphp
+            @include('pages.partials.design-directory', ['compact' => false])
+            <x-modal.modal id="demo-directory" title="All categories" maxWidth="1100px">
+                @include('pages.partials.design-directory', ['compact' => true])
+            </x-modal.modal>
+        </section>
+
         <section class="favorites-section" id="mega-menu">
             <div class="favorites-header"><h2>Mega menu</h2></div>
             <p style="color:var(--text-muted); max-width:52rem; margin:0 0 var(--space4);">
